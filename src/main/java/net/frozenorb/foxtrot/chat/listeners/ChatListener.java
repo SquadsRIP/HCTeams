@@ -58,6 +58,11 @@ public class ChatListener implements Listener {
       }
    }
 
+   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+   public void onAsyncPlayerChatCount(AsyncPlayerChatEvent event) {
+      Foxtrot.getInstance().getChatMessagesMap().increment(event.getPlayer().getUniqueId());
+   }
+
    @EventHandler(priority = EventPriority.MONITOR)
    public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
       event.getPlayer().removeMetadata("NoSpamCheck", Foxtrot.getInstance());
