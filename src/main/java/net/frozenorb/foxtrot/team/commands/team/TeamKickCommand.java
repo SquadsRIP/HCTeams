@@ -9,6 +9,7 @@ import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.listener.LunarClientListener;
 import net.frozenorb.foxtrot.server.SpawnTagHandler;
 import net.frozenorb.foxtrot.team.Team;
+import net.frozenorb.foxtrot.team.dtr.DTRHandler;
 import net.frozenorb.foxtrot.team.track.TeamActionTracker;
 import net.frozenorb.foxtrot.team.track.TeamActionType;
 import net.minecraft.util.com.google.common.collect.ImmutableMap;
@@ -34,6 +35,8 @@ public class TeamKickCommand {
          sender.sendMessage(ChatColor.RED + "Only the owner can kick other co-leaders!");
       } else if (team.isCaptain(player) && !team.isOwner(sender.getUniqueId()) && !team.isCoLeader(sender.getUniqueId())) {
          sender.sendMessage(ChatColor.RED + "Only an owner or co-leader can kick other captains!");
+      } else if (DTRHandler.isOnCooldown(team)) {
+         sender.sendMessage(ChatColor.RED + "You cannot kick members while your faction's DTR is frozen!");
       } else {
          Player bukkitPlayer = Foxtrot.getInstance().getServer().getPlayer(player);
          if (bukkitPlayer != null && SpawnTagHandler.isTagged(bukkitPlayer)) {
