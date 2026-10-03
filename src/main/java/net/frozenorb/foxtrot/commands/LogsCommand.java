@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class LogsCommand {
-   @Command(names = {"logs"}, permission = "foxtrot.command.logs")
+   @Command(names = {"playerlogs", "plogs"}, permission = "foxtrot.command.logs")
    public static void logs(CommandSender sender, @Parameter(name = "player") UUID uuid) {
       Foxtrot foxtrot = Foxtrot.getInstance();
       long firstJoin = foxtrot.getFirstJoinMap().getFirstJoin(uuid);
