@@ -1,6 +1,9 @@
 package net.frozenorb.foxtrot.nametag;
 
 import cc.fyre.modsuite.mod.ModHandler;
+import cc.fyre.neutron.Neutron;
+import cc.fyre.neutron.profile.Profile;
+import cc.fyre.neutron.rank.Rank;
 import cc.fyre.proton.Proton;
 import cc.fyre.proton.nametag.construct.NameTagInfo;
 import java.util.ArrayList;
@@ -23,6 +26,11 @@ public final class FactionNametagFormatter {
 
       String name = info.getPrefix() + target.getDisguisedName();
       List<String> lines = new ArrayList<>();
+      String staffLine = staffRankLine(target);
+      if (staffLine != null) {
+         lines.add(staffLine);
+      }
+
       if (ModHandler.INSTANCE.isInModMode(target.getUniqueId())) {
          lines.add(ChatColor.GRAY + "[Mod Mode]");
          lines.add(name);
@@ -50,5 +58,19 @@ public final class FactionNametagFormatter {
 
       lines.add(name);
       return lines;
+   }
+
+   public static String staffRankLine(Player target) {
+      if (!target.hasPermission("neutron.staff")) {
+         return null;
+      }
+
+      Profile profile = Neutron.getInstance().getProfileHandler().fromUuid(target.getUniqueId());
+      if (profile == null || profile.getDisguiseProfile() != null) {
+         return null;
+      }
+
+      Rank rank = profile.getActiveRank();
+      return rank.getColor() + (rank.getSecondColor() == null ? "" : rank.getSecondColor().toString()) + rank.getName().replace('-', ' ');
    }
 }

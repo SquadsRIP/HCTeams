@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import net.frozenorb.foxtrot.Foxtrot;
+import net.frozenorb.foxtrot.nametag.FactionNametagFormatter;
 import net.frozenorb.foxtrot.team.Team;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -75,7 +76,11 @@ public class ApolloNametagListener implements Listener {
             }
          }
 
-         arrayList.add(Component.text(string2 + player2.getName()));
+         String staffLine = FactionNametagFormatter.staffRankLine(player2);
+         if (staffLine != null) {
+            arrayList.add(Component.text(staffLine));
+         }
+
          Team team2 = Foxtrot.getInstance().getTeamHandler().getTeam(player2.getUniqueId());
          if (team2 != null) {
             String string = team2.getName(player);
@@ -83,6 +88,8 @@ public class ApolloNametagListener implements Listener {
             String string4 = ChatColor.GOLD + "[" + string + " " + string3 + ChatColor.GOLD + "]";
             arrayList.add(Component.text(string4));
          }
+
+         arrayList.add(Component.text(string2 + player2.getName()));
 
          Nametag nametag = Nametag.builder().lines(arrayList).visibilityOverride(NametagVisibilityOverride.NONE).build();
          ((NametagModule)Apollo.getModuleManager().getModule(NametagModule.class))
