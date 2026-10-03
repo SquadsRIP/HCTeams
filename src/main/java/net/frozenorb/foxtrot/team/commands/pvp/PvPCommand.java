@@ -12,7 +12,6 @@ public class PvPCommand {
          "",
          "§7/pvp lives [target] §f- Display the amount of lives a player has.",
          "§7/pvp revive <player> §f- Revive a player.",
-         "§7/lives use §f- Use a life to respawn while deathbanned.",
          "§7/pvp time §f- Display time left on PVP Timer.",
          "§7/pvp enable §f- Remove PVP Timer.",
          "§8§m-----------------------------------------------------"

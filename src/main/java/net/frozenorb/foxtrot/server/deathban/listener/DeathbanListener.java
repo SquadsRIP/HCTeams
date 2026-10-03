@@ -2,9 +2,7 @@ package net.frozenorb.foxtrot.server.deathban.listener;
 
 import cc.fyre.proton.util.TimeUtils;
 import java.beans.ConstructorProperties;
-import mkremins.fanciful.FancyMessage;
 import net.frozenorb.foxtrot.Foxtrot;
-import net.frozenorb.foxtrot.server.deathban.DeathbanArenaHandler;
 import net.frozenorb.foxtrot.team.dtr.DTRBitmask;
 import org.bukkit.ChatColor;
 import org.bukkit.World.Environment;
@@ -22,7 +20,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class DeathbanListener implements Listener {
-   private static final int LIFE_WINDOW_SECONDS = 15;
    private static final String[] ALLOWED_COMMANDS = new String[]{
       "/lives", "/pvp lives", "/hub", "/request", "/report", "/helpop", "/msg ", "/r ", "/reply ", "/message ", "/m ", "/w ", "/tell "
    };
@@ -70,6 +67,12 @@ public class DeathbanListener implements Listener {
             }
          }
 
+         // Joining Teams with a usable life spends it and lets the player play.
+         if (this.instance.getDeathbanArenaHandler().canUseLife(player)) {
+            this.instance.getDeathbanArenaHandler().useLife(player);
+            return;
+         }
+
          long seconds = (this.instance.getDeathbanMap().getDeathban(player.getUniqueId()) - System.currentTimeMillis()) / 1000L;
          player.sendMessage("");
          player.sendMessage(ChatColor.RED + "You are still deathbanned for " + TimeUtils.formatIntoDetailedString((int)seconds) + "!");
@@ -77,21 +80,17 @@ public class DeathbanListener implements Listener {
       }
    }
 
-   // A deathbanned player who can spend a life gets a short window to type /lives use before being sent to the hub.
    public void sendToHub(Player player) {
-      DeathbanArenaHandler handler = this.instance.getDeathbanArenaHandler();
       long hubDelay = 40L;
-      if (handler.canUseLife(player)) {
-         int lives = this.instance.getFriendLivesMap().getLives(player.getUniqueId());
-         hubDelay = LIFE_WINDOW_SECONDS * 20L;
-         player.sendMessage("");
-         new FancyMessage(ChatColor.GREEN + "You have " + ChatColor.WHITE + lives + ChatColor.GREEN + (lives == 1 ? " life" : " lives") + ". ")
-            .then(ChatColor.YELLOW + ChatColor.BOLD.toString() + "[Click here]")
-            .command("/lives use")
-            .tooltip(ChatColor.GREEN + "Use a life to respawn")
-            .then(ChatColor.GREEN + " or type " + ChatColor.WHITE + "/lives use" + ChatColor.GREEN + " within " + LIFE_WINDOW_SECONDS + " seconds to respawn.")
-            .send(player);
-         player.sendMessage("");
+      int lives = this.instance.getFriendLivesMap().getLives(player.getUniqueId());
+      if (lives > 0 && !this.instance.getServerHandler().isPreEOTW()) {
+         long cooldown = this.instance.getDeathbanArenaHandler().getLifeCooldown().getOrDefault(player.getUniqueId(), 0L);
+         String when = cooldown > System.currentTimeMillis()
+            ? " in " + TimeUtils.formatIntoDetailedString((int)((cooldown - System.currentTimeMillis()) / 1000L)) + " (you died in either Nether, End or an Event)"
+            : "";
+         player.sendMessage(
+            ChatColor.GREEN + "You have " + ChatColor.WHITE + lives + ChatColor.GREEN + (lives == 1 ? " life" : " lives") + ". Rejoin Teams" + when + " to use one and respawn."
+         );
       }
 
       (new BukkitRunnable() {
@@ -112,7 +111,7 @@ public class DeathbanListener implements Listener {
       }).runTaskLater(this.instance, hubDelay + 80L);
    }
 
-   // While waiting to be sent to the hub, a deathbanned player can't move, fight or run commands.
+   // During the 2 s before being sent to the hub, a deathbanned player can't move, fight or run commands.
    private boolean isHeld(Player player) {
       return !this.instance.getMapHandler().isKitMap()
          && this.instance.getDeathbanMap().isDeathbanned(player.getUniqueId())
