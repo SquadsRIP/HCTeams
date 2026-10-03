@@ -90,8 +90,9 @@ public class FocusCommand {
             } else if (focusTeam == team2) {
                player.sendMessage(ChatColor.YELLOW + "You can't focus yourself!");
             } else {
-               if (team2.getFocusedTeam() != null && team2.getFocusedTeam().getHQ() != null && team2.getFocusWaypoint() != null) {
+               if (team2.getFocusWaypoint() != null) {
                   team2.getOnlineMembers().forEach(it -> ApolloService.removeWaypoint(it, team2.getFocusWaypoint()));
+                  team2.setFocusWaypoint(null);
                }
 
                Team passFocusedTeam = team2.getFocusedTeam();
