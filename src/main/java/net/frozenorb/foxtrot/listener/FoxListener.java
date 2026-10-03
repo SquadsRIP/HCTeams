@@ -334,7 +334,7 @@ public class FoxListener implements Listener {
             player.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 16));
          }
 
-         if (CustomTimerCreateCommand.getCustomTimers().get("&a&lSOTW") == null) {
+         if (!CustomTimerCreateCommand.isSOTWTimer()) {
             if (Foxtrot.getInstance().getServerHandler().isStartingTimerEnabled()) {
                player.setMetadata("PVP_TIMER_BYPASS", new FixedMetadataValue(Foxtrot.getInstance(), true));
                Foxtrot.getInstance().getPvPTimerMap().createStartingTimer(player.getUniqueId(), (int)TimeUnit.HOURS.toSeconds(1L));

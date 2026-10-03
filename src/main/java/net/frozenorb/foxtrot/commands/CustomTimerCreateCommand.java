@@ -174,8 +174,8 @@ public class CustomTimerCreateCommand {
          return -1L;
       }
 
-      long endsAt = customTimers.get(sotwKey);
-      return endsAt - System.currentTimeMillis();
+      Long endsAt = customTimers.get(sotwKey);
+      return endsAt == null ? -1L : endsAt - System.currentTimeMillis();
    }
 
    public static boolean isSOTWTimer() {

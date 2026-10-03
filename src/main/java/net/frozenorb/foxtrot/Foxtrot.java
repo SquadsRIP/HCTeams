@@ -701,9 +701,8 @@ public class Foxtrot extends JavaPlugin {
       (new BukkitRunnable() {
          @Override
          public void run() {
-            if (CustomTimerCreateCommand.isSOTWTimer()) {
-               long endsAt = CustomTimerCreateCommand.getCustomTimers().get("&a&lSOTW");
-               long remaining = endsAt - System.currentTimeMillis();
+            long remaining = CustomTimerCreateCommand.remainingSOTWTime();
+            if (remaining >= 0L) {
                int seconds = (int)(remaining / 1000L);
                List configuredReminders = Foxtrot.this.getConfiguration("gameplay.yml").getIntegerList("sotw.reminder-seconds");
                if ((configuredReminders.isEmpty() ? Foxtrot.this.sotwReminders : configuredReminders).contains(seconds)) {
