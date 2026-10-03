@@ -345,12 +345,7 @@ public class FoxListener implements Listener {
          }
 
          Foxtrot.getInstance().getServer().getScheduler().runTaskLater(Foxtrot.getInstance(), () -> {
-            World spawn = Foxtrot.getInstance().getServer().getWorld("Spawn");
-            if (Foxtrot.getInstance().getMapHandler().isKitMap()) {
-               spawn = Foxtrot.getInstance().getServer().getWorld("world");
-            }
-
-            player.teleport(spawn.getSpawnLocation());
+            player.teleport(Foxtrot.getInstance().getServerHandler().getSpawnLocation());
          }, 5L);
          if (Foxtrot.getInstance().getDeathsMap().getDeaths(player.getUniqueId()) == 0) {
             Foxtrot.getInstance().getDeathsMap().setDeaths(player.getUniqueId(), 0);
