@@ -14,12 +14,7 @@ public class FirstJoinFixListener implements Listener {
       Player player = event.getPlayer();
       if (!player.hasPlayedBefore()) {
          Foxtrot.getInstance().getServer().getScheduler().runTaskLater(Foxtrot.getInstance(), () -> {
-            World world = Foxtrot.getInstance().getServer().getWorld("world");
-            if (world == null) {
-               world = Foxtrot.getInstance().getServer().getWorlds().get(0);
-            }
-
-            player.teleport(world.getSpawnLocation());
+            player.teleport(Foxtrot.getInstance().getServerHandler().getSpawnLocation());
             player.sendMessage("Welcome to the overworld!");
          }, 10L);
       }

@@ -21,7 +21,7 @@ public class RTPCommand {
          player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Once you've gotten a claim, type /f sethome to set your claim's home!"));
          player.sendMessage("");
          player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0F, 1.0F);
-         player.teleport(Foxtrot.getInstance().getServer().getWorld("world").getHighestBlockAt(0, 1000).getLocation().add(0.0, 1.0, 0.0));
+         player.teleport(Foxtrot.getInstance().getServerHandler().getMapWorld().getHighestBlockAt(0, 1000).getLocation().add(0.0, 1.0, 0.0));
       }
    }
 

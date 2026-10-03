@@ -47,9 +47,9 @@ public class LunarClientListener implements Listener {
 
    public LunarClientListener(Foxtrot instance) {
       this.instance = instance;
-      this.world = instance.getServer().getWorld("world");
+      this.world = instance.getServerHandler().getMapWorld();
       this.spawnWaypoint = new LCWaypoint(
-         ChatColor.GREEN + "Spawn" + ChatColor.WHITE, this.world.getBlockAt(0, 76, 0).getLocation(), Color.GREEN.getRGB(), true
+         ChatColor.GREEN + "Spawn" + ChatColor.WHITE, this.world.getSpawnLocation().getBlock().getLocation(), Color.GREEN.getRGB(), true
       );
    }
 
