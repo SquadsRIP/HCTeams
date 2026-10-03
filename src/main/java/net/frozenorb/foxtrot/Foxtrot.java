@@ -81,6 +81,7 @@ import net.frozenorb.foxtrot.persist.maps.AnnoyingBroadcastMap;
 import net.frozenorb.foxtrot.persist.maps.ArcherTagColorMap;
 import net.frozenorb.foxtrot.persist.maps.BountyCooldownMap;
 import net.frozenorb.foxtrot.persist.maps.ChatModeMap;
+import net.frozenorb.foxtrot.persist.maps.ChatMessagesMap;
 import net.frozenorb.foxtrot.persist.maps.ChatSpyMap;
 import net.frozenorb.foxtrot.persist.maps.CoalMinedMap;
 import net.frozenorb.foxtrot.persist.maps.DeathbanMap;
@@ -250,6 +251,7 @@ public class Foxtrot extends JavaPlugin {
    private TeamFocusColorMap teamFocusColorMap;
    private AnnoyingBroadcastMap annoyingBroadcastMap;
    private ChatModeMap chatModeMap;
+   private ChatMessagesMap chatMessagesMap;
    private FishingKitMap fishingKitMap;
    private ToggleGlobalChatMap toggleGlobalChatMap;
    private ChatSpyMap chatSpyMap;
@@ -666,6 +668,7 @@ public class Foxtrot extends JavaPlugin {
       this.firstJoinMap.loadFromRedis();
       this.lastJoinMap = new LastJoinMap();
       this.lastJoinMap.loadFromRedis();
+      this.chatMessagesMap = new ChatMessagesMap();
       this.wrappedBalanceMap = new WrappedBalanceMap();
       this.wrappedBalanceMap.loadFromRedis();
       this.toggleFoundDiamondsMap = new ToggleFoundDiamondsMap();
@@ -1092,6 +1095,10 @@ public class Foxtrot extends JavaPlugin {
 
    public LastJoinMap getLastJoinMap() {
       return this.lastJoinMap;
+   }
+
+   public ChatMessagesMap getChatMessagesMap() {
+      return this.chatMessagesMap;
    }
 
    public FriendLivesMap getFriendLivesMap() {
