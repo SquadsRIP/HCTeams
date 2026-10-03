@@ -1,6 +1,7 @@
 package net.frozenorb.foxtrot.commands;
 
 import cc.fyre.proton.command.Command;
+import net.frozenorb.foxtrot.config.ConfigMessages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -155,6 +156,6 @@ public class DisabledCommands {
 
    @Command(names = "discord", permission = "")
    public static void discord(Player player) {
-      player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Discord: &cComing Soon!"));
+      player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Discord: &c" + ConfigMessages.link("discord", "Coming Soon!")));
    }
 }
