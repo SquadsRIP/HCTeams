@@ -64,6 +64,7 @@ import net.frozenorb.foxtrot.listener.KitMapListener;
 import net.frozenorb.foxtrot.listener.LunarClientListener;
 import net.frozenorb.foxtrot.listener.MapListener;
 import net.frozenorb.foxtrot.listener.MegaFixListener;
+import net.frozenorb.foxtrot.listener.OldWorldGuardListener;
 import net.frozenorb.foxtrot.listener.MobStackListener;
 import net.frozenorb.foxtrot.listener.NetherPortalListener;
 import net.frozenorb.foxtrot.listener.OwnerClickableKitListener;
@@ -148,6 +149,7 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new FirstJoinFixListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new MobStackListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new MegaFixListener(), foxtrot);
+      foxtrot.getServer().getPluginManager().registerEvents(new OldWorldGuardListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new SignShopListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new RatioCommand(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new TitleListener(), foxtrot);
