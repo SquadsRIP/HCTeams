@@ -16,6 +16,8 @@ public final class SquadsText {
    private static final Pattern URL = Pattern.compile(
       "(?i)(?:https?://|www\\.)[^\\s<>\"'§&]+|(?:(?<![\\w.])|(?<=[&§][0-9a-fk-or]))(?:(?:store|ts|www)\\.)?(?:cavepvp\\.(?:org|com|net)|squads\\.(?:org|rip)|discord\\.gg)(?![a-z0-9-])(?:/[^\\s<>\"'§&]*)?"
    );
+   // Squads' own links are shown as-is; every other URL (leftover CavePVP links) is scrubbed.
+   private static final Pattern OWN_LINK = Pattern.compile("(?i)^(?:https?://)?(?:www\\.)?(?:(?:[a-z0-9-]+\\.)*squads\\.rip|squadsrip\\.tebex\\.io|discord\\.gg/squadsrip|(?:x|twitter)\\.com/@?squadsrip)(?:/.*)?$");
    private static final Pattern BRAND = Pattern.compile("(?i)cavepvp|cave(?!rn|[_ ]?spider| spawner)");
 
    private SquadsText() {
@@ -39,7 +41,8 @@ public final class SquadsText {
             var3 = var4.substring(var4.length() - 1) + var3;
          }
 
-         var1.appendReplacement(var2, Matcher.quoteReplacement("Coming Soon!" + var3));
+         String var10 = var1.group().substring(0, var1.group().length() - var3.length());
+         var1.appendReplacement(var2, Matcher.quoteReplacement((OWN_LINK.matcher(var10).matches() ? var10 : "Coming Soon!") + var3));
       }
 
       var1.appendTail(var2);
@@ -97,10 +100,6 @@ public final class SquadsText {
                if (!var1.equals("disabled-commands.yml") || var7.startsWith("custom-messages.")) {
                   Object var8 = var3.invoke(var0, var7);
                   Object var9 = value(var8);
-                  if (var1.equals("branding.yml") && (var7.equals("networkWebsite") || var7.equals("statsRoot") || var7.startsWith("links."))) {
-                     var9 = "Coming Soon!";
-                  }
-
                   if (var7.equals("branding.network-name")) {
                      var9 = "Squads";
                   }
