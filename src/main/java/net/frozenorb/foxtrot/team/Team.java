@@ -1504,7 +1504,7 @@ public class Team {
          player.sendMessage(GRAY_LINE);
          String homeStr = this.HQ == null ? "None" : this.HQ.getBlockX() + ", " + this.HQ.getBlockZ();
          String line1 = ChatColor.translateAlternateColorCodes(
-            '&', "&4&l" + this.getName() + " &7[" + onlineMembers + "/" + this.getSize() + "] &4Home: &f" + homeStr
+            '&', "&6&l" + this.getName() + " &7[" + onlineMembers + "/" + this.getSize() + "] &eHome: &f" + homeStr
          );
          FancyMessage teamLine = new FancyMessage();
          teamLine.text(line1).command("/f focus " + this.getName()).tooltip(ChatColor.GREEN + "Click to focus this team!");
@@ -1518,7 +1518,7 @@ public class Team {
          teamLine.send(player);
          if (allies.length() > 2) {
             allies.setLength(allies.length() - 2);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Allies: &c" + allies));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eAllies: " + allies));
          }
 
          String leaderName = Proton.getInstance().getUuidCache().name(this.getOwner());
@@ -1526,7 +1526,7 @@ public class Team {
          String leaderColor = leaderOnline ? "&a" : "&7";
          String leaderKills = String.valueOf(killsMap.getKills(this.getOwner()));
          FancyMessage leader = new FancyMessage(
-            ChatColor.translateAlternateColorCodes('&', "&4Leader: " + leaderColor + leaderName + " &7[" + leaderKills + "]")
+            ChatColor.translateAlternateColorCodes('&', "&eLeader: " + leaderColor + leaderName + " &7[" + leaderKills + "]")
          );
          if (player.hasPermission("neutron.staff")) {
             leader.command("/manageteam leader " + this.getName()).tooltip("§bClick to change leader");
@@ -1534,7 +1534,7 @@ public class Team {
 
          leader.send(player);
          if (onlineMembers > 0) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Online Members:"));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eOnline Members:"));
             if (!ChatColor.stripColor(coleadersJson.toOldMessageFormat()).endsWith("s: ")) {
                coleadersJson.send(player);
             }
@@ -1563,11 +1563,11 @@ public class Team {
          }
 
          if (offlineList.length() > 0) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Offline Members:"));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eOffline Members:"));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', offlineList.toString()));
          }
 
-         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Balance: &a$" + Math.round(this.getBalance())));
+         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eBalance: &a$" + Math.round(this.getBalance())));
          int totalHearts = (int)Math.ceil(this.getMaxDTR());
          int currentHearts = (int)Math.ceil(this.getDTR());
          StringBuilder aids = new StringBuilder();
@@ -1593,7 +1593,7 @@ public class Team {
          String dtrDisplay = Foxtrot.getInstance().getDTRDisplayMap().isHearts(player.getUniqueId())
             ? this.getDTRColor() + aids.toString() + this.getDTRSuffix()
             : this.getDTRColor() + formatDtrValue(this.getDTR()) + this.getDTRSuffix();
-         FancyMessage dtrMessage = new FancyMessage(ChatColor.translateAlternateColorCodes('&', "&4DTR: " + dtrDisplay));
+         FancyMessage dtrMessage = new FancyMessage(ChatColor.translateAlternateColorCodes('&', "&eDTR: " + dtrDisplay));
          if (player.hasPermission("foxtrot.manage")) {
             dtrMessage.command("/manageteam dtr " + this.getName()).tooltip("§bClick to modify team DTR");
          }
@@ -1629,11 +1629,11 @@ public class Team {
             if (!player.isOp()) {
                player.sendMessage(
                   ChatColor.translateAlternateColorCodes(
-                     '&', "&4DTR Regen: &f" + TimeUtils.formatIntoDetailedString((int)(this.getDTRCooldown() - System.currentTimeMillis()) / 1000).trim()
+                     '&', "&eDTR Regen: &f" + TimeUtils.formatIntoDetailedString((int)(this.getDTRCooldown() - System.currentTimeMillis()) / 1000).trim()
                   )
                );
             } else {
-               FancyMessage message = new FancyMessage(ChatColor.translateAlternateColorCodes('&', "&4DTR Regen: "))
+               FancyMessage message = new FancyMessage(ChatColor.translateAlternateColorCodes('&', "&eDTR Regen: "))
                   .tooltip(ChatColor.GREEN + "Click to remove regeneration timer")
                   .command("/startdtrregen " + this.getName());
                message.then(TimeUtils.formatIntoDetailedString((int)(this.getDTRCooldown() - System.currentTimeMillis()) / 1000))
