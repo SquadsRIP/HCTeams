@@ -68,6 +68,15 @@ public final class EnchantmentRules {
 
    public void applyTableRules(ItemStack item, Map<Enchantment, Integer> enchants, int levelCost, Random random) {
       if (item != null && item.getType() != Material.AIR) {
+         if (item.getType() == Material.BOW) {
+            enchants.remove(Enchantment.ARROW_FIRE);
+            if (enchants.isEmpty() && Enchantment.DURABILITY.canEnchantItem(item)) {
+               enchants.put(Enchantment.DURABILITY, 1);
+            }
+
+            return;
+         }
+
          boolean book = item.getType() == Material.BOOK;
          enchants.entrySet()
             .removeIf(
