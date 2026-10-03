@@ -86,7 +86,19 @@ public class EnchantmentLimiterListener implements Listener {
                && previous.hasItemMeta()
                && previous.getItemMeta().hasDisplayName()
                && this.containsColor(previous.getItemMeta().getDisplayName())) {
-               event.setCancelled(true);
+               String original = previous.getItemMeta().getDisplayName();
+               if (!this.isUnchangedName(original, meta.getDisplayName())) {
+                  event.setCancelled(true);
+                  if (event.getWhoClicked() instanceof Player) {
+                     ((Player)event.getWhoClicked()).sendMessage(ChatColor.RED + "You cannot rename this item.");
+                  }
+
+                  return;
+               }
+
+               meta.setDisplayName(original);
+               item.setItemMeta(meta);
+               event.setCurrentItem(item);
                return;
             }
 
@@ -99,6 +111,10 @@ public class EnchantmentLimiterListener implements Listener {
 
    private boolean containsColor(String displayName) {
       return !ChatColor.stripColor(displayName).equals(displayName);
+   }
+
+   private boolean isUnchangedName(String original, String result) {
+      return result.equals(original) || result.equals(original.replace("§", "")) || result.equals(ChatColor.stripColor(original));
    }
 
    private String fixName(String name) {
@@ -164,7 +180,7 @@ public class EnchantmentLimiterListener implements Listener {
    public void onAnvilResult(InventoryClickEvent event) {
       if (event.getInventory() instanceof AnvilInventory && event.getRawSlot() == 2) {
          EnchantmentRules rules = new EnchantmentRules(Foxtrot.getInstance().getConfig());
-         if (rules.exceedsLimits(event.getCurrentItem())) {
+         if (rules.exceedsLimits(event.getCurrentItem(), event.getInventory().getItem(0), event.getInventory().getItem(1))) {
             event.setCancelled(true);
             if (event.getWhoClicked() instanceof Player) {
                ((Player)event.getWhoClicked())
