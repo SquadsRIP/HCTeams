@@ -8,11 +8,6 @@ import org.bukkit.entity.Player;
 public class DisabledCommands {
    private static final String UNKNOWN_COMMAND = "Unknown command. Type \"/help\" for help.";
 
-   @Command(names = {"help", "?"}, permission = "")
-   public static void help(Player player) {
-      player.sendMessage("Unknown command. Type \"/help\" for help.");
-   }
-
    @Command(names = "settings", permission = "")
    public static void settings(Player player) {
       player.sendMessage("Unknown command. Type \"/help\" for help.");

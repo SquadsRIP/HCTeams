@@ -125,13 +125,6 @@ public class HardcoreCommandListener implements Listener {
       var1 = var1.substring(var1.lastIndexOf(58) + 1);
       return var1.equalsIgnoreCase("gkit")
          || var1.equalsIgnoreCase("gkits")
-         || var1.equalsIgnoreCase("help")
-         || var1.equalsIgnoreCase("whatdoido")
-         || var1.equalsIgnoreCase("helpme")
-         || var1.equalsIgnoreCase("menu")
-         || var1.equalsIgnoreCase("mainmenu")
-         || var1.equalsIgnoreCase("imstupid")
-         || var1.equalsIgnoreCase("noob")
          || var1.equalsIgnoreCase("classes")
          || var1.equalsIgnoreCase("class")
          || var1.equalsIgnoreCase("armorclasses")
