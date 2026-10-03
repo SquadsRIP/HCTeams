@@ -1,6 +1,5 @@
 package net.frozenorb.foxtrot.gameplay.events.koth.minikoth.kothschedule;
 
-import cc.fyre.proton.command.Command;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +14,6 @@ import org.bukkit.entity.Player;
 public class MiniKOTHScheduleCommand {
    public static final DateFormat KOTH_DATE_FORMAT = new SimpleDateFormat("EEE h:mm a");
 
-   @Command(names = {"MiniKoth Schedule", "minikoth"}, permission = "")
    public static void kothSchedule(Player sender) {
       int sent = 0;
       Date now = new Date();

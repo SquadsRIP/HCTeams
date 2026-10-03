@@ -346,13 +346,12 @@ public class ServerHandler {
       return player.getGameMode() == GameMode.CREATIVE && player.hasPermission("hcf.admin.override");
    }
 
-   public Location getSpawnLocation() {
-      World spawn = Foxtrot.getInstance().getServer().getWorld("Spawn");
-      if (Foxtrot.getInstance().getMapHandler().isKitMap()) {
-         spawn = Foxtrot.getInstance().getServer().getWorld("world");
-      }
+   public World getMapWorld() {
+      return Foxtrot.getInstance().getServer().getWorld(Foxtrot.getInstance().getMapHandler().isKitMap() ? "world" : "Spawn");
+   }
 
-      return spawn.getSpawnLocation().add(0.0, 1.0, 0.0);
+   public Location getSpawnLocation() {
+      return this.getMapWorld().getSpawnLocation().add(0.0, 1.0, 0.0);
    }
 
    public boolean isUnclaimedOrRaidable(Player player, Location loc) {

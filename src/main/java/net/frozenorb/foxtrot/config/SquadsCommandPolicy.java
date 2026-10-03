@@ -56,7 +56,8 @@ public final class SquadsCommandPolicy implements Runnable {
          "buildcomp",
          "basebuild",
          "basebuildcompetition",
-         "ratio"
+         "ratio",
+         "falltrap"
       )
    );
    private final Object plugin;

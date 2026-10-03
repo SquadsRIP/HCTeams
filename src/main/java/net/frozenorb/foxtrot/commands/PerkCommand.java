@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 public class PerkCommand {
    public static Map<UUID, UUID> requests = new HashMap<>();
 
-   @Command(names = "warp end", permission = "")
    public static void execute(Player player) {
       if (!player.hasPermission("perk.warp.end")) {
          player.sendMessage(ChatColor.RED + "You do not have the /warp End perk!");
@@ -25,7 +24,6 @@ public class PerkCommand {
       }
    }
 
-   @Command(names = "warp nether", permission = "")
    public static void nether(Player player) {
       if (!player.hasPermission("perk.warp.nether")) {
          player.sendMessage(ChatColor.RED + "You do not have the /warp Nether perk!");

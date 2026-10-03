@@ -10,9 +10,11 @@ import org.bukkit.entity.Player;
 
 public class SpawnCommand {
    @Command(names = "spawn", permission = "command.spawn")
-   public static void spawn(Player sender, @Parameter(name = "world", defaultValue = "world") String worldName) {
+   public static void spawn(Player sender, @Parameter(name = "world", defaultValue = "Spawn") String worldName) {
       if (!sender.hasPermission("command.spawn.advanced")) {
          sender.sendMessage(ChatColor.RED + "This command is disabled. Walk to spawn!");
+      } else if (worldName.equalsIgnoreCase("Spawn")) {
+         sender.teleport(Foxtrot.getInstance().getServerHandler().getSpawnLocation());
       } else {
          if (worldName.equalsIgnoreCase("s")) {
             worldName = sender.getWorld().getName();

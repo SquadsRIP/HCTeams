@@ -2,7 +2,6 @@ package net.frozenorb.foxtrot.gameplay.loot.crate.command;
 
 import cc.fyre.piston.Piston;
 import cc.fyre.piston.packet.StaffBroadcastPacket;
-import cc.fyre.proton.command.Command;
 import cc.fyre.proton.command.param.Parameter;
 import cc.fyre.universe.UniverseAPI;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class CrateCommand {
-   @Command(names = "crates give", permission = "command.crates.give", hidden = true)
    public static void execute(
       CommandSender sender, @Parameter(name = "target") Player target, @Parameter(name = "crate") Crate crate, @Parameter(name = "amount") int amount
    ) {
@@ -68,7 +66,6 @@ public class CrateCommand {
       }
    }
 
-   @Command(names = "crates create", permission = "command.crates.create", hidden = true)
    public static void give(Player player, @Parameter(name = "id") String id) {
       ItemStack itemStack = player.getItemInHand();
       if (itemStack != null && itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName() != null) {
@@ -87,7 +84,6 @@ public class CrateCommand {
       }
    }
 
-   @Command(names = "crates additem", permission = "command.crates.additem", hidden = true)
    public static void addItem(
       Player player, @Parameter(name = "crate") Crate crate, @Parameter(name = "chance") double chance, @Parameter(name = "broadcast") boolean broadcast
    ) {
@@ -100,7 +96,6 @@ public class CrateCommand {
       }
    }
 
-   @Command(names = "crates giveall", permission = "op", hidden = true)
    public static void giveAll(CommandSender sender, @Parameter(name = "crate") Crate crate, @Parameter(name = "amount") int amount) {
       if (amount > 1 && !sender.getName().equalsIgnoreCase("SimplyTrash")) {
          sender.sendMessage(ChatColor.RED + "No permission.");
@@ -140,7 +135,6 @@ public class CrateCommand {
       }
    }
 
-   @Command(names = "crates addcmd", permission = "command.crates.addcmd", hidden = true)
    public static void addCmd(
       Player player,
       @Parameter(name = "crate") Crate crate,
@@ -152,7 +146,6 @@ public class CrateCommand {
       crate.getItems().add(new CrateItem(player.getItemInHand(), chance, command, false, broadcast));
    }
 
-   @Command(names = "crates reload", permission = "op", hidden = true)
    public static void reload(Player player) {
       CrateHandler crateHandler = Foxtrot.getInstance().getCrateHandler();
       crateHandler.getCrates().clear();

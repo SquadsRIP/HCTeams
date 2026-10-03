@@ -193,11 +193,7 @@ public final class CheatBreakerService implements Listener {
          return saved;
       }
 
-      World world = this.plugin.getServer().getWorld("world");
-      if (world == null) {
-         world = this.plugin.getServer().getWorld("Spawn");
-      }
-
+      World world = Foxtrot.getInstance().getServerHandler().getMapWorld();
       return world == null ? null : world.getSpawnLocation();
    }
 

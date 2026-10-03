@@ -1,11 +1,9 @@
 package net.frozenorb.foxtrot.listener;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import net.frozenorb.foxtrot.Foxtrot;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -21,7 +19,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 public class MobStackListener implements Listener {
-   private static final double STACK_RADIUS = 25.0;
    private static final int MAX_STACK = 500;
 
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -42,17 +39,14 @@ public class MobStackListener implements Listener {
             }
 
             Location loc;
-            World world;
-            if ((world = (loc = entity.getLocation()).getWorld()) != null) {
-               ArrayList<Entity> nearby = new ArrayList<>();
+            if ((loc = entity.getLocation()).getWorld() != null) {
+               double radius = Foxtrot.getInstance().getConfig().getDouble("mobStacking.radius", 8.0);
 
-               for (Entity e : world.getEntities()) {
-                  if (!e.getUniqueId().equals(entity.getUniqueId()) && e.getLocation().distanceSquared(loc) <= 625.0) {
-                     nearby.add(e);
+               for (Entity nearbyEntity : entity.getNearbyEntities(radius, radius, radius)) {
+                  if (nearbyEntity.getLocation().distanceSquared(loc) > radius * radius) {
+                     continue;
                   }
-               }
 
-               for (Entity nearbyEntity : nearby) {
                   LivingEntity nearbyMob;
                   int nearbyCount;
                   if (!nearbyEntity.getUniqueId().equals(entity.getUniqueId())

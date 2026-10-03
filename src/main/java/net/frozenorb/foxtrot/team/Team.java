@@ -28,7 +28,9 @@ import java.util.concurrent.TimeUnit;
 import mkremins.fanciful.FancyMessage;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.chat.enums.ChatMode;
+import net.frozenorb.foxtrot.gameplay.events.Event;
 import net.frozenorb.foxtrot.gameplay.events.fury.FuryCapZone;
+import net.frozenorb.foxtrot.gameplay.events.koth.KOTH;
 import net.frozenorb.foxtrot.gameplay.events.outposts.data.Outpost;
 import net.frozenorb.foxtrot.gameplay.events.outposts.type.EndOutpost;
 import net.frozenorb.foxtrot.gameplay.events.outposts.type.NetherOutpost;
@@ -48,6 +50,7 @@ import net.frozenorb.foxtrot.team.track.TeamActionTracker;
 import net.frozenorb.foxtrot.team.track.TeamActionType;
 import net.frozenorb.foxtrot.team.upgrade.UpgradeType;
 import net.frozenorb.foxtrot.util.CuboidRegion;
+import net.frozenorb.foxtrot.util.LocationUtil;
 import net.minecraft.util.com.google.common.collect.ImmutableMap;
 import net.minecraft.util.org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
@@ -64,6 +67,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.TrapDoor;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.BlockVector;
 
 public class Team {
    public static final DecimalFormat DTR_FORMAT = new DecimalFormat("0.00");
@@ -1397,27 +1401,41 @@ public class Team {
       };
    }
 
+   private String getSystemTeamLocation() {
+      String eventName = this.name.replaceAll("(?i)\\s*koth$", "");
+      Event event = Foxtrot.getInstance().getEventHandler().getEvent(eventName);
+      if (event == null && !eventName.equals(this.name)) {
+         event = Foxtrot.getInstance().getEventHandler().getEvent(this.name);
+      }
+
+      if (event instanceof KOTH) {
+         KOTH koth = (KOTH)event;
+         BlockVector cap = koth.getCapLocation();
+         return cap.getBlockX() + ", " + cap.getBlockZ() + ChatColor.GRAY + " (" + LocationUtil.realmName(koth.getWorld()) + ")";
+      } else if (this.HQ != null) {
+         return this.HQ.getBlockX() + ", " + this.HQ.getBlockZ() + ChatColor.GRAY + " (" + LocationUtil.realmName(this.HQ.getWorld()) + ")";
+      } else if (!this.claims.isEmpty()) {
+         Claim claim = this.claims.get(0);
+         Location min = claim.getMinimumPoint();
+         Location max = claim.getMaximumPoint();
+         return (min.getBlockX() + max.getBlockX()) / 2
+            + ", "
+            + (min.getBlockZ() + max.getBlockZ()) / 2
+            + ChatColor.GRAY
+            + " ("
+            + LocationUtil.realmName(claim.getWorld())
+            + ")";
+      } else {
+         return null;
+      }
+   }
+
    public void sendTeamInfo(Player player) {
       if (this.getOwner() == null) {
          player.sendMessage(GRAY_LINE);
          player.sendMessage(this.getName(player));
-         if (this.HQ != null && this.HQ.getWorld().getEnvironment() != Environment.NORMAL) {
-            String world = this.HQ.getWorld().getEnvironment() == Environment.NETHER ? "Nether" : "End";
-            if (this.HQ.getWorld().getName().contains("MiniKOTH")) {
-               world = "Mini KOTH";
-            }
-
-            player.sendMessage(
-               ChatColor.YELLOW
-                  + "Location: "
-                  + ChatColor.WHITE
-                  + (this.HQ == null ? "None" : this.HQ.getBlockX() + ", " + this.HQ.getBlockZ() + " (" + world + ")")
-            );
-         } else {
-            player.sendMessage(
-               ChatColor.YELLOW + "Location: " + ChatColor.WHITE + (this.HQ == null ? "None" : this.HQ.getBlockX() + ", " + this.HQ.getBlockZ())
-            );
-         }
+         String location = this.getSystemTeamLocation();
+         player.sendMessage(ChatColor.YELLOW + "Location: " + ChatColor.WHITE + (location == null ? "None" : location));
 
          if (this.getName().equalsIgnoreCase("Glowstone")) {
             long resetMs = Foxtrot.getInstance().getGlowHandler().getResetTime();
@@ -1504,7 +1522,7 @@ public class Team {
          player.sendMessage(GRAY_LINE);
          String homeStr = this.HQ == null ? "None" : this.HQ.getBlockX() + ", " + this.HQ.getBlockZ();
          String line1 = ChatColor.translateAlternateColorCodes(
-            '&', "&4&l" + this.getName() + " &7[" + onlineMembers + "/" + this.getSize() + "] &4Home: &f" + homeStr
+            '&', "&6&l" + this.getName() + " &7[" + onlineMembers + "/" + this.getSize() + "] &eHome: &f" + homeStr
          );
          FancyMessage teamLine = new FancyMessage();
          teamLine.text(line1).command("/f focus " + this.getName()).tooltip(ChatColor.GREEN + "Click to focus this team!");
@@ -1518,7 +1536,7 @@ public class Team {
          teamLine.send(player);
          if (allies.length() > 2) {
             allies.setLength(allies.length() - 2);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Allies: &c" + allies));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eAllies: " + allies));
          }
 
          String leaderName = Proton.getInstance().getUuidCache().name(this.getOwner());
@@ -1526,7 +1544,7 @@ public class Team {
          String leaderColor = leaderOnline ? "&a" : "&7";
          String leaderKills = String.valueOf(killsMap.getKills(this.getOwner()));
          FancyMessage leader = new FancyMessage(
-            ChatColor.translateAlternateColorCodes('&', "&4Leader: " + leaderColor + leaderName + " &7[" + leaderKills + "]")
+            ChatColor.translateAlternateColorCodes('&', "&eLeader: " + leaderColor + leaderName + " &7[" + leaderKills + "]")
          );
          if (player.hasPermission("neutron.staff")) {
             leader.command("/manageteam leader " + this.getName()).tooltip("§bClick to change leader");
@@ -1534,7 +1552,7 @@ public class Team {
 
          leader.send(player);
          if (onlineMembers > 0) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Online Members:"));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eOnline Members:"));
             if (!ChatColor.stripColor(coleadersJson.toOldMessageFormat()).endsWith("s: ")) {
                coleadersJson.send(player);
             }
@@ -1563,11 +1581,11 @@ public class Team {
          }
 
          if (offlineList.length() > 0) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Offline Members:"));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eOffline Members:"));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', offlineList.toString()));
          }
 
-         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Balance: &a$" + Math.round(this.getBalance())));
+         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eBalance: &a$" + Math.round(this.getBalance())));
          int totalHearts = (int)Math.ceil(this.getMaxDTR());
          int currentHearts = (int)Math.ceil(this.getDTR());
          StringBuilder aids = new StringBuilder();
@@ -1593,7 +1611,7 @@ public class Team {
          String dtrDisplay = Foxtrot.getInstance().getDTRDisplayMap().isHearts(player.getUniqueId())
             ? this.getDTRColor() + aids.toString() + this.getDTRSuffix()
             : this.getDTRColor() + formatDtrValue(this.getDTR()) + this.getDTRSuffix();
-         FancyMessage dtrMessage = new FancyMessage(ChatColor.translateAlternateColorCodes('&', "&4DTR: " + dtrDisplay));
+         FancyMessage dtrMessage = new FancyMessage(ChatColor.translateAlternateColorCodes('&', "&eDTR: " + dtrDisplay));
          if (player.hasPermission("foxtrot.manage")) {
             dtrMessage.command("/manageteam dtr " + this.getName()).tooltip("§bClick to modify team DTR");
          }
@@ -1629,11 +1647,11 @@ public class Team {
             if (!player.isOp()) {
                player.sendMessage(
                   ChatColor.translateAlternateColorCodes(
-                     '&', "&4DTR Regen: &f" + TimeUtils.formatIntoDetailedString((int)(this.getDTRCooldown() - System.currentTimeMillis()) / 1000).trim()
+                     '&', "&eDTR Regen: &f" + TimeUtils.formatIntoDetailedString((int)(this.getDTRCooldown() - System.currentTimeMillis()) / 1000).trim()
                   )
                );
             } else {
-               FancyMessage message = new FancyMessage(ChatColor.translateAlternateColorCodes('&', "&4DTR Regen: "))
+               FancyMessage message = new FancyMessage(ChatColor.translateAlternateColorCodes('&', "&eDTR Regen: "))
                   .tooltip(ChatColor.GREEN + "Click to remove regeneration timer")
                   .command("/startdtrregen " + this.getName());
                message.then(TimeUtils.formatIntoDetailedString((int)(this.getDTRCooldown() - System.currentTimeMillis()) / 1000))

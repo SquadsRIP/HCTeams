@@ -1,6 +1,5 @@
 package net.frozenorb.foxtrot.gameplay.extra.runningin;
 
-import cc.fyre.proton.command.Command;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +12,6 @@ import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 
 public class RunningInCommand {
-   @Command(names = "runningin", permission = "")
    public static void execute(Player player) {
       if (Foxtrot.getInstance().getServerHandler().isTeams()) {
          player.sendMessage(ChatColor.RED + "This feature is disabled on " + Foxtrot.getInstance().getServerHandler().getServerName() + ".");
@@ -80,7 +78,6 @@ public class RunningInCommand {
       }
    }
 
-   @Command(names = {"runningin list", "runningin menu"}, permission = "")
    public static void runningInMenu(Player player) {
       if (Foxtrot.getInstance().getServerHandler().isTeams()) {
          player.sendMessage(ChatColor.RED + "This feature is disabled on " + Foxtrot.getInstance().getServerHandler().getServerName() + ".");

@@ -1,12 +1,22 @@
 package net.frozenorb.foxtrot.config;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import net.frozenorb.foxtrot.Foxtrot;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public final class ConfigMessages {
+   private static final Map<String, String> DEFAULT_LINKS = new HashMap<>();
+
+   static {
+      DEFAULT_LINKS.put("store", "squadsrip.tebex.io");
+      DEFAULT_LINKS.put("discord", "discord.gg/squadsrip");
+      DEFAULT_LINKS.put("twitter", "x.com/@SquadsRIP");
+   }
+
    private ConfigMessages() {
    }
 
@@ -16,8 +26,14 @@ public final class ConfigMessages {
       return SquadsText.display(value == null ? fallback : value);
    }
 
-   public static String link(String var0, String var1) {
-      return "Coming Soon!";
+   public static String link(String key, String fallback) {
+      FileConfiguration branding = Foxtrot.getInstance() == null ? null : Foxtrot.getInstance().getConfiguration("branding.yml");
+      String value = branding == null ? null : branding.getString("links." + key);
+      if (value == null || value.trim().isEmpty() || value.trim().equalsIgnoreCase("Coming Soon!")) {
+         value = DEFAULT_LINKS.getOrDefault(key, fallback);
+      }
+
+      return SquadsText.display(value);
    }
 
    public static String networkName() {

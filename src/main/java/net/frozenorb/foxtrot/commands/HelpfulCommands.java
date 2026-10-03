@@ -27,7 +27,6 @@ public class HelpfulCommands {
       player.sendMessage("");
    }
 
-   @Command(names = "schedule", permission = "")
    public static void schedule(Player player) {
       final int date = new GregorianCalendar().get(7);
       (new Menu() {
@@ -333,7 +332,6 @@ public class HelpfulCommands {
       }
    }
 
-   @Command(names = {"outpost", "outposts"}, permission = "")
    public static void outpost(Player player) {
       new OutpostMenu().openMenu(player);
    }

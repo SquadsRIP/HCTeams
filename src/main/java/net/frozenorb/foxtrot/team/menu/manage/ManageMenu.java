@@ -6,7 +6,6 @@ import java.beans.ConstructorProperties;
 import java.util.HashMap;
 import java.util.Map;
 import net.frozenorb.foxtrot.team.Team;
-import net.frozenorb.foxtrot.team.menu.manage.button.LettingInButton;
 import net.frozenorb.foxtrot.team.menu.manage.button.LogsButton;
 import net.frozenorb.foxtrot.team.menu.manage.button.MemberButton;
 import net.frozenorb.foxtrot.team.menu.manage.button.PointsButton;
@@ -37,7 +36,6 @@ public class ManageMenu extends Menu {
       toReturn.put(15, new PointsButton(this.team));
       toReturn.put(28, new SettingsButton(this.team));
       toReturn.put(30, new UpgradesButton(this.team));
-      toReturn.put(32, new LettingInButton(this.team, this));
       toReturn.put(34, new StatisticsButton(this.team));
       return toReturn;
    }

@@ -1,16 +1,12 @@
 package net.frozenorb.foxtrot.commands;
 
 import cc.fyre.proton.command.Command;
+import net.frozenorb.foxtrot.config.ConfigMessages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class DisabledCommands {
    private static final String UNKNOWN_COMMAND = "Unknown command. Type \"/help\" for help.";
-
-   @Command(names = {"help", "?"}, permission = "")
-   public static void help(Player player) {
-      player.sendMessage("Unknown command. Type \"/help\" for help.");
-   }
 
    @Command(names = "settings", permission = "")
    public static void settings(Player player) {
@@ -22,7 +18,6 @@ public class DisabledCommands {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
 
-   @Command(names = "schedule", permission = "")
    public static void schedule(Player player) {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
@@ -84,7 +79,6 @@ public class DisabledCommands {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
 
-   @Command(names = "outpost", permission = "")
    public static void outpost(Player player) {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
@@ -106,7 +100,6 @@ public class DisabledCommands {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
 
-   @Command(names = {"gems", "gem"}, permission = "")
    public static void gems(Player player) {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
@@ -155,6 +148,6 @@ public class DisabledCommands {
 
    @Command(names = "discord", permission = "")
    public static void discord(Player player) {
-      player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Discord: &cComing Soon!"));
+      player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Discord: &c" + ConfigMessages.link("discord", "Coming Soon!")));
    }
 }

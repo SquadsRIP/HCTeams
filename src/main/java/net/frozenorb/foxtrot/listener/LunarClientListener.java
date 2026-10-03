@@ -18,6 +18,7 @@ import java.util.UUID;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.commands.CustomTimerCreateCommand;
 import net.frozenorb.foxtrot.commands.DisableCommand;
+import net.frozenorb.foxtrot.nametag.FactionNametagFormatter;
 import net.frozenorb.foxtrot.nametag.FoxtrotNametagProvider;
 import net.frozenorb.foxtrot.team.Team;
 import org.bukkit.ChatColor;
@@ -47,9 +48,9 @@ public class LunarClientListener implements Listener {
 
    public LunarClientListener(Foxtrot instance) {
       this.instance = instance;
-      this.world = instance.getServer().getWorld("world");
+      this.world = instance.getServerHandler().getMapWorld();
       this.spawnWaypoint = new LCWaypoint(
-         ChatColor.GREEN + "Spawn" + ChatColor.WHITE, this.world.getBlockAt(0, 76, 0).getLocation(), Color.GREEN.getRGB(), true
+         ChatColor.GREEN + "Spawn" + ChatColor.WHITE, this.world.getSpawnLocation().getBlock().getLocation(), Color.GREEN.getRGB(), true
       );
    }
 
@@ -244,6 +245,11 @@ public class LunarClientListener implements Listener {
       NameTagInfo nameTagInfo = new FoxtrotNametagProvider().fetchNameTag(target, viewer);
       String nameTag = nameTagInfo.getPrefix() + target.getDisguisedName();
       List<String> tag = new ArrayList<>();
+      String staffLine = FactionNametagFormatter.staffRankLine(target);
+      if (staffLine != null) {
+         tag.add(staffLine);
+      }
+
       if (ModHandler.INSTANCE.isInModMode(target.getUniqueId())) {
          tag.add(ChatColor.GRAY + "[Mod Mode]");
          tag.add(nameTag);
@@ -262,7 +268,8 @@ public class LunarClientListener implements Listener {
 
       Team team = Foxtrot.getInstance().getTeamHandler().getTeam(target);
       if (team == null) {
-         return Collections.singletonList(nameTag);
+         tag.add(nameTag);
+         return tag;
       }
 
       String dtrFormat = team.formatDTR();
