@@ -1,6 +1,8 @@
 package net.frozenorb.foxtrot.listener;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import net.frozenorb.foxtrot.Foxtrot;
@@ -21,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class RodCooldownListener implements Listener {
    public static Map<UUID, Long> cache = new HashMap<>();
+   private static final List<String> TWO_SECOND_CLASSES = Arrays.asList("Bard", "Archer", "Miner", "Rogue");
 
    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
    private void onFish(PlayerFishEvent event) {
@@ -65,7 +68,7 @@ public class RodCooldownListener implements Listener {
       PvPClass pvpClass = PvPClassHandler.getPvPClass(player);
       if (pvpClass != null) {
          String name = pvpClass.getName();
-         seconds = config.getDouble("rodCooldown.classes." + name, !name.equals("Bard") && !name.equals("Archer") ? seconds : 2.0);
+         seconds = config.getDouble("rodCooldown.classes." + name, TWO_SECOND_CLASSES.contains(name) ? 2.0 : seconds);
       }
 
       return (long)(seconds * 1000.0);

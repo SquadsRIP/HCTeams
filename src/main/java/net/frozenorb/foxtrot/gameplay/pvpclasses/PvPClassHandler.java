@@ -40,21 +40,26 @@ public class PvPClassHandler extends BukkitRunnable implements Listener {
    private final EnergyService energyService;
    private final List<PvPClass> pvpClasses = new ArrayList<>();
 
+   private static boolean isClassEnabled(String name, boolean def) {
+      String path = "pvpClasses." + name;
+      return Foxtrot.getInstance().getConfiguration("classes.yml").getBoolean(path, Foxtrot.getInstance().getConfig().getBoolean(path, def));
+   }
+
    public PvPClassHandler() {
       this.pvpClasses.add(new MinerClass());
-      if (Foxtrot.getInstance().getConfig().getBoolean("pvpClasses.archer")) {
+      if (isClassEnabled("archer", true)) {
          this.pvpClasses.add(new ArcherClass());
       }
 
-      if (Foxtrot.getInstance().getConfig().getBoolean("pvpClasses.bard")) {
+      if (isClassEnabled("bard", true)) {
          this.pvpClasses.add(new BardClass());
       }
 
-      if (Foxtrot.getInstance().getMapHandler().isKitMap()) {
+      if (Foxtrot.getInstance().getMapHandler().isKitMap() && isClassEnabled("reaper", false)) {
          this.pvpClasses.add(new WitherSkeletonClass());
       }
 
-      if (Foxtrot.getInstance().getConfig().getBoolean("pvpClasses.rogue")) {
+      if (isClassEnabled("rogue", true)) {
          this.pvpClasses.add(new RogueClass());
       }
 

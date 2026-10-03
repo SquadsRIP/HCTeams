@@ -4,6 +4,8 @@ pvpClasses:
   bard: true
   rogue: true
   ranger: true
+  # Reaper is Kitmap-only and disabled on Squads.
+  reaper: false
 
 minerWorld:
   regen:
