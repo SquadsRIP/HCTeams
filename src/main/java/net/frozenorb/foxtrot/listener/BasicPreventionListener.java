@@ -33,11 +33,13 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreeperPowerEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
@@ -184,6 +186,25 @@ public class BasicPreventionListener implements Listener {
    @EventHandler
    public void onEntityExplodeCreeper(EntityExplodeEvent event) {
       if (event.getEntity() instanceof Creeper) {
+         event.setCancelled(true);
+      }
+   }
+
+   @EventHandler
+   public void onCreeperPrime(ExplosionPrimeEvent event) {
+      if (event.getEntity() instanceof Creeper) {
+         event.setCancelled(true);
+      }
+   }
+
+   @EventHandler
+   public void onCreeperPower(CreeperPowerEvent event) {
+      event.setCancelled(true);
+   }
+
+   @EventHandler(ignoreCancelled = true)
+   public void onCreeperDamage(EntityDamageByEntityEvent event) {
+      if (event.getDamager() instanceof Creeper) {
          event.setCancelled(true);
       }
    }
