@@ -28,7 +28,6 @@ import net.frozenorb.foxtrot.gameplay.kitmap.game.impl.tnttag.TNTTagListeners;
 import net.frozenorb.foxtrot.gameplay.kitmap.game.listener.GameListeners;
 import net.frozenorb.foxtrot.gameplay.kitmap.kits.listener.KitEditorListener;
 import net.frozenorb.foxtrot.gameplay.loot.partnercrate.listener.PartnerCrateListener;
-import net.frozenorb.foxtrot.listener.AntiCleanListener;
 import net.frozenorb.foxtrot.listener.AntiGlitchListener;
 import net.frozenorb.foxtrot.listener.AntiGriefListener;
 import net.frozenorb.foxtrot.listener.AntiPrimeListener;
@@ -179,7 +178,6 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new TeamClaimCommand(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new SellAllListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new FlyListener(), foxtrot);
-      foxtrot.getServer().getPluginManager().registerEvents(new AntiCleanListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new SpawnerTrackerListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new SpawnerLimiterListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new BossCleanupListener(), foxtrot);

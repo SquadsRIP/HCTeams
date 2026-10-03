@@ -9,7 +9,6 @@ import org.github.paperspigot.PaperSpigotConfig;
 public class DisableCommand {
    public static boolean deaths = false;
    public static boolean teamView = false;
-   public static boolean antiClean = true;
    public static boolean dailyKit = false;
    public static boolean crapplelimit = true;
    public static boolean damage = false;
@@ -116,17 +115,6 @@ public class DisableCommand {
       } else {
          deaths = true;
          player.sendMessage(ChatColor.GREEN + "Enabled bonus damage");
-      }
-   }
-
-   @Command(names = "disable anticlean", permission = "command.disable.anticlean")
-   public static void disableAntiClean(Player player) {
-      if (antiClean) {
-         antiClean = false;
-         player.sendMessage(ChatColor.YELLOW + "Disabled anti-clean");
-      } else {
-         antiClean = true;
-         player.sendMessage(ChatColor.GREEN + "Enabled anti-clean");
       }
    }
 

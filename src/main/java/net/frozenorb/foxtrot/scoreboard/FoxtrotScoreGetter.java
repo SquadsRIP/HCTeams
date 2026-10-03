@@ -50,7 +50,6 @@ import net.frozenorb.foxtrot.gameplay.loot.voteparty.VotePartyHandler;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.PvPClass;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.PvPClassHandler;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.pvpclasses.ArcherClass;
-import net.frozenorb.foxtrot.listener.AntiCleanListener;
 import net.frozenorb.foxtrot.listener.CrappleLimitListener;
 import net.frozenorb.foxtrot.listener.EndListener;
 import net.frozenorb.foxtrot.listener.GoldenAppleListener;
@@ -158,28 +157,6 @@ public class FoxtrotScoreGetter implements ScoreGetter {
          }
 
          Team team = Foxtrot.getInstance().getTeamHandler().getTeam(player);
-         Long antiCleanTime = AntiCleanListener.TIME_CACHE.get(team);
-         if (antiCleanTime != null) {
-            Team fightOpponent = AntiCleanListener.CACHE.get(team);
-            String fightFaction = fightOpponent != null ? fightOpponent.getName() : "Unknown";
-            long timeLeft = antiCleanTime - System.currentTimeMillis();
-            String fightTime;
-            if (timeLeft <= 0L) {
-               fightTime = "0s";
-            } else {
-               int seconds = (int)(timeLeft / 1000L);
-               fightTime = seconds + "s";
-            }
-
-            scores.add(sc("fight-format", "&4Fight: &7<faction> &4(<time>)").replace("<faction>", fightFaction).replace("<time>", fightTime));
-            if (System.currentTimeMillis() > antiCleanTime) {
-               String opponentName = fightOpponent != null ? fightOpponent.getName() : "Unknown";
-               AntiCleanListener.CACHE.remove(team);
-               AntiCleanListener.TIME_CACHE.remove(team);
-               team.sendMessage(ChatColor.translateAlternateColorCodes('&', "&fYour &4Fight&f against &4" + opponentName + "&f is now over."));
-            }
-         }
-
          String spawnTagScore = this.getSpawnTagScore(player);
          String enderpearlScore = this.getEnderpearlScore(player);
          String abilityScore = this.getAbilityScore(player);
