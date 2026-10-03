@@ -1,6 +1,5 @@
 package net.frozenorb.foxtrot.gameplay.lettingIn.command;
 
-import cc.fyre.proton.command.Command;
 import cc.fyre.proton.command.param.Parameter;
 import cc.fyre.proton.util.TimeUtils;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class LettingInCommand {
-   @Command(names = {"lettingin", "iamlettingin"}, permission = "")
    public static void execute(Player player, @Parameter(name = "base height") int baseHeight) {
       if (Foxtrot.getInstance().getServerHandler().isTeams()) {
          player.sendMessage(ChatColor.RED + "This feature is disabled on " + Foxtrot.getInstance().getServerHandler().getServerName() + ".");
@@ -75,7 +73,6 @@ public class LettingInCommand {
       }
    }
 
-   @Command(names = {"lettingin list", "lettingin gui", "whoslettingin", "lettingin menu", "lettingin who", "lettingin show"}, permission = "")
    public static void list(Player player) {
       if (Foxtrot.getInstance().getServerHandler().isTeams()) {
          player.sendMessage(ChatColor.RED + "This feature is disabled on " + Foxtrot.getInstance().getServerHandler().getServerName() + ".");

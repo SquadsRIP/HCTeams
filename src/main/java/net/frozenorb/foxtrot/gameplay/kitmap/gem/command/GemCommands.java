@@ -1,6 +1,5 @@
 package net.frozenorb.foxtrot.gameplay.kitmap.gem.command;
 
-import cc.fyre.proton.command.Command;
 import cc.fyre.proton.command.param.Parameter;
 import cc.fyre.proton.util.TimeUtils;
 import cc.fyre.proton.util.UUIDUtils;
@@ -27,7 +26,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class GemCommands {
-   @Command(names = {"gem help", "gems help", "gemshelp", "gemhelp"}, permission = "")
    public static void help(CommandSender sender) {
       if (!Foxtrot.getInstance().getMapHandler().isKitMap()) {
          sender.sendMessage(ChatColor.YELLOW + "This is a KitMap only command.");
@@ -46,7 +44,6 @@ public class GemCommands {
       }
    }
 
-   @Command(names = {"gem", "gems", "gem balance", "gems balance"}, description = "Check another player's balance", permission = "", async = true)
    public static void gems(Player sender, @Parameter(name = "player", defaultValue = "self") Player target) {
       if (!Foxtrot.getInstance().getMapHandler().isKitMap()) {
          new UpgradeMenu(Foxtrot.getInstance().getTeamHandler().getTeam(sender)).openMenu(sender);
@@ -60,7 +57,6 @@ public class GemCommands {
       }
    }
 
-   @Command(names = {"gem shop", "gems shop", "gemshop"}, permission = "")
    public static void gemShop(Player sender) {
       if (!Foxtrot.getInstance().getMapHandler().isKitMap()) {
          sender.sendMessage(ChatColor.YELLOW + "This is a KitMap only command.");
@@ -77,7 +73,6 @@ public class GemCommands {
       }
    }
 
-   @Command(names = {"gem repair", "gems repair"}, permission = "")
    public static void repair(Player sender) {
       if (!Foxtrot.getInstance().getMapHandler().isKitMap()) {
          sender.sendMessage(ChatColor.YELLOW + "This is a KitMap only command.");
@@ -108,7 +103,6 @@ public class GemCommands {
       }
    }
 
-   @Command(names = {"gem pay", "gems send", "gempay"}, permission = "")
    public static void gemPay(Player sender, @Parameter(name = "target") Player target, @Parameter(name = "amount") int amount) {
       if (!Foxtrot.getInstance().getMapHandler().isKitMap()) {
          sender.sendMessage(ChatColor.YELLOW + "This is a KitMap only command.");
@@ -125,7 +119,6 @@ public class GemCommands {
       }
    }
 
-   @Command(names = {"gem set", "gems set"}, permission = "op")
    public static void gemsSet(CommandSender sender, @Parameter(name = "target", defaultValue = "self") UUID player, @Parameter(name = "amount") int amount) {
       if (!Foxtrot.getInstance().getMapHandler().isKitMap()) {
          sender.sendMessage(ChatColor.YELLOW + "This is a KitMap only command.");
@@ -140,7 +133,6 @@ public class GemCommands {
       }
    }
 
-   @Command(names = {"gem add", "gems add"}, permission = "op")
    public static void gemsAdd(CommandSender sender, @Parameter(name = "target") OfflinePlayer target, @Parameter(name = "amount") int amount) {
       if (!Foxtrot.getInstance().getMapHandler().isKitMap()) {
          sender.sendMessage(ChatColor.YELLOW + "This is a KitMap only command.");
@@ -152,7 +144,6 @@ public class GemCommands {
       }
    }
 
-   @Command(names = {"gem hour", "gem double"}, permission = "foxtrot.gem.double")
    public static void gemHour(Player sender, @Parameter(name = "time") String time) {
       if (!Foxtrot.getInstance().getMapHandler().isKitMap()) {
          sender.sendMessage(ChatColor.YELLOW + "This is a KitMap only command.");
@@ -201,7 +192,6 @@ public class GemCommands {
       }
    }
 
-   @Command(names = {"gem hour stop", "gem double stop"}, permission = "foxtrot.gem.double")
    public static void gemHour(Player sender) {
       if (!Foxtrot.getInstance().getMapHandler().isKitMap()) {
          sender.sendMessage(ChatColor.YELLOW + "This is a KitMap only command.");

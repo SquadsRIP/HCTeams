@@ -170,7 +170,6 @@ public class AbilityHandler {
       }
    }
 
-   @Command(names = "tradeitem", permission = "")
    public static void tradeItem(Player player) {
       ItemStack itemStack = player.getItemInHand().clone();
       if (itemStack != null && itemStack.getType() != Material.AIR) {
