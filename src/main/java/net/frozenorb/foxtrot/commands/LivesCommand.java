@@ -30,6 +30,11 @@ public class LivesCommand {
       }
    }
 
+   @Command(names = {"lives use", "lives self"}, permission = "")
+   public static void use(Player sender) {
+      Foxtrot.getInstance().getDeathbanArenaHandler().useLife(sender);
+   }
+
    @Command(names = "Revive", permission = "foxtrot.revive")
    public static void revive(CommandSender sender, @Parameter(name = "player") UUID player, @Parameter(name = "reason", wildcard = true) String reason) {
       if (reason.equals(".")) {

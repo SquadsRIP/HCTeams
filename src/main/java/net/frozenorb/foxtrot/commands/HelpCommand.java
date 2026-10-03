@@ -17,6 +17,7 @@ public class HelpCommand {
          "§7/koth §f- Show active and upcoming events.",
          "§7/pvp §f- Manage your PvP timer.",
          "§7/lives §f- Check your lives.",
+         "§7/lives use §f- Use a life to respawn while deathbanned.",
          "",
          "§cPlayer Commands:",
          "§7/stats [player] §f- View a player's statistics.",

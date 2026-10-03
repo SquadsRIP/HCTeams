@@ -1,5 +1,6 @@
 package net.frozenorb.foxtrot.server.deathban;
 
+import cc.fyre.proton.util.TimeUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -95,6 +96,50 @@ public class DeathbanArenaHandler {
                player.setMetadata("PVP_TIMER_BYPASS", new FixedMetadataValue(Foxtrot.getInstance(), true));
                Foxtrot.getInstance().getPvPTimerMap().createTimer(player.getUniqueId(), 1800);
             }, 20L);
+         }
+      }
+   }
+
+   public void startLifeCooldown(Player player) {
+      if (player.getWorld().getEnvironment() == Environment.THE_END
+         || DTRBitmask.CITADEL.appliesAt(player.getLocation())
+         || DTRBitmask.KOTH.appliesAt(player.getLocation())) {
+         this.lifeCooldown.put(player.getUniqueId(), System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3L));
+      } else if (player.getWorld().getEnvironment() == Environment.NETHER) {
+         this.lifeCooldown.put(player.getUniqueId(), System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5L));
+      }
+   }
+
+   public boolean canUseLife(Player player) {
+      return !this.instance.getServerHandler().isPreEOTW()
+         && this.instance.getFriendLivesMap().getLives(player.getUniqueId()) > 0
+         && this.lifeCooldown.getOrDefault(player.getUniqueId(), 0L) <= System.currentTimeMillis();
+   }
+
+   public void useLife(Player player) {
+      UUID uuid = player.getUniqueId();
+      int lives = this.instance.getFriendLivesMap().getLives(uuid);
+      if (!this.instance.getDeathbanMap().isDeathbanned(uuid)) {
+         player.sendMessage(ChatColor.RED + "You are not deathbanned!");
+      } else if (this.instance.getServerHandler().isPreEOTW()) {
+         player.sendMessage(ChatColor.RED + "The server is in EOTW Mode: Lives cannot be used.");
+      } else if (lives <= 0) {
+         player.sendMessage(ChatColor.RED + "You don't have any lives!");
+      } else {
+         long cooldown = this.lifeCooldown.getOrDefault(uuid, 0L);
+         if (cooldown > System.currentTimeMillis()) {
+            int difference = (int)(cooldown - System.currentTimeMillis()) / 1000;
+            player.sendMessage(
+               ChatColor.translate(
+                  "&cYou may not use a life for another &f"
+                     + TimeUtils.formatIntoDetailedString(difference)
+                     + " &cas you died in either Nether, End or an Event!"
+               )
+            );
+         } else {
+            this.instance.getFriendLivesMap().setLives(uuid, lives - 1);
+            player.sendMessage(ChatColor.YELLOW + "You used a life. " + ChatColor.GRAY + "(" + (lives - 1) + " left)");
+            this.revive(uuid);
          }
       }
    }
