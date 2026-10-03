@@ -63,10 +63,7 @@ public class MegaFixListener implements Listener {
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onRespawn(PlayerRespawnEvent event) {
       if (!Foxtrot.getInstance().getDeathbanArenaHandler().isDeathbanArena(event.getPlayer())) {
-         World overworld = Bukkit.getWorld("world");
-         if (overworld != null) {
-            event.setRespawnLocation(overworld.getSpawnLocation().add(0.0, 1.0, 0.0));
-         }
+         event.setRespawnLocation(Foxtrot.getInstance().getServerHandler().getSpawnLocation());
       } else {
          final Player player = event.getPlayer();
          (new BukkitRunnable() {
