@@ -303,7 +303,6 @@ public class BattlePassHandler {
                .newReward(false, reward -> reward.addText(CC.PINK + CC.BOLD + "16x Eggports").addCommand("ability Eggport 16 {playerName}")),
             new Tier(14, 280).newReward(true, reward -> reward.addText(CC.AQUA + CC.BOLD + "1x Airdrops").addCommand("airdrops give {playerName} 1")),
             new Tier(15, 300)
-               .newReward(true, reward -> reward.addText(CC.RED + CC.BOLD + "Boss Summoner").addCommand("clickitem give boss-summoner 1 {playerName}"))
                .newReward(false, reward -> reward.addText(CC.GOLD + CC.BOLD + "3x Reinforce Lootbox").addCommand("crates give {playerName} Reinforce 3")),
             new Tier(16, 320)
                .newReward(true, reward -> reward.addText(CC.LIGHT_PURPLE + CC.BOLD + "8x Partner Keys").addCommand("cr givekey {playerName} Partner 8")),

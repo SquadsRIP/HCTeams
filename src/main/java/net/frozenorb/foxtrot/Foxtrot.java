@@ -34,7 +34,6 @@ import net.frozenorb.foxtrot.economy.EconomyHandler;
 import net.frozenorb.foxtrot.gameplay.ability.type.MidasTouch;
 import net.frozenorb.foxtrot.gameplay.armorclass.ArmorClassHandler;
 import net.frozenorb.foxtrot.gameplay.boosters.NetworkBoosterHandler;
-import net.frozenorb.foxtrot.gameplay.bosses.BossHandler;
 import net.frozenorb.foxtrot.gameplay.cavesays.CaveSaysHandler;
 import net.frozenorb.foxtrot.gameplay.clickitem.ClickItemHandler;
 import net.frozenorb.foxtrot.gameplay.content.ContentHandler;
@@ -223,7 +222,6 @@ public class Foxtrot extends JavaPlugin {
    private CaveNiteHandler caveNiteHandler;
    private GlowHandler glowHandler;
    private CrateHandler crateHandler;
-   private BossHandler bossHandler;
    private NetworkBoosterHandler networkBoosterHandler;
    private RedeemCreatorHandler redeemCreatorHandler;
    private CustomTimerHandler customTimerHandler;
@@ -580,7 +578,6 @@ public class Foxtrot extends JavaPlugin {
          this.spawnerGroundsHandler = new SpawnerGroundsHandler(this);
       }
 
-      this.bossHandler = new BossHandler(this);
       this.miniEventsHandler = new MiniEventsHandler(this);
       this.caveSaysHandler = new CaveSaysHandler(this);
       this.networkBoosterHandler = new NetworkBoosterHandler(this);
@@ -935,10 +932,6 @@ public class Foxtrot extends JavaPlugin {
 
    public CrateHandler getCrateHandler() {
       return this.crateHandler;
-   }
-
-   public BossHandler getBossHandler() {
-      return this.bossHandler;
    }
 
    public NetworkBoosterHandler getNetworkBoosterHandler() {

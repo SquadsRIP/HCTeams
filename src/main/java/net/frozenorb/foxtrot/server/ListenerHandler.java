@@ -38,6 +38,7 @@ import net.frozenorb.foxtrot.listener.AutoRebuildListener;
 import net.frozenorb.foxtrot.listener.BasicPreventionListener;
 import net.frozenorb.foxtrot.listener.BlockConvenienceListener;
 import net.frozenorb.foxtrot.listener.BlockRegenListener;
+import net.frozenorb.foxtrot.listener.BossCleanupListener;
 import net.frozenorb.foxtrot.listener.BorderListener;
 import net.frozenorb.foxtrot.listener.ClickableKitListener;
 import net.frozenorb.foxtrot.listener.CombatLoggerListener;
@@ -181,6 +182,7 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new AntiCleanListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new SpawnerTrackerListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new SpawnerLimiterListener(), foxtrot);
+      foxtrot.getServer().getPluginManager().registerEvents(new BossCleanupListener(), foxtrot);
       if (!Foxtrot.getInstance().getServerHandler().isTeams()) {
          foxtrot.getServer().getPluginManager().registerEvents(new BlockConvenienceListener(), foxtrot);
          foxtrot.getServer().getPluginManager().registerEvents(new FixListener(), foxtrot);
