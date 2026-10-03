@@ -34,11 +34,7 @@ public class AntiCleanListener implements Listener {
                      Team victimTeam = Foxtrot.getInstance().getTeamHandler().getTeam(victim);
                      Team damagerTeam = Foxtrot.getInstance().getTeamHandler().getTeam(damager);
                      Environment env = victim.getWorld().getEnvironment();
-                     if (env == Environment.NORMAL) {
-                        damager.sendMessage(
-                           ChatColor.translateAlternateColorCodes('&', "&7[Anti-Clean Debug] &cAnti-clean only works in the Nether or End, not the Overworld.")
-                        );
-                     } else {
+                     if (env != Environment.NORMAL) {
                         boolean ignore = false;
 
                         for (Event e : Foxtrot.getInstance().getEventHandler().getEvents()) {
@@ -54,14 +50,7 @@ public class AntiCleanListener implements Listener {
                            }
                         }
 
-                        if (ignore) {
-                           damager.sendMessage(
-                              ChatColor.translateAlternateColorCodes(
-                                 '&', "&7[Anti-Clean Debug] &cAnti-clean is disabled because a KOTH is active in this dimension."
-                              )
-                           );
-                        } else {
-                           damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Anti-Clean Debug] &aAnti-clean is active. Checking teams..."));
+                        if (!ignore) {
                            Team victimOpponentTeam = victimTeam == null ? null : CACHE.get(victimTeam);
                            Team damagerOpponentTeam = damagerTeam == null ? null : CACHE.get(damagerTeam);
                            if (victimOpponentTeam != null && victimOpponentTeam != damagerTeam) {
