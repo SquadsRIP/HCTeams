@@ -24,7 +24,12 @@ public class SpawnCommand {
             if (target == null) {
                sender.sendMessage(ChatColor.YELLOW + "No world or player with that name exists!");
             } else {
-               target.teleport(Foxtrot.getInstance().getServerHandler().getSpawnLocation());
+               World spawn = Foxtrot.getInstance().getServer().getWorld("Spawn");
+               if (Foxtrot.getInstance().getMapHandler().isKitMap()) {
+                  spawn = Foxtrot.getInstance().getServer().getWorld("world");
+               }
+
+               target.teleport(spawn.getSpawnLocation());
             }
          } else {
             sender.teleport(world.getSpawnLocation().add(0.5, 0.5, 0.5));

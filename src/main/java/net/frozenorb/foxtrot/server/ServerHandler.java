@@ -347,7 +347,12 @@ public class ServerHandler {
    }
 
    public Location getSpawnLocation() {
-      return Foxtrot.getInstance().getServer().getWorld("world").getSpawnLocation().add(0.0, 1.0, 0.0);
+      World spawn = Foxtrot.getInstance().getServer().getWorld("Spawn");
+      if (Foxtrot.getInstance().getMapHandler().isKitMap()) {
+         spawn = Foxtrot.getInstance().getServer().getWorld("world");
+      }
+
+      return spawn.getSpawnLocation().add(0.0, 1.0, 0.0);
    }
 
    public boolean isUnclaimedOrRaidable(Player player, Location loc) {

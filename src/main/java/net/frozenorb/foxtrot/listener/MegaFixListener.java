@@ -45,7 +45,15 @@ public class MegaFixListener implements Listener {
             @Override
             public void run() {
                if (player.isOnline()) {
-                  player.teleport(Foxtrot.getInstance().getServerHandler().getSpawnLocation());
+                  World spawnWorld = Bukkit.getWorld("Spawn");
+                  if (spawnWorld != null) {
+                     player.teleport(spawnWorld.getSpawnLocation().add(0.0, 1.0, 0.0));
+                  } else {
+                     World overworld = Bukkit.getWorld("world");
+                     if (overworld != null) {
+                        player.teleport(overworld.getSpawnLocation().add(0.0, 1.0, 0.0));
+                     }
+                  }
                }
             }
          }).runTaskLater(Foxtrot.getInstance(), 5L);
