@@ -346,6 +346,10 @@ public class ServerHandler {
       return player.getGameMode() == GameMode.CREATIVE && player.hasPermission("hcf.admin.override");
    }
 
+   public boolean isNetherOpOverride(Player player, Location loc) {
+      return player != null && player.isOp() && loc.getWorld().getEnvironment() == Environment.NETHER;
+   }
+
    public World getMapWorld() {
       return Foxtrot.getInstance().getServer().getWorld(Foxtrot.getInstance().getMapHandler().isKitMap() ? "world" : "Spawn");
    }

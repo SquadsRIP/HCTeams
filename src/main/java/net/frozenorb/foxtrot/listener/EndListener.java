@@ -380,6 +380,11 @@ public class EndListener implements Listener {
                }
             }
          } else if (event.getCause() == TeleportCause.NETHER_PORTAL
+            && from.getWorld().getEnvironment() == Environment.NETHER
+            && isNetherSpawn(from)) {
+            event.setTo(Foxtrot.getInstance().getServerHandler().getSpawnLocation());
+            event.useTravelAgent(false);
+         } else if (event.getCause() == TeleportCause.NETHER_PORTAL
             && event.getTo() != null
             && from.getWorld().getEnvironment() == Environment.NETHER
             && event.getTo().getWorld().getEnvironment() == Environment.NORMAL
@@ -389,6 +394,17 @@ public class EndListener implements Listener {
             event.setTo(to);
          }
       }
+   }
+
+   private static boolean isNetherSpawn(Location loc) {
+      if (DTRBitmask.SAFE_ZONE.appliesAt(loc)) {
+         return true;
+      }
+
+      FileConfiguration config = Foxtrot.getInstance().getConfig();
+      int radius = config.getInt("netherSpawnPortalRadius", 32);
+      return Math.abs(loc.getX() - config.getDouble("netherSpawn.x", 0.5)) <= radius
+         && Math.abs(loc.getZ() - config.getDouble("netherSpawn.z", 0.5)) <= radius;
    }
 
    private static Location getNetherSpawn(World nether, Location from) {

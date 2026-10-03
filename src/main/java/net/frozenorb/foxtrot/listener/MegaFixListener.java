@@ -158,7 +158,7 @@ public class MegaFixListener implements Listener {
    public void onNetherBlockBreak(BlockBreakEvent event) {
       Block block = event.getBlock();
       if (block.getWorld().getEnvironment() == Environment.NETHER) {
-         if (!event.getPlayer().hasMetadata("ADMIN_BUILD")) {
+         if (!event.getPlayer().hasMetadata("ADMIN_BUILD") && !event.getPlayer().isOp()) {
             if (isNetherWarzone(block.getLocation())) {
                if (block.getType() == Material.GLOWSTONE && Foxtrot.getInstance().getGlowHandler() != null) {
                   Team team = LandBoard.getInstance().getTeam(block.getLocation());
@@ -178,7 +178,7 @@ public class MegaFixListener implements Listener {
    public void onNetherBlockPlace(BlockPlaceEvent event) {
       Block block = event.getBlock();
       if (block.getWorld().getEnvironment() == Environment.NETHER) {
-         if (!event.getPlayer().hasMetadata("ADMIN_BUILD")) {
+         if (!event.getPlayer().hasMetadata("ADMIN_BUILD") && !event.getPlayer().isOp()) {
             if (isNetherWarzone(block.getLocation())) {
                event.setCancelled(true);
                event.getPlayer().sendMessage(ChatColor.RED + "You cannot place blocks in the nether warzone!");

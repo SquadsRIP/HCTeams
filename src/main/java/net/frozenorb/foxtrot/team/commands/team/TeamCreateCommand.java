@@ -48,7 +48,7 @@ public class TeamCreateCommand {
          createdTeam.setUniqueId(new ObjectId());
          createdTeam.setOwner(sender.getUniqueId());
          createdTeam.setName(team);
-         createdTeam.setDTR(1.0);
+         createdTeam.setDTR(createdTeam.getMaxDTR());
          Foxtrot.getInstance().getQuestHandler().completeQuest(sender, "CreateOrJoin");
          Foxtrot.getInstance().getTeamHandler().setupTeam(createdTeam);
          LunarClientListener.updateNametag(sender);
