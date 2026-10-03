@@ -412,7 +412,6 @@ public class VoucherCommand {
       }
    }
 
-   @Command(names = "nitroboost", permission = "command.nitroboost.giverewards")
    public static void execute(Player player, @Parameter(name = "target") Player target) {
       player.sendMessage(ChatColor.GREEN + "Giving rewards...");
       player.chat("/crates give " + target.getName() + " Seasonal 5");
