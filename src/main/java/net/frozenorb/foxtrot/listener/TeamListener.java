@@ -192,7 +192,9 @@ public class TeamListener implements Listener {
 
    @EventHandler(priority = EventPriority.HIGH)
    public void onBlockIgnite(BlockIgniteEvent event) {
-      if (event.getPlayer() == null || !Foxtrot.getInstance().getServerHandler().isAdminOverride(event.getPlayer())) {
+      if (event.getPlayer() == null
+         || !Foxtrot.getInstance().getServerHandler().isAdminOverride(event.getPlayer())
+            && !Foxtrot.getInstance().getServerHandler().isNetherOpOverride(event.getPlayer(), event.getBlock().getLocation())) {
          if (!Foxtrot.getInstance().getServerHandler().isUnclaimedOrRaidable(event.getPlayer(), event.getBlock().getLocation())) {
             if (LandBoard.getInstance().getTeam(event.getBlock().getLocation()) != null) {
                Team owner = LandBoard.getInstance().getTeam(event.getBlock().getLocation());
@@ -209,6 +211,7 @@ public class TeamListener implements Listener {
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onBlockPlace(final BlockPlaceEvent event) {
       if (!Foxtrot.getInstance().getServerHandler().isAdminOverride(event.getPlayer())
+         && !Foxtrot.getInstance().getServerHandler().isNetherOpOverride(event.getPlayer(), event.getBlock().getLocation())
          && !Foxtrot.getInstance().getServerHandler().isUnclaimedOrRaidable(event.getPlayer(), event.getBlock().getLocation())) {
          if (!Foxtrot.getInstance().getServerHandler().isEOTW()) {
             Team team = LandBoard.getInstance().getTeam(event.getBlock().getLocation());
@@ -277,6 +280,7 @@ public class TeamListener implements Listener {
    @EventHandler(ignoreCancelled = true)
    public void onBlockBreak(BlockBreakEvent event) {
       if (!Foxtrot.getInstance().getServerHandler().isAdminOverride(event.getPlayer())
+         && !Foxtrot.getInstance().getServerHandler().isNetherOpOverride(event.getPlayer(), event.getBlock().getLocation())
          && !Foxtrot.getInstance().getServerHandler().isUnclaimedOrRaidable(event.getPlayer(), event.getBlock().getLocation())) {
          Team team = LandBoard.getInstance().getTeam(event.getBlock().getLocation());
          if (event.getBlock().getType() != Material.GLOWSTONE
