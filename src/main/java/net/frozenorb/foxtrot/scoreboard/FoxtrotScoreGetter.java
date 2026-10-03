@@ -650,7 +650,7 @@ public class FoxtrotScoreGetter implements ScoreGetter {
    }
 
    private static String getCyclingWebsiteLine() {
-      return "§7§oComing Soon!";
+      return sc("website-line", "&7&osquads.rip");
    }
 
    public boolean showTimer(Player player, String timer) {

@@ -19,8 +19,8 @@ header: "&a&7&m----------------------"
 website-lines:
   - "&7&oComing Soon!"
   - "&7&oComing Soon!"
-# Legacy single-line key (fallback if website-lines is empty)
-website-line: "&7&oComing Soon!"
+# Server IP shown at the bottom of the scoreboard
+website-line: "&7&osquads.rip"
 footer: "&b&7&m----------------------"
 
 # ----------------------------------------------------------
