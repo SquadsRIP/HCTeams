@@ -29,9 +29,7 @@ public class MinerClass extends PvPClass implements Listener {
       super("Miner", null);
       this.getPermanentEffects().add(PotionEffectType.NIGHT_VISION);
       this.getPermanentEffects().add(PotionEffectType.FAST_DIGGING);
-      if (!Foxtrot.getInstance().getServerHandler().isHardcore()) {
-         this.getPermanentEffects().add(PotionEffectType.FIRE_RESISTANCE);
-      }
+      this.getPermanentEffects().add(PotionEffectType.FIRE_RESISTANCE);
 
       (new BukkitRunnable() {
          @Override
@@ -82,15 +80,17 @@ public class MinerClass extends PvPClass implements Listener {
    public void apply(Player player) {
       player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0), true);
       player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 1), true);
-      if (!Foxtrot.getInstance().getServerHandler().isHardcore()) {
-         player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 0), true);
-      }
+      player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 0), true);
    }
 
    @Override
    public void tick(Player player) {
       if (!player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
          player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0), true);
+      }
+
+      if (!player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
+         player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 0), true);
       }
 
       int diamonds = Foxtrot.getInstance().getDiamondMinedMap().getMined(player.getUniqueId());
