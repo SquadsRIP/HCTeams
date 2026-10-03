@@ -76,11 +76,7 @@ public class ApolloNametagListener implements Listener {
             }
          }
 
-         String staffLine = FactionNametagFormatter.staffRankLine(player2);
-         if (staffLine != null) {
-            arrayList.add(Component.text(staffLine));
-         }
-
+         arrayList.add(Component.text(string2 + player2.getName()));
          Team team2 = Foxtrot.getInstance().getTeamHandler().getTeam(player2.getUniqueId());
          if (team2 != null) {
             String string = team2.getName(player);
@@ -89,7 +85,10 @@ public class ApolloNametagListener implements Listener {
             arrayList.add(Component.text(string4));
          }
 
-         arrayList.add(Component.text(string2 + player2.getName()));
+         String staffLine = FactionNametagFormatter.staffRankLine(player2);
+         if (staffLine != null) {
+            arrayList.add(Component.text(staffLine));
+         }
 
          Nametag nametag = Nametag.builder().lines(arrayList).visibilityOverride(NametagVisibilityOverride.NONE).build();
          ((NametagModule)Apollo.getModuleManager().getModule(NametagModule.class))
