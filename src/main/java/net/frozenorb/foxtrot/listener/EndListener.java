@@ -14,6 +14,7 @@ import net.frozenorb.foxtrot.listener.event.TimerEndEvent;
 import net.frozenorb.foxtrot.server.SpawnTagHandler;
 import net.frozenorb.foxtrot.team.Team;
 import net.frozenorb.foxtrot.team.claims.LandBoard;
+import net.frozenorb.foxtrot.team.dtr.DTRBitmask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -23,6 +24,7 @@ import org.bukkit.PortalType;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EntityType;
@@ -363,8 +365,13 @@ public class EndListener implements Listener {
             if (event.getCause() == TeleportCause.NETHER_PORTAL) {
                World nether = Foxtrot.getInstance().getServer().getWorld("world_nether");
                if (nether != null) {
-                  event.setTo(new Location(nether, from.getX() / 8.0, from.getY(), from.getZ() / 8.0, from.getYaw(), from.getPitch()));
-                  event.useTravelAgent(true);
+                  if (DTRBitmask.SAFE_ZONE.appliesAt(from)) {
+                     event.setTo(getNetherSpawn(nether, from));
+                     event.useTravelAgent(false);
+                  } else {
+                     event.setTo(new Location(nether, from.getX() / 8.0, from.getY(), from.getZ() / 8.0, from.getYaw(), from.getPitch()));
+                     event.useTravelAgent(true);
+                  }
                }
             } else if (event.getCause() == TeleportCause.END_PORTAL) {
                World end = Foxtrot.getInstance().getServer().getWorld("world_the_end");
@@ -382,6 +389,24 @@ public class EndListener implements Listener {
             event.setTo(to);
          }
       }
+   }
+
+   private static Location getNetherSpawn(World nether, Location from) {
+      FileConfiguration config = Foxtrot.getInstance().getConfig();
+      Location spawn = new Location(
+         nether,
+         config.getDouble("netherSpawn.x", 0.5),
+         config.getDouble("netherSpawn.y", 36.0),
+         config.getDouble("netherSpawn.z", 0.5),
+         from.getYaw(),
+         from.getPitch()
+      );
+
+      for (int i = 0; i < 4 && (spawn.getBlock().getType().isSolid() || spawn.clone().add(0.0, 1.0, 0.0).getBlock().getType().isSolid()); i++) {
+         spawn.add(0.0, 1.0, 0.0);
+      }
+
+      return spawn;
    }
 
    @EventHandler
