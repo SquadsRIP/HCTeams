@@ -28,7 +28,9 @@ import java.util.concurrent.TimeUnit;
 import mkremins.fanciful.FancyMessage;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.chat.enums.ChatMode;
+import net.frozenorb.foxtrot.gameplay.events.Event;
 import net.frozenorb.foxtrot.gameplay.events.fury.FuryCapZone;
+import net.frozenorb.foxtrot.gameplay.events.koth.KOTH;
 import net.frozenorb.foxtrot.gameplay.events.outposts.data.Outpost;
 import net.frozenorb.foxtrot.gameplay.events.outposts.type.EndOutpost;
 import net.frozenorb.foxtrot.gameplay.events.outposts.type.NetherOutpost;
@@ -48,6 +50,7 @@ import net.frozenorb.foxtrot.team.track.TeamActionTracker;
 import net.frozenorb.foxtrot.team.track.TeamActionType;
 import net.frozenorb.foxtrot.team.upgrade.UpgradeType;
 import net.frozenorb.foxtrot.util.CuboidRegion;
+import net.frozenorb.foxtrot.util.LocationUtil;
 import net.minecraft.util.com.google.common.collect.ImmutableMap;
 import net.minecraft.util.org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
@@ -64,6 +67,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.TrapDoor;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.BlockVector;
 
 public class Team {
    public static final DecimalFormat DTR_FORMAT = new DecimalFormat("0.00");
@@ -1397,27 +1401,41 @@ public class Team {
       };
    }
 
+   private String getSystemTeamLocation() {
+      String eventName = this.name.replaceAll("(?i)\\s*koth$", "");
+      Event event = Foxtrot.getInstance().getEventHandler().getEvent(eventName);
+      if (event == null && !eventName.equals(this.name)) {
+         event = Foxtrot.getInstance().getEventHandler().getEvent(this.name);
+      }
+
+      if (event instanceof KOTH) {
+         KOTH koth = (KOTH)event;
+         BlockVector cap = koth.getCapLocation();
+         return cap.getBlockX() + ", " + cap.getBlockZ() + ChatColor.GRAY + " (" + LocationUtil.realmName(koth.getWorld()) + ")";
+      } else if (this.HQ != null) {
+         return this.HQ.getBlockX() + ", " + this.HQ.getBlockZ() + ChatColor.GRAY + " (" + LocationUtil.realmName(this.HQ.getWorld()) + ")";
+      } else if (!this.claims.isEmpty()) {
+         Claim claim = this.claims.get(0);
+         Location min = claim.getMinimumPoint();
+         Location max = claim.getMaximumPoint();
+         return (min.getBlockX() + max.getBlockX()) / 2
+            + ", "
+            + (min.getBlockZ() + max.getBlockZ()) / 2
+            + ChatColor.GRAY
+            + " ("
+            + LocationUtil.realmName(claim.getWorld())
+            + ")";
+      } else {
+         return null;
+      }
+   }
+
    public void sendTeamInfo(Player player) {
       if (this.getOwner() == null) {
          player.sendMessage(GRAY_LINE);
          player.sendMessage(this.getName(player));
-         if (this.HQ != null && this.HQ.getWorld().getEnvironment() != Environment.NORMAL) {
-            String world = this.HQ.getWorld().getEnvironment() == Environment.NETHER ? "Nether" : "End";
-            if (this.HQ.getWorld().getName().contains("MiniKOTH")) {
-               world = "Mini KOTH";
-            }
-
-            player.sendMessage(
-               ChatColor.YELLOW
-                  + "Location: "
-                  + ChatColor.WHITE
-                  + (this.HQ == null ? "None" : this.HQ.getBlockX() + ", " + this.HQ.getBlockZ() + " (" + world + ")")
-            );
-         } else {
-            player.sendMessage(
-               ChatColor.YELLOW + "Location: " + ChatColor.WHITE + (this.HQ == null ? "None" : this.HQ.getBlockX() + ", " + this.HQ.getBlockZ())
-            );
-         }
+         String location = this.getSystemTeamLocation();
+         player.sendMessage(ChatColor.YELLOW + "Location: " + ChatColor.WHITE + (location == null ? "None" : location));
 
          if (this.getName().equalsIgnoreCase("Glowstone")) {
             long resetMs = Foxtrot.getInstance().getGlowHandler().getResetTime();

@@ -1,13 +1,16 @@
 package net.frozenorb.foxtrot.gameplay.events.koth.commands.koth;
 
 import cc.fyre.proton.command.Command;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map.Entry;
 import mkremins.fanciful.FancyMessage;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.gameplay.events.Event;
 import net.frozenorb.foxtrot.gameplay.events.EventScheduledTime;
 import net.frozenorb.foxtrot.gameplay.events.koth.KOTH;
+import net.frozenorb.foxtrot.util.LocationUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -17,12 +20,20 @@ public class KOTHCommand {
       for (Event koth : Foxtrot.getInstance().getEventHandler().getEvents()) {
          if (!koth.isHidden() && koth.isActive()) {
             FancyMessage fm = new FancyMessage("[Events] ").color(ChatColor.GOLD).then(koth.getName()).color(ChatColor.YELLOW).style(ChatColor.UNDERLINE);
+            fm.color(ChatColor.YELLOW).then(" can be contested now").color(ChatColor.GOLD);
             if (koth instanceof KOTH) {
-               fm.tooltip(ChatColor.YELLOW.toString() + ((KOTH)koth).getCapLocation().getBlockX() + ", " + ((KOTH)koth).getCapLocation().getBlockZ());
+               KOTH active = (KOTH)koth;
+               fm.then(" at ")
+                  .color(ChatColor.GOLD)
+                  .then(active.getCapLocation().getBlockX() + ", " + active.getCapLocation().getBlockZ())
+                  .color(ChatColor.WHITE)
+                  .then(" (" + LocationUtil.realmName(active.getWorld()) + ")")
+                  .color(ChatColor.GRAY);
             }
 
-            fm.color(ChatColor.YELLOW).then(" can be contested now.").color(ChatColor.GOLD);
+            fm.then(".").color(ChatColor.GOLD);
             fm.send(sender);
+            sender.sendMessage(ChatColor.YELLOW + "Type '/koths' to see every KOTH location.");
             return;
          }
       }
@@ -58,24 +69,17 @@ public class KOTHCommand {
          }
       }
 
+      List<String> rotation = new ArrayList<>();
+
+      for (Event event : Foxtrot.getInstance().getEventHandler().getEvents()) {
+         if (event instanceof KOTH && !event.isHidden() && !((KOTH)event).isMini()) {
+            rotation.add(event.getName());
+         }
+      }
+
+      rotation.sort(String.CASE_INSENSITIVE_ORDER);
       sender.sendMessage(ChatColor.DARK_RED + "[KingOfTheHill] " + ChatColor.YELLOW + "KOTH Schedule: " + ChatColor.GRAY + "Every 2 hours");
-      sender.sendMessage(
-         ChatColor.GRAY
-            + "Rotation: "
-            + ChatColor.DARK_RED
-            + "Spider"
-            + ChatColor.GRAY
-            + ", "
-            + ChatColor.DARK_RED
-            + "Mushroom"
-            + ChatColor.GRAY
-            + ", "
-            + ChatColor.DARK_RED
-            + "Hell"
-            + ChatColor.GRAY
-            + ", "
-            + ChatColor.DARK_RED
-            + "End"
-      );
+      sender.sendMessage(ChatColor.GRAY + "Rotation: " + ChatColor.DARK_RED + String.join(ChatColor.GRAY + ", " + ChatColor.DARK_RED, rotation));
+      sender.sendMessage(ChatColor.YELLOW + "Type '/koths' to see every KOTH location.");
    }
 }
