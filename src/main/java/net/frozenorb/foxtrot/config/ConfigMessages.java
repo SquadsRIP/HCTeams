@@ -12,7 +12,7 @@ public final class ConfigMessages {
    private static final Map<String, String> DEFAULT_LINKS = new HashMap<>();
 
    static {
-      DEFAULT_LINKS.put("store", "store.squads.rip");
+      DEFAULT_LINKS.put("store", "squadsrip.tebex.io");
       DEFAULT_LINKS.put("discord", "discord.gg/squadsrip");
       DEFAULT_LINKS.put("twitter", "x.com/@SquadsRIP");
    }
