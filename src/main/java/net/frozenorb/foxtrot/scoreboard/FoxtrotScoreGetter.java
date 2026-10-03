@@ -54,7 +54,6 @@ import net.frozenorb.foxtrot.listener.AntiCleanListener;
 import net.frozenorb.foxtrot.listener.CrappleLimitListener;
 import net.frozenorb.foxtrot.listener.EndListener;
 import net.frozenorb.foxtrot.listener.GoldenAppleListener;
-import net.frozenorb.foxtrot.listener.RodCooldownListener;
 import net.frozenorb.foxtrot.listener.event.TimerEndEvent;
 import net.frozenorb.foxtrot.server.ServerHandler;
 import net.frozenorb.foxtrot.server.SpawnTagHandler;
@@ -185,7 +184,6 @@ public class FoxtrotScoreGetter implements ScoreGetter {
          String abilityScore = this.getAbilityScore(player);
          String pvpTimerScore = this.getPvPTimerScore(player);
          String archerMarkScore = this.getArcherMarkScore(player);
-         String rodScore = this.getRodScore(player);
          String effectScore = getEffectScore(player);
          String energyScore = this.getEnergyScore(player);
          String fstuckScore = this.getFStuckScore(player);
@@ -258,10 +256,6 @@ public class FoxtrotScoreGetter implements ScoreGetter {
 
          if (goppleScore != null) {
             scores.add(sc("gopple-format", "&6&lGopple&7: &6<time>").replace("<time>", goppleScore));
-         }
-
-         if (rodScore != null) {
-            scores.add(sc("fishing-rod-format", "&5&lFishing Rod&7: &5<time>").replace("<time>", rodScore));
          }
 
          if (appleScore != null) {
@@ -688,15 +682,6 @@ public class FoxtrotScoreGetter implements ScoreGetter {
       } else {
          return false;
       }
-   }
-
-   public String getRodScore(Player player) {
-      float diff;
-      return RodCooldownListener.cache.containsKey(player.getUniqueId())
-            && RodCooldownListener.cache.get(player.getUniqueId()) >= System.currentTimeMillis()
-            && (diff = (float)(RodCooldownListener.cache.get(player.getUniqueId()) - System.currentTimeMillis())) >= 0.0F
-         ? ScoreFunction.TIME_FANCY.apply(diff / 1000.0F)
-         : null;
    }
 
    public List<String> getAbilityCooldownsScore(Player player) {
