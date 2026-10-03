@@ -30,11 +30,11 @@ public class KOTHRewardKeyListener implements Listener {
          && event.getItem() != null
          && event.getClickedBlock().getType() == Material.ENDER_CHEST
          && DTRBitmask.SAFE_ZONE.appliesAt(event.getClickedBlock().getLocation())
-         && InventoryUtils.isSimilar(event.getItem(), ChatColor.RED + "KOTH Reward Key")) {
+         && isRewardKey(event.getItem())) {
          ItemStack key = event.getItem();
-         if (key.getItemMeta() != null
-            && key.getType() == Material.GOLD_NUGGET
-            && key.getItemMeta().getLore().get(1) != null
+         if (key.getType() == Material.GOLD_NUGGET
+            && key.getItemMeta().hasLore()
+            && key.getItemMeta().getLore().size() > 1
             && ChatColor.stripColor(key.getItemMeta().getLore().get(1)).contains("Obtained from")) {
             event.setCancelled(true);
             int open = 0;
@@ -49,7 +49,9 @@ public class KOTHRewardKeyListener implements Listener {
                event.getPlayer().sendMessage(ChatColor.RED + "You must have at least 3 open inventory slots to use a KOTH reward key!");
             } else {
                Block block = event.getClickedBlock().getRelative(BlockFace.DOWN, 3);
-               if (block.getType() == Material.CHEST) {
+               if (block.getType() != Material.CHEST) {
+                  event.getPlayer().sendMessage(ChatColor.RED + "This KOTH loot chest isn't set up. Please tell a staff member.");
+               } else {
                   ItemStack stack = event.getPlayer().getItemInHand();
                   if (stack.getAmount() == 1) {
                      event.getPlayer().setItemInHand(null);
@@ -173,6 +175,10 @@ public class KOTHRewardKeyListener implements Listener {
             this.openKothLoot(event.getPlayer(), event.getClickedBlock());
          }
       }
+   }
+
+   private static boolean isRewardKey(ItemStack item) {
+      return item.hasItemMeta() && item.getItemMeta().hasDisplayName() && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("KOTH Reward Key");
    }
 
    private void openKothLoot(Player player, Block clickedBlock) {
