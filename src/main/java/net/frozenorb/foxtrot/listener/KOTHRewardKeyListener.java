@@ -26,6 +26,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class KOTHRewardKeyListener implements Listener {
    @EventHandler
    public void onPlayerInteract(final PlayerInteractEvent event) {
+      if (event.getClickedBlock() != null && event.getClickedBlock().hasMetadata("SquadsCrate")) {
+         return;
+      }
+
       if (event.getClickedBlock() != null
          && event.getItem() != null
          && event.getClickedBlock().getType() == Material.ENDER_CHEST
@@ -185,9 +189,14 @@ public class KOTHRewardKeyListener implements Listener {
       Block block = clickedBlock.getRelative(BlockFace.DOWN, 3);
       if (block.getType() == Material.CHEST) {
          Chest chest = (Chest)block.getState();
-         ItemStack[] lootTables = chest.getBlockInventory().getContents();
          Inventory inventory = Bukkit.createInventory(player, 27, "KOTH Loot");
-         inventory.setContents(lootTables);
+
+         for (ItemStack itemStack : chest.getBlockInventory().getContents()) {
+            if (itemStack != null && itemStack.getType() != Material.AIR && !inventory.containsAtLeast(itemStack, 1)) {
+               inventory.addItem(itemStack.clone());
+            }
+         }
+
          player.openInventory(inventory);
       }
    }
