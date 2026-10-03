@@ -1,12 +1,9 @@
 package net.frozenorb.foxtrot.server.deathban.listener;
 
 import cc.fyre.proton.util.TimeUtils;
-import cc.fyre.universe.util.BungeeUtil;
 import java.beans.ConstructorProperties;
-import java.util.concurrent.ThreadLocalRandom;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.team.dtr.DTRBitmask;
-import net.frozenorb.foxtrot.util.InventoryUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
@@ -15,10 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.cavepvp.suge.Suge;
-import org.cavepvp.suge.kit.data.Kit;
 
 public class DeathbanListener implements Listener {
    private Foxtrot instance;
@@ -40,26 +34,10 @@ public class DeathbanListener implements Listener {
          }
 
          this.instance.getDeathbanMap().deathban(player.getUniqueId(), seconds);
-         if ((!this.instance.getServerHandler().isEOTW() || !this.instance.getServerHandler().isPreEOTW())
-            && this.instance.getServer().getWorld("Deathban") != null) {
-            String time = TimeUtils.formatIntoDetailedString(seconds);
-            player.sendMessage(ChatColor.RED + "You have been deathbanned for " + time);
-            this.instance.getDeathbanArenaHandler().deathban(player);
-         } else {
-            this.kickPlayer(player);
-         }
-      }
-   }
-
-   @EventHandler
-   private void onRespawn(PlayerRespawnEvent event) {
-      Player player = event.getPlayer();
-      if (this.instance.getDeathbanArenaHandler().isDeathbanArena(player)) {
-         Kit kit = Suge.getInstance().getKitHandler().findKit("UltimateDiamond").orElse(null);
-         InventoryUtils.resetInventoryNow(player);
-         if (kit != null) {
-            kit.apply(player);
-         }
+         player.removeMetadata("PVP_TIMER_BYPASS", this.instance);
+         this.instance.getPvPTimerMap().removeTimer(player.getUniqueId());
+         player.sendMessage(ChatColor.RED + "You have been deathbanned for " + TimeUtils.formatIntoDetailedString(seconds) + "!");
+         this.kickPlayer(player);
       }
    }
 
@@ -83,25 +61,24 @@ public class DeathbanListener implements Listener {
          long seconds = (this.instance.getDeathbanMap().getDeathban(player.getUniqueId()) - System.currentTimeMillis()) / 1000L;
          player.sendMessage("");
          player.sendMessage(ChatColor.RED + "You are still deathbanned for " + TimeUtils.formatIntoDetailedString((int)seconds) + "!");
+         this.kickPlayer(player);
       }
    }
 
    public void kickPlayer(final Player player) {
-      final String randomHub = "Hub-0" + ThreadLocalRandom.current().nextInt(1, 3);
       (new BukkitRunnable() {
          @Override
          public void run() {
             if (player.isOnline()) {
-               player.sendMessage(ChatColor.RED + "You have been deathbanned!");
-               BungeeUtil.sendToServer(player, randomHub);
+               player.performCommand("hub");
             }
          }
-      }).runTaskLaterAsynchronously(this.instance, 40L);
+      }).runTaskLater(this.instance, 40L);
       (new BukkitRunnable() {
          @Override
          public void run() {
             if (player.isOnline()) {
-               player.kickPlayer(ChatColor.RED + "You have been deathbanned!");
+               player.kickPlayer(ChatColor.RED + "You are deathbanned!");
             }
          }
       }).runTaskLater(this.instance, 120L);

@@ -37,7 +37,7 @@ public class CouponDropsTask extends BukkitRunnable {
       if (!UniverseAPI.getServerName().contains("Dev")) {
          int x = ThreadLocalRandom.current().nextInt(100, 1000) - 500;
          int z = ThreadLocalRandom.current().nextInt(100, 1000) - 500;
-         Location location = this.instance.getServer().getWorld("world").getHighestBlockAt(x, z).getLocation().add(new Vector(0, 1, 0)).clone();
+         Location location = this.instance.getServerHandler().getMapWorld().getHighestBlockAt(x, z).getLocation().add(new Vector(0, 1, 0)).clone();
          location.getChunk().load(true);
          this.instance.getServer().getOnlinePlayers().forEach(player -> {
             player.sendMessage(" ");

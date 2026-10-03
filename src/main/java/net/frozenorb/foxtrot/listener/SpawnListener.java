@@ -49,25 +49,6 @@ public class SpawnListener implements Listener {
       }
    }
 
-   @EventHandler(ignoreCancelled = true)
-   public void onMove(PlayerMoveEvent event) {
-      Location from = event.getFrom();
-      Location to = event.getTo();
-      if (to.getBlockX() != from.getBlockX() || to.getBlockZ() != from.getBlockZ() || to.getBlockY() != from.getBlockY()) {
-         if (DTRBitmask.SAFE_ZONE.appliesAt(to)) {
-            if (!Foxtrot.getInstance().getMapHandler().isKitMap()) {
-               if ((
-                     event.getPlayer().getLocation().getBlock().getType() == Material.WATER
-                        || event.getPlayer().getLocation().getBlock().getType() == Material.STATIONARY_WATER
-                  )
-                  && from.getWorld().getName().equalsIgnoreCase("Spawn")) {
-                  event.getPlayer().teleport(Foxtrot.getInstance().getServer().getWorld("world").getSpawnLocation().clone());
-               }
-            }
-         }
-      }
-   }
-
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onBlockPlace(final BlockPlaceEvent event) {
       if (!event.getPlayer().hasMetadata("ADMIN_BUILD")) {

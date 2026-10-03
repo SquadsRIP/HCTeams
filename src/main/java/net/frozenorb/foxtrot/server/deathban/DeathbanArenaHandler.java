@@ -34,13 +34,7 @@ public class DeathbanArenaHandler {
    }
 
    public boolean isDeathbanArena(Player player) {
-      if (this.instance.getMapHandler().isKitMap()) {
-         return false;
-      } else if (player.isOp()) {
-         return false;
-      } else {
-         return this.instance.getDeathbanMap().isDeathbanned(player.getUniqueId()) ? true : player.getWorld().getName().equalsIgnoreCase("Deathban");
-      }
+      return false;
    }
 
    public void deathban(Player player) {
@@ -91,7 +85,7 @@ public class DeathbanArenaHandler {
                         && Foxtrot.getInstance().getServer().getPlayer(player.getUniqueId()) == player
                         && !Foxtrot.getInstance().getDeathbanMap().isDeathbanned(player.getUniqueId())) {
                         clearReviveInventory(player);
-                        player.teleport(this.instance.getServer().getWorld("world").getSpawnLocation());
+                        player.teleport(this.instance.getServerHandler().getSpawnLocation());
                         clearReviveInventory(player);
                         PendingReviveInventory.complete(player);
                      }

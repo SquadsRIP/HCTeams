@@ -289,6 +289,11 @@ public class EndListener implements Listener {
 
    @EventHandler(priority = EventPriority.LOWEST)
    public void onPortal(PlayerPortalEvent event) {
+      retargetMapWorldPortal(event);
+      if (event.getTo() == null) {
+         return;
+      }
+
       if (event.getCause() == TeleportCause.END_PORTAL) {
          Player player = event.getPlayer();
          if ((event.getTo() == null || event.getTo().getWorld() == null) && event.getFrom().getWorld().getName().equalsIgnoreCase("world_miner")) {
@@ -350,6 +355,35 @@ public class EndListener implements Listener {
       }
    }
 
+   private static void retargetMapWorldPortal(PlayerPortalEvent event) {
+      World mapWorld = Foxtrot.getInstance().getServerHandler().getMapWorld();
+      if (mapWorld != null) {
+         Location from = event.getFrom();
+         if (event.getTo() == null && from.getWorld().equals(mapWorld)) {
+            if (event.getCause() == TeleportCause.NETHER_PORTAL) {
+               World nether = Foxtrot.getInstance().getServer().getWorld("world_nether");
+               if (nether != null) {
+                  event.setTo(new Location(nether, from.getX() / 8.0, from.getY(), from.getZ() / 8.0, from.getYaw(), from.getPitch()));
+                  event.useTravelAgent(true);
+               }
+            } else if (event.getCause() == TeleportCause.END_PORTAL) {
+               World end = Foxtrot.getInstance().getServer().getWorld("world_the_end");
+               if (end != null) {
+                  event.setTo(end.getSpawnLocation());
+               }
+            }
+         } else if (event.getCause() == TeleportCause.NETHER_PORTAL
+            && event.getTo() != null
+            && from.getWorld().getEnvironment() == Environment.NETHER
+            && event.getTo().getWorld().getEnvironment() == Environment.NORMAL
+            && !event.getTo().getWorld().equals(mapWorld)) {
+            Location to = event.getTo().clone();
+            to.setWorld(mapWorld);
+            event.setTo(to);
+         }
+      }
+   }
+
    @EventHandler
    public void onEntityExplode(EntityExplodeEvent event) {
       if (event.getEntity() instanceof EnderDragon) {
@@ -368,7 +402,8 @@ public class EndListener implements Listener {
                || event.getPlayer().getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
                double pitch = 21.294214;
                double yaw = 28.865494;
-               event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 0.5, 70.0, 300.5, (float)yaw, (float)pitch));
+               World mapWorld = Foxtrot.getInstance().getServerHandler().getMapWorld();
+               event.getPlayer().teleport(new Location(mapWorld, 0.5, mapWorld.getHighestBlockYAt(0, 200) + 1, 200.5, (float)yaw, (float)pitch));
             }
 
             if (CustomTimerCreateCommand.isSOTWTimer() && !CustomTimerCreateCommand.hasSOTWEnabled(event.getPlayer().getUniqueId())) {
@@ -400,7 +435,7 @@ public class EndListener implements Listener {
             if (redis.exists("endReturn")) {
                endReturn = Proton.PLAIN_GSON.fromJson(redis.get("endReturn"), Location.class);
             } else {
-               endReturn = new Location(Bukkit.getWorlds().get(0), 0.6, 64.0, 346.5);
+               endReturn = new Location(Foxtrot.getInstance().getServerHandler().getMapWorld(), 0.6, 64.0, 346.5);
             }
 
             return null;
