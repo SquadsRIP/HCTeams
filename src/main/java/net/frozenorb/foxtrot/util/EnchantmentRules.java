@@ -159,6 +159,47 @@ public final class EnchantmentRules {
       }
    }
 
+   public boolean exceedsLimits(ItemStack result, ItemStack... inputs) {
+      if (result != null && result.getType() != Material.AIR && result.hasItemMeta()) {
+         for (Entry<Enchantment, Integer> entry : getAllEnchants(result).entrySet()) {
+            int limit = this.getLimit(entry.getKey());
+            if (limit > 0 && entry.getValue() > limit) {
+               int inputLevel = 0;
+
+               for (ItemStack input : inputs) {
+                  Integer level = getAllEnchants(input).get(entry.getKey());
+                  if (level != null) {
+                     inputLevel = Math.max(inputLevel, level);
+                  }
+               }
+
+               if (entry.getValue() > inputLevel) {
+                  return true;
+               }
+            }
+         }
+
+         return false;
+      } else {
+         return false;
+      }
+   }
+
+   private static Map<Enchantment, Integer> getAllEnchants(ItemStack item) {
+      Map<Enchantment, Integer> enchants = new HashMap<>();
+      if (item != null && item.getType() != Material.AIR && item.hasItemMeta()) {
+         ItemMeta meta = item.getItemMeta();
+         enchants.putAll(meta.getEnchants());
+         if (meta instanceof EnchantmentStorageMeta) {
+            for (Entry<Enchantment, Integer> entry : ((EnchantmentStorageMeta)meta).getStoredEnchants().entrySet()) {
+               enchants.merge(entry.getKey(), entry.getValue(), Math::max);
+            }
+         }
+      }
+
+      return enchants;
+   }
+
    private boolean exceedsLimits(Map<Enchantment, Integer> enchants) {
       for (Entry<Enchantment, Integer> entry : enchants.entrySet()) {
          int limit = this.getLimit(entry.getKey());
