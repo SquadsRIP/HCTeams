@@ -1,0 +1,48 @@
+# Disabled Commands Configuration
+# Set any command to true to disable it (prints "Unknown command. Type /help for help.")
+# Set to false to re-enable it (for OP realm or other use cases)
+#
+# These are overridden via DisabledCommands.java in HCTeams.
+# Changing this file requires a /hcteams reload + server restart for new commands to register.
+
+disabled:
+  # Core disabled commands (always disabled on Squads)
+  settings: true
+  armorcolor: true
+  schedule: true
+  skins: true
+  freerank: true
+  vote: true
+  filter: true
+  grounds: true
+  buildcomp: true
+  menu: true
+  bosses: true
+  conquest: true
+  cavenite: true
+  fury: true
+  outpost: true
+  treasure: true
+  xpshop: true
+  ce: true
+  customenchants: true
+
+  # Feature toggles (disable for Squads, enable for OP realm)
+  coinshop: true
+  coupondrops: true
+  cavesays: true
+  gems: true
+  factionUpgrade: true
+  brewer: true
+  boss: true
+  totem: true
+
+  # /f top raidable and /f top trapping
+  topRaidable: true
+  topTrapping: true
+
+# Commands that print a custom message instead of "Unknown command"
+# Format: command: "custom message"
+custom-messages:
+  discord: "&4Discord: &cComing Soon!"
+

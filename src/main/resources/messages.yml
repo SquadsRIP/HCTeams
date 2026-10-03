@@ -1,0 +1,56 @@
+# Administrator-facing messages support &, plus the global placeholders:
+# %network%, %server%, %website%, %store%, %stats%, %discord%, and %support%.
+messages:
+  sign-shop:
+    # Short, temporary sign text; %amount% is the quantity actually traded.
+    cannot-afford: "&cCan't afford"
+    not-carrying: '&cNot carrying'
+    bought: '&aBought %amount%'
+    sold: '&cSold %amount%'
+  reload:
+    usage: '&eUsage: /hcteams reload'
+    success: '&aReloaded all HCTeams configuration files in %time%ms. Startup-only changes require a restart.'
+    failure: '&eThe configuration files could not be reloaded: %error%'
+  logout:
+    started: '&e&lLogging out... &ePlease wait &e%seconds% &eseconds.'
+    complete: '&eYou have been safely logged out of the server!'
+  welcome:
+    first-join-chat: '&fWelcome to %network% %universe_server%!'
+  store:
+    custom-rank-required: '&eYou must purchase the Custom Rank to use this at %store%!'
+    perk-required: '&ePurchase this perk at %store%'
+    vip-required: '&ePurchase VIP status at %store%'
+    booster-required: '&eYou do not have this booster! You can purchase boosters at %store%'
+  fancy-brewer:
+    tutorial: '&7Watch this tutorial on how to use a Fancy Brewer &f%tutorial%'
+  coupons:
+    book-author: 'Squads'
+    book-page: |-
+
+      &eApply this coupon code at checkout!
+      &7%store%
+
+      &2Code: &a%code%
+  vouchers:
+    store: '&7Purchase Perk Keys on our store at &f%store%&7.'
+  deathban:
+    rest-of-map: |-
+      &eYou are deathbanned for the rest of the map!
+      Check out SOTW information at:
+      %deathban_info%
+
+broadcasts:
+  custom-rank:
+    enabled: true
+    initial-delay-seconds: 350
+    interval-seconds: 350
+    lines:
+      - ''
+      - '&6&l  Online Custom Ranks'
+      - ''
+      - '  %players%'
+      - ''
+      - '&7  Purchase the Custom Rank at'
+      - '&f  %store%'
+      - ''
+

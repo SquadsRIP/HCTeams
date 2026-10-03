@@ -1,0 +1,14 @@
+# Class enablement is startup-only because listeners are registered at startup.
+pvpClasses:
+  archer: true
+  bard: true
+  rogue: true
+  ranger: true
+
+minerWorld:
+  regen:
+    COAL_ORE: 30
+    IRON_ORE: 60
+    GOLD_ORE: 90
+    DIAMOND_ORE: 120
+

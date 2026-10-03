@@ -1,0 +1,38 @@
+# Cosmetic identity and external links. These values are never used as
+# database or Redis keys.
+branding:
+  network-name: 'Squads'
+
+serverName: 'Teams'
+networkWebsite: 'Coming Soon!'
+statsRoot: 'Coming Soon!'
+
+links:
+  website: 'Coming Soon!'
+  stats: 'Coming Soon!'
+  store: 'Coming Soon!'
+  discord: 'Coming Soon!'
+  support: 'Coming Soon!'
+  fancy-brewers: 'Coming Soon!'
+  build-competition: 'Coming Soon!'
+  deathban-info: 'Coming Soon!'
+  boosters: 'Coming Soon!'
+  perks: 'Coming Soon!'
+  vip-status: 'Coming Soon!'
+  omega-chests: 'Coming Soon!'
+  illuminated-chests: 'Coming Soon!'
+
+# This override prevents legacy mapInfo.json branding from changing the title.
+scoreboard:
+  title: '&4Teams &7[Map 1]'
+  animated-title:
+    network-text: 'SQUADS'
+    primary-color: 'RED'
+    secondary-color: 'DARK_RED'
+    flicker-color: 'WHITE'
+
+tab:
+  serverName: '&4&lSquads'
+  sectionColor: '&4'
+  infoColor: '&7'
+

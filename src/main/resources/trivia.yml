@@ -1,0 +1,54 @@
+trivia:
+  enabled: false
+  initial-delay-seconds: 5404
+  interval-seconds: 5404
+  questions:
+    - { question: 'In what year was Minecraft released?', answer: '2011' }
+    - { question: 'What is the current top rank on Squads?', answer: 'Squads' }
+    - { question: 'What is the lowest rank on Squads?', answer: 'Iron' }
+    - { question: "What is Squads' Discord link?", answer: 'Coming Soon!' }
+    - { question: 'How many states are there in the United States?', answer: '50' }
+    - { question: 'Is tomato a fruit?', answer: 'Yes' }
+    - { question: 'What country has the 2nd largest GDP?', answer: 'China' }
+    - { question: 'What country is largest in population?', answer: 'India' }
+    - { question: 'What country is largest in land size?', answer: 'Russia' }
+    - { question: "What's 6x6?", answer: '36' }
+    - { question: "What's 829+219?", answer: '1048' }
+    - { question: "What's 3x3+349?", answer: '358' }
+    - { question: "What's 348+233?", answer: '358' }
+    - { question: "What's the first 5 numbers of PI?", answer: '3.1415' }
+    - { question: "What's 8 squared?", answer: '64' }
+    - { question: "What's 12 squared?", answer: '144' }
+    - { question: "What's 3 squared?", answer: '9' }
+    - { question: "What's 9 cubed?", answer: '729' }
+    - { question: "What's 48+16", answer: '64' }
+    - { question: 'How many months have 28 days?', answer: '12' }
+    - { question: 'When was the Squads Christmas Update?', answer: 'December' }
+    - { question: 'How many continents are there?', answer: '7' }
+    - { question: "What's the largest crypto currency?", answer: 'Bitcoin' }
+    - { question: 'What company invented the iPhone?', answer: 'Apple' }
+    - { question: 'What company invented the Playstation?', answer: 'Sony' }
+    - { question: 'What company invented the Xbox?', answer: 'Microsoft' }
+    - { question: 'Who created Minecraft?', answer: 'Notch' }
+    - { question: "What's the name of the Minecraft convention?", answer: 'Minecon' }
+    - { question: "What's the name of the Twitch convention?", answer: 'Twitchcon' }
+    - { question: "What's the final boss in Minecraft?", answer: 'Enderdragon' }
+    - { question: 'What version is Minecraft currently on?', answer: '1.17' }
+    - { question: 'What is the IP to Squads?', answer: 'Coming Soon!' }
+    - { question: 'What is the new Minecraft mob that was voted upon?', answer: 'Allay' }
+    - { question: 'What is the 8th letter of the alphabet?', answer: 'H' }
+    - { question: 'What is the 12th letter of the alphabet?', answer: 'L' }
+    - { question: 'What is the 18th letter of the alphabet?', answer: 'R' }
+    - { question: 'What is the 24th letter of the alphabet?', answer: 'W' }
+    - { question: 'SimplyTrash', answer: 'SimplyTrash', reaction: true }
+    - { question: 'DrePvP', answer: 'DrePvP', reaction: true }
+    - { question: 'iMakeMcVids', answer: 'iMakeMcVids', reaction: true }
+    - { question: 'Headed', answer: 'Headed', reaction: true }
+    - { question: 'Vik', answer: 'Vik', reaction: true }
+    - { question: 'Lectors', answer: 'Lectors', reaction: true }
+    - { question: 'Frozeado', answer: 'Frozeado', reaction: true }
+    - { question: 'SamHCF', answer: 'SamHCF', reaction: true }
+    - { question: 'Squads', answer: 'Squads', reaction: true }
+    - { question: 'Squads On Top', answer: 'Squads On Top', reaction: true }
+    - { question: 'Trojan', answer: 'Trojan', reaction: true }
+

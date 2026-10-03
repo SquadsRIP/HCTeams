@@ -1,0 +1,13 @@
+# Tips configuration
+# Tips are broadcast to all players at the configured interval (in seconds)
+# The prefix is shown before each tip
+# Tips are stored in data/tips.yml at runtime but defaults are here
+
+tips:
+  prefix: '&7[&e&l&oTIP&7] &6'
+  interval: 300
+
+# Default tips (can be added/removed in-game with /tips add <text>)
+default-tips:
+  - 'We do not allow &6Autoclickers &fyou should not use them because you will get &6&lBANNED&r &ffor them.'
+

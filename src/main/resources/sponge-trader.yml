@@ -1,0 +1,15 @@
+# One trader per server. Commands save its position here; restart after editing messages.
+display-name: '&e&lSponge Trader'
+messages:
+  usage: '&eUsage: /spongetrader <spawn|despawn>'
+  player-only: '&cRun this command in-game to spawn the trader at your location.'
+  already-spawned: '&cA sponge trader is already configured. Use /spongetrader despawn first.'
+  not-spawned: '&cThere is no sponge trader to despawn.'
+  saving: '&eA trader change is being saved. Please wait.'
+  spawned: '&aSpawned the sponge trader at your location. His location has been saved.'
+  despawned: '&aDespawned the sponge trader and removed his saved location.'
+  spawn-blocked: '&cThe location was saved, but the trader could not spawn. Check custom mob spawn restrictions; the trader will retry automatically.'
+  save-failed: '&cCould not save the change. The previous trader location was kept. Check the server log.'
+  invalid-location: '&cChoose a location inside the world, between Y=0 and Y=255.'
+  busy: '&eSomeone is trading with this villager. Please wait until they finish.'
+

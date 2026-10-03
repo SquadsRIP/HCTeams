@@ -1,0 +1,164 @@
+# Core mode flags and database settings. Feature-specific settings live in the
+# named YAML files beside this one.
+Mongo:
+  Host: "127.0.0.1"
+  Port: 25578
+  User: "none"
+  Database: "hcteams"
+  Pass: ""
+  DBName: 'Teams'
+
+# Server modes are startup-only because they decide which handlers/listeners
+# are constructed. Change these only while the server is stopped.
+anti-xray:
+  # Startup-only. Enables vSpigot's mode 2 ore obfuscation in every world.
+  # False leaves the server's own spigot.yml anti-xray settings in control.
+  enabled: true
+
+kits: false
+teams: true
+squads: false
+nightmare:
+  enabled: false
+  worldName: 'NightmareEvent'
+glowstoneMountain: true
+cavern: false
+
+# Bosses — set to false to fully disable boss auto-spawns, /boss spawn, and the BossSummoner click item.
+bosses:
+  enabled: false
+
+startingTimer: true
+forceInvites: true
+idleCheck: true
+uhcHealing: false
+au: false
+passiveTag: true
+allowBoosting: false
+waterPlacementInClaims: false
+blockRemoval: false
+rodPrevention: false
+skybridgePrevention: false
+reduceArmorDamage: true
+blockEntitiesThroughPortals: true
+teamHQInEnemyClaims: true
+hardcore: true
+placeBlocksInCombat: true
+
+archerTagColor: YELLOW
+stunTagColor: BLUE
+defaultRelationColor: YELLOW
+
+# Runtime counters are persisted here by their existing handlers.
+totalWagered: 0
+voteParty:
+  currentVotes: 0
+
+# Enchantment limits — max levels allowed on items
+# Any enchantment above these levels is automatically reduced
+enchantmentLimits:
+  protection: 2
+  sharpness: 2
+  unbreaking: 3
+  fireProtection: 2
+  projectileProtection: 2
+  blastProtection: 2
+  featherFalling: 2
+  smite: 2
+  baneOfArthropods: 2
+
+# Tables only roll Protection, Unbreaking, Efficiency, Fortune, Silk Touch,
+# Smite, Bane of Arthropods, Looting, and Sharpness. Books receive one enchant.
+enchantingTable:
+  # Chance to KEEP a qualifying max-level roll, per enchant, at level cost 30.
+  # Scales down with cost (15 = 12.5%); never raises a lower vanilla roll.
+  # Failed max rolls lose one level. Silk Touch keeps its vanilla level/rarity.
+  # Set 0 to require anvils for multi-level caps, or 100 for vanilla cap clamping
+  # at cost 30. Anvils combine normally up to enchantmentLimits above.
+  max-level-chance-percent: 25.0
+  # Level-30 gear with one enchant has this chance to receive a second.
+  level-30-second-enchant-chance-percent: 70.0
+  # Gear with two enchants then has this chance to receive a third.
+  # Extras must be allowed, compatible, and non-conflicting. Books stay at one.
+  # Bonus enchants use the same max-level rarity above; Silk Touch is vanilla-only.
+  # Cheaper table rolls do not receive bonus enchants. Set both to 0 to disable.
+  level-30-third-enchant-chance-percent: 20.0
+  anvil-limit-message: '&cYou cannot combine items above the maximum enchantment level.'
+
+# Spawn tag duration in seconds
+spawnTagSeconds: 30
+
+# Border sizes
+netherBorderSize: 3000
+kitMapBorderSize: 2000
+
+# Nether spawn protection radius (no breaking/placing within this many blocks of nether spawn)
+netherSpawnProtectionRadius: 500
+
+# Starting balance for first-time joiners
+startingBalance: 500.0
+startingBalanceTeams: 100.0
+
+# Custom rank name — the rank that hides sale timers on the scoreboard
+# (was hardcoded as "Partner" — now configurable)
+customRankName: 'Partner'
+
+# /f focus messages (configurable)
+focusMessage: '&d<target> &ehas been focused by &d<player>&e.'
+unfocusMessage: '&d<target> &ehas been unfocused by &d<player>&e.'
+teamFocusMessage: '&eTeam &d<team> &ehas been <action> by &d<player>&e.'
+teamUnfocusMessage: '&eTeam &d<team> &ehas been unfocused by &d<player>&e.'
+
+# Fight scoreboard (shown during anti-clean/teamfight)
+fightFormat: '&6Fight: &7<faction>'
+
+# Bard effect notification messages (configurable)
+bardEffectReceivedMessage: '&fYou have received &6<effect> &ffrom your &6Bard'
+bardEffectGivenMessage: '&fYou have given &6<effect> &fto your team'
+
+
+# /f who message format — used when players run /f who <faction>
+# Placeholders: <faction>, <dtr>, <dtrmax>, <online>, <total>, <balance>, <hq>
+fWho:
+  header: '&4<faction> &7(&c<online>&7/&c<total>&7)'
+  hq: '&4HQ: &c<hq>'
+  allies: '&4Allies: &c<allies>'
+  leader: '&4Leader: &c<name> &7[<kills>]'
+  dtr: '&4DTR: &f<dtr>/<dtrmax>'
+  balance: '&4Balance: &a$&c<balance>'
+  online_members: '&4Online Members:'
+  offline_members: '&4Offline Members:'
+
+# Control Panel website URL
+# Set this to the public URL of the Squads Control Panel website.
+# The Minecraft server will POST logs (chat, kills, items, commands) to this URL.
+# Leave empty to disable logging.
+# Configure controlPanel.url and controlPanel.apiKey in the server-local config only.
+controlPanel:
+  url: ""
+  apiKey: ""
+
+# Golden apple cooldown (normal golden apples, in seconds)
+crappleCooldownSeconds: 30
+
+# Optional CheatBreakerAPI 3.4.0 integration. Install the API JAR beside HCTeams.
+# All clients may join: HCTeams disables the API's kick.enabled requirement.
+# These settings can be applied with /hcteams reload.
+cheatbreaker:
+  enabled: true
+  team-view: true
+  nametags: true
+  # Allows the client's Minimap mod, which is required to display waypoints.
+  allow-minimap: true
+  staff:
+    enabled: true
+    permission: 'modsuite.command.modmode'
+    # Set true to restrict the four staff modules to active /mod mode.
+    require-mod-mode: false
+  waypoints:
+    # Uses /f setlocation Spawn, or the gameplay world's exact spawn location.
+    spawn: true
+    faction: true
+    koth: true
+  # Voice chat is currently unavailable in the CheatBreaker client.
+

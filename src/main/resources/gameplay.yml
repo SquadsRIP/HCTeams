@@ -1,0 +1,40 @@
+gameplay:
+  logout:
+    delay-seconds: 30
+    hub-prefix: 'Hub-0'
+    hub-minimum: 1
+    hub-maximum-exclusive: 3
+    fallback-kick-delay-ticks: 40
+  idle-check:
+    initial-delay-ticks: 1200
+    interval-ticks: 1200
+
+# Tick-based scheduler values are startup-only (20 ticks = 1 second).
+tasks:
+  dtr:
+    initial-delay-ticks: 20
+    interval-ticks: 2400
+  redis-save:
+    initial-delay-ticks: 1200
+    interval-ticks: 1200
+  full-save:
+    initial-delay-ticks: 6000
+    interval-ticks: 6000
+
+world-settings:
+  thundering: false
+  storm: false
+  normal-world-time: 18000
+  weather-duration-ticks: 2147483647
+  game-rules:
+    doMobSpawning: false
+    doFireTick: false
+    doDaylightCycle: false
+    mobGriefing: false
+
+sotw:
+  reminder-seconds: [300, 600, 900, 1800, 3600, 7200]
+  claim-unlock-minutes: 10
+
+conquestWinPoints: 250
+

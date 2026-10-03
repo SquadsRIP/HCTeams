@@ -1,0 +1,46 @@
+# Redeem Configuration
+# Players can /redeem to support creators. Opens a 3x9 GUI.
+# Clicking a creator's head gives the player 1 life and broadcasts a message.
+
+redeem:
+  enabled: true
+  once-per-map: true
+  gui-title: "&4&lRedeem"
+  gui-size: 27
+
+  # Broadcast format: {player} = redeemer, {creator} = creator name
+  broadcast-format: "&4{player} &fhas redeemed &4&l{creator}&f. Use &4/redeem &fto get free rewards!"
+
+  # Commands to run when a creator is redeemed
+  # {player} = player name
+  commands:
+    - "lives give {player} 1"
+
+  creators:
+    letsjustpretend:
+      slot: 11
+      head-ign: "letsjustpretend"
+      name: "&fletsjustpretend"
+      lore:
+        - "&7Click here to support this creator"
+        - "&c\u2764"
+      creator-name: "letsjustpretend"
+
+    R3faced:
+      slot: 13
+      head-ign: "R3faced"
+      name: "&fR3faced"
+      lore:
+        - "&7Click here to support this creator"
+        - "&c\u2764"
+      creator-name: "R3faced"
+
+    determiners:
+      slot: 15
+      head-ign: "determiners"
+      name: "&fdeterminers"
+      lore:
+        - "&7Click here to support this creator"
+        - "&c\u2764"
+      creator-name: "determiners"
+

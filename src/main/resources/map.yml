@@ -1,0 +1,35 @@
+# Values here override mapInfo.json while retaining mapInfo.json as a legacy
+# fallback. kit-map and crafting recipe changes require a server restart.
+map:
+  kit-map: false
+  halloween: false
+  ally-limit: 0
+  team-size: 5
+  dtr-regen:
+    death-minutes: 30
+    raidable-minutes: 30
+  started-message: 'Map 3 - Started January 31, 2015'
+  warzone-radius: 1000
+  border-size: 3000
+  nether-buffer: 150
+  world-buffer: 300
+  end-portal-location: '1000, 1000'
+  gopple-cooldown-minutes: 180
+  fast-smelt: true
+  minimum-force-invite-members: 10
+  dtr-increment-multiplier: 4.5
+  looting:
+    base: 1.0
+    level-1: 1.2
+    level-2: 1.4
+    level-3: 2.0
+  crafting:
+    gopple: true
+    reduced-melon: true
+  deathban-minutes:
+    HIGHROLLER: 45
+    EPIC: 45
+    PRO: 90
+    VIP: 120
+    DEFAULT: 240
+

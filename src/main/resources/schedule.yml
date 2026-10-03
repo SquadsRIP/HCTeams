@@ -1,0 +1,84 @@
+# Schedule Configuration
+# All scheduled events and resets are configured here.
+# Times are in 24-hour format (HH:MM) or intervals.
+# Timezone: server timezone (default UTC)
+
+# KOTH Schedule
+# KOTHs run every 2 hours, cycling through: Spider, Mushroom, Hell, End
+koth:
+  enabled: true
+  interval-hours: 2
+  rotation:
+    - "Spider"
+    - "Mushroom"
+    - "Hell"
+    - "End"
+  # Cap time in seconds
+  cap-time: 900
+  # Cap distance in blocks
+  cap-distance: 5
+
+# Glowstone Mountain
+glowstone:
+  enabled: true
+  reset-interval-minutes: 60
+  # When the glowstone mountain is broken, the reset countdown starts.
+  # Players can see the countdown in /f who glowstone.
+
+# Citadel
+citadel:
+  enabled: true
+  # Citadel runs on specific days/times
+  schedule:
+    - day: "SATURDAY"
+      time: "18:00"
+  cap-time: 600
+
+# Conquest
+conquest:
+  enabled: true
+  schedule:
+    - day: "SUNDAY"
+      time: "18:00"
+  points-to-win: 250
+
+# Rewards
+rewards:
+  koth:
+    crates: 3
+    crate-type: "KOTH"
+    points: 25
+    commands:
+      - "cr givekey {player} KOTH 3"
+      - "faction addpoints {faction} 25"
+  citadel:
+    crates: 3
+    crate-type: "KOTH"
+    points: 150
+    commands:
+      - "cr givekey {player} KOTH 3"
+      - "faction addpoints {faction} 150"
+  conquest:
+    crates: 3
+    crate-type: "KOTH"
+    points: 150
+    commands:
+      - "cr givekey {player} KOTH 3"
+      - "faction addpoints {faction} 150"
+
+# Deathban timers per rank (in minutes)
+deathban:
+  default: 240
+  ranks:
+    VIP: 120
+    PRO: 90
+    EPIC: 45
+    HIGHROLLER: 45
+
+# Auto-reboot schedule
+auto-reboot:
+  enabled: true
+  times:
+    - "04:00"
+    - "16:00"
+

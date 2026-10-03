@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"><modelVersion>4.0.0</modelVersion><groupId>org.cavepvp.entity</groupId><artifactId>entity</artifactId><version>1.0-SNAPSHOT</version><packaging>jar</packaging><description>Compile-only classes from the supplied entity-entity-1.0-SNAPSHOT.jar; no runtime plugin configuration or entry point. Do not deploy this archive.</description></project>

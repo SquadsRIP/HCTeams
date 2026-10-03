@@ -1,0 +1,45 @@
+package net.frozenorb.foxtrot.serialization;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import java.lang.reflect.Type;
+import org.bukkit.util.BlockVector;
+
+public class BlockVectorAdapter implements JsonDeserializer<BlockVector>, JsonSerializer<BlockVector> {
+   public BlockVector deserialize(JsonElement src, Type type, JsonDeserializationContext context) throws JsonParseException {
+      return fromJson(src);
+   }
+
+   public JsonElement serialize(BlockVector src, Type type, JsonSerializationContext context) {
+      return toJson(src);
+   }
+
+   public static JsonObject toJson(BlockVector src) {
+      if (src == null) {
+         return null;
+      }
+
+      JsonObject object = new JsonObject();
+      object.addProperty("x", src.getX());
+      object.addProperty("y", src.getY());
+      object.addProperty("z", src.getZ());
+      return object;
+   }
+
+   public static BlockVector fromJson(JsonElement src) {
+      if (src != null && src.isJsonObject()) {
+         JsonObject json = src.getAsJsonObject();
+         double x = json.get("x").getAsDouble();
+         double y = json.get("y").getAsDouble();
+         double z = json.get("z").getAsDouble();
+         return new BlockVector(x, y, z);
+      } else {
+         return null;
+      }
+   }
+}

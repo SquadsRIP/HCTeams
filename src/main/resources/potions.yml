@@ -1,0 +1,58 @@
+# Allowed potion forms, maximum amplifier, and per-type inventory limits.
+potions:
+  REGEN:
+    splash: false
+    drinkables: false
+    maxLevel: -1
+    limit: 0
+  SPEED:
+    splash: true
+    drinkables: true
+    maxLevel: -1
+  FIRE_RESISTANCE:
+    splash: true
+    drinkables: true
+    maxLevel: -1
+  POISON:
+    splash: true
+    drinkables: false
+    maxLevel: -1
+    limit: 1
+  INSTANT_HEAL:
+    splash: true
+    drinkables: true
+    maxLevel: -1
+  NIGHT_VISION:
+    splash: true
+    drinkables: true
+    maxLevel: -1
+  WEAKNESS:
+    splash: false
+    drinkables: false
+    maxLevel: -1
+    limit: 0
+  STRENGTH:
+    splash: false
+    drinkables: false
+    maxLevel: -1
+    limit: 0
+  SLOWNESS:
+    splash: true
+    drinkables: false
+    maxLevel: -1
+    limit: 1
+  INSTANT_DAMAGE:
+    splash: false
+    drinkables: false
+    maxLevel: -1
+    limit: 0
+  WATER_BREATHING:
+    splash: true
+    drinkables: true
+    maxLevel: -1
+  INVISIBILITY:
+    splash: false
+    drinkables: false
+    maxLevel: -1
+    limit: 1
+

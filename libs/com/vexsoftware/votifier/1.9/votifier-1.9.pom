@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"><modelVersion>4.0.0</modelVersion><groupId>com.vexsoftware</groupId><artifactId>votifier</artifactId><version>1.9</version><packaging>jar</packaging><description>Compile-only classes from the supplied votifier-1.9.jar; no runtime plugin configuration or entry point. Do not deploy this archive.</description></project>

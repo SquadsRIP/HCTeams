@@ -1,0 +1,247 @@
+{
+  "purpose": "Compile-only dependency archives. These contain actual classfiles from supplied/deployed binaries, with runtime resources removed. Do not install these archives on a server.",
+  "build": "mvn clean package",
+  "public_dependencies": "Maven resolves public dependencies normally. No manual install:install-file step is required.",
+  "libraries": [
+    {
+      "groupId": "com.cheatbreaker",
+      "artifactId": "CheatBreakerAPI",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/com/cheatbreaker/CheatBreakerAPI/1.0-SNAPSHOT/CheatBreakerAPI-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "8f0c230426c3a44b452fed5083215c6a84c76983cc05844979ba80cffd29d68b",
+      "source_sha256": "4a1672762c995aa74b014240fd403dab7e24ddcd73a02b44a52ca3360cdde77e",
+      "class_count": 51,
+      "source_filename": "CheatBreakerAPI.jar",
+      "retained_class_packages": [
+        "com/cheatbreaker/"
+      ]
+    },
+    {
+      "groupId": "net.valorhcf",
+      "artifactId": "vspigot-server",
+      "version": "1.7.10-R0.1-SNAPSHOT",
+      "classifier": "compile-only-api",
+      "path": "libs/net/valorhcf/vspigot-server/1.7.10-R0.1-SNAPSHOT/vspigot-server-1.7.10-R0.1-SNAPSHOT-compile-only-api.jar",
+      "sha256": "5b144b9d354fef92b8a324239b7d5f8810a60682064053bf072bf32004a6965c",
+      "source_sha256": "ac8c0baa16dd2121c6fab43767584d0482d43818ce59a61b710b079ec210a001",
+      "class_count": 3435,
+      "source_filename": "server.jar",
+      "retained_class_packages": [
+        "Exact referenced server types and transitive compilation signature types"
+      ]
+    },
+    {
+      "groupId": "cc.fyre.neutron",
+      "artifactId": "neutron",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/cc/fyre/neutron/neutron/1.0-SNAPSHOT/neutron-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "4684f97c87e7ff66638f46c9ff56cb628051b133c1ac95dbdfd4f4b990302965",
+      "source_sha256": "74a5cfa4a1c637d07a28aa70050d4da377c9b675712685cfd83caa854ca6f5bb",
+      "class_count": 258,
+      "source_filename": "neutron-1.0-SNAPSHOT(4).jar",
+      "retained_class_packages": [
+        "cc/fyre/neutron/"
+      ]
+    },
+    {
+      "groupId": "org.cavepvp.coinshop",
+      "artifactId": "CoinShop",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/org/cavepvp/coinshop/CoinShop/1.0-SNAPSHOT/CoinShop-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "06694769e726fac6a89d274eb2d6b4df2abbabdd8da96eb4ad45dce79514abbf",
+      "source_sha256": "08b1f9cdfe692e0ee0e80816333a78396f655a46e369134aa02244133d1deaca",
+      "class_count": 133,
+      "source_filename": "CoinShop-1.0-SNAPSHOT.jar",
+      "retained_class_packages": [
+        "org/cavepvp/coinshop/"
+      ]
+    },
+    {
+      "groupId": "cc.fyre.proton",
+      "artifactId": "proton",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/cc/fyre/proton/proton/1.0-SNAPSHOT/proton-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "705f35d93383f250e6c4e12b72199a5d15be54c610073c103445515dc89fe11c",
+      "source_sha256": "5f9c7d33a25f2e917a084f231e60b2e9b8d5441e1fe26e7c9a1fa458219ff637",
+      "class_count": 378,
+      "source_filename": "proton-1.0-SNAPSHOT(1).jar",
+      "retained_class_packages": [
+        "cc/fyre/proton/",
+        "mkremins/fanciful/"
+      ]
+    },
+    {
+      "groupId": "com.minexd.quartz",
+      "artifactId": "plugin",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/com/minexd/quartz/plugin/1.0-SNAPSHOT/plugin-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "f343fb5e415402de6f4bb15872cc0ada42fc4fcc8be8df08a620bb32e7b2048a",
+      "source_sha256": "ff78247d7acee13f9f1e6b41c88998691a5ba0d09f94311f8a4e023d7a0e00cd",
+      "class_count": 44,
+      "source_filename": "quartz-plugin-1.0-SNAPSHOT.jar",
+      "retained_class_packages": [
+        "com/minexd/quartz/"
+      ]
+    },
+    {
+      "groupId": "cc.fyre.piston",
+      "artifactId": "piston",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/cc/fyre/piston/piston/1.0-SNAPSHOT/piston-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "68dfaa605e04f24ef73bbfa44b1a985b41c5415e635e1f1377bd514770a8058c",
+      "source_sha256": "0d61b9ef23057a9b410334ed1952f6b5ef2f9cbe5092331ae5987540061c11db",
+      "class_count": 91,
+      "source_filename": "Piston-1.0-SNAPSHOT(1).jar",
+      "retained_class_packages": [
+        "cc/fyre/piston/"
+      ]
+    },
+    {
+      "groupId": "org.cavepvp.suge",
+      "artifactId": "Suge",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/org/cavepvp/suge/Suge/1.0-SNAPSHOT/Suge-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "e47f8f0be7c2d12ef0721617582482090589990886cdc837266abcc128b01448",
+      "source_sha256": "96699e11245de5ff4f9f8384572cde339b4c1616c51d9b53a14fe4fe1970acc3",
+      "class_count": 60,
+      "source_filename": "Suge-1.0-SNAPSHOT.jar",
+      "retained_class_packages": [
+        "org/cavepvp/suge/"
+      ]
+    },
+    {
+      "groupId": "net.buycraft",
+      "artifactId": "buycraftx-bukkit",
+      "version": "10.3.0",
+      "classifier": "compile-only",
+      "path": "libs/net/buycraft/buycraftx-bukkit/10.3.0/buycraftx-bukkit-10.3.0-compile-only.jar",
+      "sha256": "f1172efbdb5390716241a35d67c0bd32425ae690b3e5cc77913953b97d8041f2",
+      "source_sha256": "6a3f65901aae74ec89c568c40b42600c5dc47b5a670b1bcdc31831b1370cd84c",
+      "class_count": 1314,
+      "source_filename": "BuycraftX.jar",
+      "retained_class_packages": [
+        "net/buycraft/"
+      ]
+    },
+    {
+      "groupId": "org.cavepvp.entity",
+      "artifactId": "entity",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/org/cavepvp/entity/entity/1.0-SNAPSHOT/entity-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "5a4a82840b19d296b2b3f875359d9521ca58b0f7cb7e64bb79ec0014075d8e2f",
+      "source_sha256": "b2c500f04345b41595a9b9964151252824a1d080251c20101ec388af61539db2",
+      "class_count": 145,
+      "source_filename": "entity-entity-1.0-SNAPSHOT.jar",
+      "retained_class_packages": [
+        "org/cavepvp/entity/"
+      ]
+    },
+    {
+      "groupId": "com.shampaggon",
+      "artifactId": "CrackShot",
+      "version": "0.98.11",
+      "classifier": "compile-only",
+      "path": "libs/com/shampaggon/CrackShot/0.98.11/CrackShot-0.98.11-compile-only.jar",
+      "sha256": "94942cda1d3fa49a95febd20f8cff65267487ebcc6042ca7995fb2381f9ec8b3",
+      "source_sha256": "8bb80635778a88521ca6d1ab8ce42bfec67174953967abf849dd231be16c7963",
+      "class_count": 43,
+      "source_filename": "CrackShot.jar",
+      "retained_class_packages": [
+        "com/shampaggon/crackshot/"
+      ]
+    },
+    {
+      "groupId": "com.vexsoftware",
+      "artifactId": "votifier",
+      "version": "1.9",
+      "classifier": "compile-only",
+      "path": "libs/com/vexsoftware/votifier/1.9/votifier-1.9-compile-only.jar",
+      "sha256": "fb267ecf9f7e77539622c178ac327358847b77cdf7fb77c35fb03fa5db236563",
+      "source_sha256": "65f083f33ab05159e2584c21dcf4fab55d9090cce49de6349af73a2cccf7f06c",
+      "class_count": 12,
+      "source_filename": "votifier-1.9.jar",
+      "retained_class_packages": [
+        "com/vexsoftware/votifier/"
+      ]
+    },
+    {
+      "groupId": "cc.fyre.universe",
+      "artifactId": "spigot",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/cc/fyre/universe/spigot/1.0-SNAPSHOT/spigot-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "649dc51012518bc312b0630dc75312a77ea25bb258b3a5c3f94667f7ea6734fb",
+      "source_sha256": "ad444373643a1fca3759e22031827961f4a8018adcfb20474ef6f6bcceac6455",
+      "class_count": 37,
+      "source_filename": "universe-spigot-1.0-SNAPSHOT(2).jar",
+      "retained_class_packages": [
+        "cc/fyre/universe/"
+      ]
+    },
+    {
+      "groupId": "com.lunarclient",
+      "artifactId": "bukkitapi",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/com/lunarclient/bukkitapi/1.0-SNAPSHOT/bukkitapi-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "eaa77552330a060d99d18ffe0f50a932d159388864e10bdf7595daa044c1893b",
+      "source_sha256": "55c6028eeb0d4481994895460f755fa55b364312b9d030a753e39a011c4d3597",
+      "class_count": 54,
+      "source_filename": "bukkitapi.jar",
+      "retained_class_packages": [
+        "com/lunarclient/"
+      ]
+    },
+    {
+      "groupId": "cc.fyre.modsuite",
+      "artifactId": "bukkit",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/cc/fyre/modsuite/bukkit/1.0-SNAPSHOT/bukkit-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "32106d0e5b368beada816ed4eb7eaaab583dd03471291b4f73cfec696906e976",
+      "source_sha256": "ea91937dae9d888b6fd71808e241dcb95f193119eac39079e988903b3d5ee654",
+      "class_count": 72,
+      "source_filename": "modsuite-bukkit-1.0-SNAPSHOT(2).jar",
+      "retained_class_packages": [
+        "cc/fyre/modsuite/"
+      ]
+    },
+    {
+      "groupId": "org.cavepvp.profiles",
+      "artifactId": "Profiles",
+      "version": "1.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/org/cavepvp/profiles/Profiles/1.0-SNAPSHOT/Profiles-1.0-SNAPSHOT-compile-only.jar",
+      "sha256": "5b06e30aba43c9d9880b188b103dc5aeb60a775143d0323bd3972893d820920a",
+      "source_sha256": "4e2170649a1dc9c1ef49e534342d8273dc5ce8a63ed17082d519f2f2376ffeca",
+      "class_count": 98,
+      "source_filename": "Profiles-1.0-SNAPSHOT(1).jar",
+      "retained_class_packages": [
+        "org/cavepvp/profiles/"
+      ]
+    },
+    {
+      "groupId": "com.comphenix.protocol",
+      "artifactId": "ProtocolLib-Spigot",
+      "version": "3.6.0-SNAPSHOT",
+      "classifier": "compile-only",
+      "path": "libs/com/comphenix/protocol/ProtocolLib-Spigot/3.6.0-SNAPSHOT/ProtocolLib-Spigot-3.6.0-SNAPSHOT-compile-only.jar",
+      "sha256": "c287e0c0b8c2a3c46a995be2ec537defefbc4118b6da196f32512590da306f59",
+      "source_sha256": "c3f809ed2d9d233cfa05883bee0d612a0accaef0b6cf54ad681acc6b6cb3806d",
+      "class_count": 848,
+      "source_filename": "ProtocolLib.jar",
+      "retained_class_packages": [
+        "com/comphenix/"
+      ]
+    }
+  ],
+  "runtime_compatibility": "Custom Buycraft coupon and gift-card features require the compatible legacy API at runtime. The optional adapter reports a clear error when unavailable; it does not change the installed store plugin."
+}

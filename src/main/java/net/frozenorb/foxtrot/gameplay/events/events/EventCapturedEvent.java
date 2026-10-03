@@ -1,0 +1,41 @@
+package net.frozenorb.foxtrot.gameplay.events.events;
+
+import net.frozenorb.foxtrot.gameplay.events.Event;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
+
+public class EventCapturedEvent extends PlayerEvent implements Cancellable {
+   private static final HandlerList handlers = new HandlerList();
+   private Event event;
+   private boolean cancelled;
+
+   public EventCapturedEvent(Event event, Player capper) {
+      super(capper);
+      this.event = event;
+   }
+
+   @Override
+   public HandlerList getHandlers() {
+      return handlers;
+   }
+
+   public static HandlerList getHandlerList() {
+      return handlers;
+   }
+
+   public Event getEvent() {
+      return this.event;
+   }
+
+   @Override
+   public boolean isCancelled() {
+      return this.cancelled;
+   }
+
+   @Override
+   public void setCancelled(boolean cancelled) {
+      this.cancelled = cancelled;
+   }
+}

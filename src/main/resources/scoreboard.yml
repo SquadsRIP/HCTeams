@@ -1,0 +1,186 @@
+# ============================================================
+#  HCTeams Scoreboard Configuration
+# ============================================================
+#
+#  This file controls ALL text shown on the in-game scoreboard.
+#  You can edit any line's format, color, or text here.
+#
+#  Color codes use & (e.g., &6 = gold, &c = red, &e = yellow)
+#  Placeholders like <time> and <amount> are filled in by the plugin.
+#
+#  Lines only appear when their condition is met (e.g., Spawn Tag
+#  only shows when the player is combat tagged).
+# ============================================================
+
+# ----------------------------------------------------------
+#  Header & Footer (always shown)
+# ----------------------------------------------------------
+header: "&a&7&m----------------------"
+website-lines:
+  - "&7&oComing Soon!"
+  - "&7&oComing Soon!"
+# Legacy single-line key (fallback if website-lines is empty)
+website-line: "&7&oComing Soon!"
+footer: "&b&7&m----------------------"
+
+# ----------------------------------------------------------
+#  KitMap Stats (only in KitMap mode + safe zone)
+# ----------------------------------------------------------
+kills-format: "&6&lKills&7: &f<amount>"
+deaths-format: "&6&lDeaths&7: &f<amount>"
+gems-format: "&2&lGems&7: &f<amount>"
+
+# ----------------------------------------------------------
+#  Combat Timers
+# ----------------------------------------------------------
+spawn-tag-format: "&c&lSpawn Tag&7: &c<time>"
+enderpearl-format: "&5&lEnderpearl&7: &5<time>"
+archer-mark-format: "&6&lArcher Mark&7: &6<time>"
+anti-clean-format: "&5&lAnti-Clean&7: &5<time>"
+apple-limit-format: "&6&lApples: &6<current>/12"
+home-format: "&9&lHome&7: &9<time>"
+gopple-format: "&6&lGopple&7: &6<time>"
+fishing-rod-format: "&5&lFishing Rod&7: &5<time>"
+apple-format: "&6&lApple&7: &6<time>"
+pvp-timer-format: "&a&lPvP Timer&7: &a<time>"
+stuck-format: "&6&lStuck&7: &6<time>"
+logout-format: "&6&lLogout&7: &6<time>"
+anti-blockup-format: "&d&lAnti-Blockup&7: &d<time>"
+# ----------------------------------------------------------
+#  Ability / Partner Item Cooldowns
+# ----------------------------------------------------------
+ability-global-format: "&d&lAbility Item&7: &d<time>"
+ability-cooldown-format: "<displayname>&7: &e<time>"
+ability-combo-format: "<displayname>&7: &e<hits> hits"
+teleport-item-format: "&b&lTeleport Item&7: &b<time>"
+# ----------------------------------------------------------
+#  Boosters
+# ----------------------------------------------------------
+gem-booster-format: "&2&l2x Gem Booster&7: &2<time>"
+frenzy-booster-format: "&b&lFrenzy Booster&7: &b<time>"
+# ----------------------------------------------------------
+#  PvP Class
+# ----------------------------------------------------------
+class-ultimate-format: "&b&lUltimate&7: &b<energy>"
+class-effect-format: "&a&l<classname> Effect&7: &a<time>"
+class-energy-format: "&b&l<classname> Energy&7: &b<energy>"
+class-warmup-format: "&b&lClass Warmup&7: &b<time>"
+# ----------------------------------------------------------
+#  SOTW (Start of the World)
+# ----------------------------------------------------------
+# Shown when SOTW is active but player hasn't enabled (disabled) yet
+sotw-active-format: "&a&lSOTW ends in <time>"
+# Shown when SOTW is active AND player has enabled (disabled their timer)
+sotw-enabled-format: "&a&l&mSOTW ends in <time>"
+
+# ----------------------------------------------------------
+#  /f focus (Team Focus)
+# ----------------------------------------------------------
+# Normal mode (not in teamfight):
+focus-team-format: "&6&lTeam: &e<name>"
+focus-home-format: "&6&lHome: &e<x>, <z>"
+focus-dtr-format: "&6&lDTR: &e<dtr>"
+focus-online-format: "&6&lOnline: &e<count>"
+# Teamfight mode (compact):
+focus-teamfight-format: "&7\u25b6 &d<name>: &a<dtr>"
+
+# ----------------------------------------------------------
+#  Events
+# ----------------------------------------------------------
+koth-format: "<name>&7: &c<time>"
+dtc-format: "<name>&7: &c<points>"
+# ----------------------------------------------------------
+#  Key Alls
+# ----------------------------------------------------------
+keyall-format: "<display>&7: &e<time>"
+
+# ----------------------------------------------------------
+#  FFA (EOTW)
+# ----------------------------------------------------------
+ffa-format: "&6&lFFA&7: &6<time>"
+# ----------------------------------------------------------
+#  Treasure Cove
+# ----------------------------------------------------------
+treasure-cove-header: "&6&lTreasure Cove"
+treasure-cove-line1: "&7A gift card"
+treasure-cove-line2: "&7drops in &f<time>"
+treasure-cove-line3: "&eLocation: &f<x>, <z> &7[Nether]"
+
+# ----------------------------------------------------------
+#  Ender Dragon
+# ----------------------------------------------------------
+dragon-header: "&5&lEnder Dragon"
+dragon-health-format: "&5\u2503 &fHealth: &d<percent>%"
+dragon-location-format: "&5\u2503 &fLocation: &d<x>, <z>"
+
+# ----------------------------------------------------------
+#  Discount Drop (Coupon Drops)
+# ----------------------------------------------------------
+discount-header: "&6&lDiscount Drop"
+discount-drops-in-format: "&7drops in &f<time>"
+discount-location-format: "&eLocation: &f<x>, <z>"
+
+# ----------------------------------------------------------
+#  Kill The King (KitMap only)
+# ----------------------------------------------------------
+king-header: "&6&lKill The King"
+king-name-format: "&6\u2503 &fKing: &e<name>"
+king-location-format: "&6\u2503 &fLocation: &e<x>, <z>"
+king-distance-format: "&6\u2503 &fDistance: &e<dist>m"
+
+# ----------------------------------------------------------
+#  Mini Events
+# ----------------------------------------------------------
+mini-event-header: "&6&l<objective> Event"
+mini-event-ends-in-format: "&7ends in &f<time>"
+mini-event-command-format: "&a/minievent"
+
+# ----------------------------------------------------------
+#  Vote Party
+# ----------------------------------------------------------
+vote-party-format: "&6&lVote Party&7: &6<remaining> away"
+# ----------------------------------------------------------
+#  Reboot
+# ----------------------------------------------------------
+reboot-format: "&6&lReboot&7: &6<time>"
+# ----------------------------------------------------------
+#  Staff Board (staff mode)
+# ----------------------------------------------------------
+staff-online-format: "&e&lOnline&7: &e<online>/<max> &7(<network>)"
+staff-vanished-format: "&3&lVanished&7: <yes/no>"
+staff-chat-format: "&9&lStaff Chat&7: <yes/no>"
+tps-format: "&b&lTPS&7: &e<tps>"
+
+# ----------------------------------------------------------
+#  Duel
+# ----------------------------------------------------------
+duel-opponent-format: "&6Opponent: &f<name>"
+duel-wager-format: "&6Wager: &a<amount> Gems"
+
+# ----------------------------------------------------------
+#  Outposts (Teamfight mode)
+# ----------------------------------------------------------
+outpost-end-format: "&5End: &e<percent>%"
+outpost-nether-format: "&6Nether: &e<percent>%"
+outpost-status-format: "&7\u2022 &fStatus: &e<status>"
+
+# ----------------------------------------------------------
+#  Separator lines (between sections)
+# ----------------------------------------------------------
+separator-default: "&7&m--------------------"
+separator-teamfight: "&3&7&m--------------------"
+separator-treasure: "&5&7&m--------------------"
+separator-dragon: "&1&7&m--------------------"
+separator-discount: "&d&7&m--------------------"
+separator-king: "&6&7&m--------------------"
+separator-mini-event: "&0&7&m--------------------"
+separator-cavenite: "&1&7&m--------------------"
+separator-focus: "&9&7&m--------------------"
+separator-conquest: "&e&7&m--------------------"
+separator-staff: "&f&7&m--------------------"
+
+# ----------------------------------------------------------
+#  Fight (shown during anti-clean when focusing a faction)
+# ----------------------------------------------------------
+fight-format: "&6Fight: &7<faction>"
+

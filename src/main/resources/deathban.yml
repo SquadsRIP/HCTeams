@@ -1,0 +1,34 @@
+# Deathban Configuration
+# Deathban timers per rank (in minutes)
+# Players are deathbanned for this long when they die.
+
+default: 30
+
+ranks:
+  IRON: 120
+  GOLD: 90
+  DIAMOND: 45
+  SQUAD: 45
+
+# Whether staff bypass deathban
+staff-bypass: true
+
+# Whether EOTW removes deathban (permanent death)
+eotw-permadeath: true
+
+# Deathban arena kit — given on spawn in the deathban arena
+# Prot 1 diamond armor, Sharp 1 sword, 16 pearls, splash heal pots, 16 steak
+kit:
+  helmet: DIAMOND_HELMET
+  chestplate: DIAMOND_CHESTPLATE
+  leggings: DIAMOND_LEGGINGS
+  boots: DIAMOND_BOOTS
+  sword: DIAMOND_SWORD
+  sword-enchant: DAMAGE_ALL:1
+  armor-enchant: PROTECTION_ENVIRONMENTAL:1
+  pearls: 16
+  potions: SPLASH_POTION:INSTANT_HEAL
+  potion-amount: 5
+  food: COOKED_BEEF
+  food-amount: 16
+

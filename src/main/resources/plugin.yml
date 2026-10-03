@@ -1,0 +1,21 @@
+name: HCTeams
+version: ${git.commit.id.abbrev}
+author: ${minehq.pluginAuthor}
+main: net.frozenorb.foxtrot.Foxtrot
+description: Configurable HCF Teams core for Squads.
+website: Coming Soon!
+depend: [ Proton, Neutron, ProtocolLib, ModSuite]
+softdepend: [ CrazyEnchantments, LunarClient-API, LunarClientAPI, Apollo-Bukkit, CheatBreakerAPI, BuycraftX, CrackShot]
+commands:
+  spongetrader:
+    description: Spawn or despawn the persistent sponge trader.
+    usage: /spongetrader <spawn|despawn>
+    permission: hcteams.command.spongetrader
+permissions:
+  hcteams.command.spongetrader:
+    description: Allows spawning and despawning the sponge trader.
+    default: op
+  hcteams.command.reload:
+    description: Allows /hcteams reload and its aliases.
+    default: op
+

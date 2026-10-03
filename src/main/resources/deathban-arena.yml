@@ -1,0 +1,31 @@
+# Deathban Arena Configuration
+# Messages shown when a player is sent to the deathban arena.
+
+# Message shown when player is deathbanned and sent to arena
+deathban-message: "&cYou have been deathbanned for &f{time}&c!"
+
+# Message shown when player joins while still deathbanned
+still-deathbanned-message: "&eYou are still deathbanned for &f{time}&e!"
+
+# Message shown when player is revived
+revived-message: "&aYou have been revived!"
+
+# Title shown when entering the deathban arena (set to empty to disable)
+arena-title: "&4&lDeathban Arena"
+arena-subtitle: "&fKill players to earn lives and escape!"
+
+# Message shown when a player gets a kill in the arena
+arena-kill-message: "&aYou killed &f{player}&a in the arena! ({kills}/5 kills to escape)"
+
+# Message shown when player escapes the arena (5 kills)
+arena-escape-message: "&aYou have escaped the Deathban Arena!"
+
+# Message broadcast when a player escapes
+arena-escape-broadcast: "&f{player} &ahas escaped the Deathban Arena!"
+
+# Required kills to escape the arena
+required-kills: 5
+
+# Items given on arena join (kit name to apply)
+arena-kit: "UltimateDiamond"
+

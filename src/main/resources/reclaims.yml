@@ -1,0 +1,14 @@
+reclaims:
+  Test:
+    priority: 1
+    permission: 'reclaim.test'
+    commands:
+      - crate give to %player% Gay 16
+      - pouch give %player% CRATEToken3 3
+      - pouch give %player% CRATEMoney3 2
+  Test2:
+    priority: 1
+    permission: 'reclaim.test2'
+    commands:
+      - crate give to %player% GAY 10
+

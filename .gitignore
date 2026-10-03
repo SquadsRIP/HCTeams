@@ -1,0 +1,14 @@
+target/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.DS_Store
+*.jar
+*.class
+.env
+.env.*
+
+# Versioned compile-only dependencies
+!libs/**/*.jar
