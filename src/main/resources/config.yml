@@ -38,6 +38,12 @@ allowBoosting: false
 waterPlacementInClaims: false
 blockRemoval: false
 rodPrevention: false
+# Fishing rod cooldown in seconds, per PvP class (name as shown in-game); "default" covers diamond and every other class. 0 disables it.
+rodCooldown:
+  default: 3.0
+  classes:
+    Bard: 2.0
+    Archer: 2.0
 skybridgePrevention: false
 reduceArmorDamage: true
 blockEntitiesThroughPortals: true
