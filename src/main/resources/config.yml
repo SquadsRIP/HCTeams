@@ -24,9 +24,21 @@ nightmare:
 glowstoneMountain: true
 cavern: false
 
-# Bosses — set to false to fully disable boss auto-spawns, /boss spawn, and the BossSummoner click item.
-bosses:
-  enabled: false
+# Applied to every mob spawner once a minute. Delays are in ticks (20 = 1 second); vanilla is 200-800, 4 mobs, 6 nearby.
+spawners:
+  minDelay: 200
+  maxDelay: 600
+  spawnCount: 4
+  maxNearby: 8
+  playerRange: 16
+  # Spawners spawn monsters even in light (lit bases, Glowstone Mountain). Vanilla needs darkness.
+  ignoreLight: true
+  # Allow natural blaze spawns in the Nether (fortresses). Every other natural spawn stays blocked.
+  naturalBlazes: true
+
+# Newly spawned mobs merge into a mob of the same type within this many blocks.
+mobStacking:
+  radius: 8
 
 startingTimer: true
 forceInvites: true

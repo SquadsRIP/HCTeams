@@ -202,6 +202,13 @@ public class BasicPreventionListener implements Listener {
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onCreatureSpawnAnywhere(CreatureSpawnEvent event) {
       if (event.getSpawnReason() == SpawnReason.NATURAL
+         && event.getEntityType() == EntityType.BLAZE
+         && event.getLocation().getWorld().getEnvironment() == Environment.NETHER
+         && Foxtrot.getInstance().getConfig().getBoolean("spawners.naturalBlazes", true)) {
+         return;
+      }
+
+      if (event.getSpawnReason() == SpawnReason.NATURAL
          || event.getSpawnReason() == SpawnReason.CHUNK_GEN
          || event.getSpawnReason() == SpawnReason.MOUNT
          || event.getSpawnReason() == SpawnReason.JOCKEY) {
