@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import net.frozenorb.foxtrot.apollo.ApolloService;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.commands.CustomTimerCreateCommand;
 import net.frozenorb.foxtrot.commands.DisableCommand;
@@ -119,7 +120,7 @@ public class LunarClientListener implements Listener {
          .runTaskLater(
             this.instance,
             () -> {
-               LunarClientAPI.getInstance().sendWaypoint(player, this.spawnWaypoint);
+               ApolloService.sendWaypoint(player, this.spawnWaypoint);
                if (team != null) {
                   if (!DisableCommand.teamView) {
                      team.getOnlineMembers().forEach(LunarClientListener::updateTeammates);
@@ -130,7 +131,11 @@ public class LunarClientListener implements Listener {
                         team.setHomeWaypoint(new LCWaypoint(ChatColor.BLUE + "HQ" + ChatColor.WHITE, team.getHQ(), Color.BLUE.getRGB(), true));
                      }
 
-                     LunarClientAPI.getInstance().sendWaypoint(player, team.getHomeWaypoint());
+                     ApolloService.sendWaypoint(player, team.getHomeWaypoint());
+                  }
+
+                  if (team.getRallyWaypoint() != null) {
+                     ApolloService.sendWaypoint(player, team.getRallyWaypoint());
                   }
 
                   if (team.getFocusedTeam() != null && team.getFocusedTeam().getHQ() != null) {
@@ -141,7 +146,7 @@ public class LunarClientListener implements Listener {
                         );
                      }
 
-                     LunarClientAPI.getInstance().sendWaypoint(player, team.getFocusWaypoint());
+                     ApolloService.sendWaypoint(player, team.getFocusWaypoint());
                   }
                }
             },
@@ -159,19 +164,19 @@ public class LunarClientListener implements Listener {
       }
 
       teamViewer.remove(player.getUniqueId());
-      LunarClientAPI.getInstance().removeWaypoint(player, this.spawnWaypoint);
+      ApolloService.removeWaypoint(player, this.spawnWaypoint);
       Team team = Foxtrot.getInstance().getTeamHandler().getTeam(event.getPlayer());
       if (team != null) {
          if (team.getHQ() != null) {
-            LunarClientAPI.getInstance().removeWaypoint(player, team.getHomeWaypoint());
+            ApolloService.removeWaypoint(player, team.getHomeWaypoint());
          }
 
          if (team.getRallyPoint() != null) {
-            LunarClientAPI.getInstance().removeWaypoint(player, team.getRallyWaypoint());
+            ApolloService.removeWaypoint(player, team.getRallyWaypoint());
          }
 
          if (team.getFocusedTeam() != null && team.getFocusedTeam().getHQ() != null) {
-            LunarClientAPI.getInstance().removeWaypoint(player, team.getFocusWaypoint());
+            ApolloService.removeWaypoint(player, team.getFocusWaypoint());
          }
       }
    }
@@ -224,7 +229,7 @@ public class LunarClientListener implements Listener {
                      team.setRallyWaypoint(new LCWaypoint(ChatColor.GOLD + "Rally" + ChatColor.WHITE, team.getRallyPoint(), Color.ORANGE.getRGB(), true));
                   }
 
-                  LunarClientAPI.getInstance().sendWaypoint(player, team.getRallyWaypoint());
+                  ApolloService.sendWaypoint(player, team.getRallyWaypoint());
                }
 
                if (player.getWorld().getEnvironment() == Environment.THE_END) {
@@ -233,7 +238,7 @@ public class LunarClientListener implements Listener {
                         team.setRallyWaypoint(new LCWaypoint(ChatColor.GOLD + "Rally" + ChatColor.WHITE, team.getRallyPoint(), Color.ORANGE.getRGB(), true));
                      }
 
-                     LunarClientAPI.getInstance().sendWaypoint(player, team.getRallyWaypoint());
+                     ApolloService.sendWaypoint(player, team.getRallyWaypoint());
                   }
                }
             },
