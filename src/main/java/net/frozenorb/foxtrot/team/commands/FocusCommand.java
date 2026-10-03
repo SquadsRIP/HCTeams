@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import net.frozenorb.foxtrot.apollo.ApolloService;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.listener.LunarClientListener;
 import net.frozenorb.foxtrot.listener.StaffUtilsListener;
@@ -90,7 +91,7 @@ public class FocusCommand {
                player.sendMessage(ChatColor.YELLOW + "You can't focus yourself!");
             } else {
                if (team2.getFocusedTeam() != null && team2.getFocusedTeam().getHQ() != null && team2.getFocusWaypoint() != null) {
-                  team2.getOnlineMembers().forEach(it -> LunarClientAPI.getInstance().removeWaypoint(player, team2.getFocusWaypoint()));
+                  team2.getOnlineMembers().forEach(it -> ApolloService.removeWaypoint(it, team2.getFocusWaypoint()));
                }
 
                Team passFocusedTeam = team2.getFocusedTeam();
@@ -100,7 +101,7 @@ public class FocusCommand {
                   team2.setFocusWaypoint(
                      new LCWaypoint(ChatColor.YELLOW + team2.getFocusedTeam().getName() + "'s HQ" + ChatColor.WHITE, location, Color.RED.getRGB(), true)
                   );
-                  team2.getOnlineMembers().forEach(it -> LunarClientAPI.getInstance().sendWaypoint(player, team2.getFocusWaypoint()));
+                  team2.getOnlineMembers().forEach(it -> ApolloService.sendWaypoint(it, team2.getFocusWaypoint()));
                }
 
                if (passFocusedTeam != null) {
@@ -128,11 +129,12 @@ public class FocusCommand {
          if (focusedTeam == null) {
             player.sendMessage(ChatColor.YELLOW + "You don't have any teams focused!");
          } else {
-            if (focusedTeam.getHQ() != null && focusedTeam.getFocusWaypoint() != null) {
-               team.getOnlineMembers().forEach(it -> LunarClientAPI.getInstance().removeWaypoint(it, focusedTeam.getFocusWaypoint()));
+            if (team.getFocusWaypoint() != null) {
+               team.getOnlineMembers().forEach(it -> ApolloService.removeWaypoint(it, team.getFocusWaypoint()));
             }
 
             team.setFocusedTeam(null);
+            team.setFocusWaypoint(null);
             focusedTeam.getOnlineMembers().forEach(LunarClientListener::updateNametag);
             String teamUnfocusMsg = Foxtrot.getInstance().getConfig().getString("teamUnfocusMessage", "&eTeam &d<team> &ehas been unfocused by &d<player>&e.");
             teamUnfocusMsg = teamUnfocusMsg.replace("<team>", focusedTeam.getName()).replace("<player>", player.getName());

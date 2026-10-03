@@ -4,6 +4,7 @@ import cc.fyre.proton.command.Command;
 import com.lunarclient.bukkitapi.LunarClientAPI;
 import com.lunarclient.bukkitapi.object.LCWaypoint;
 import java.awt.Color;
+import net.frozenorb.foxtrot.apollo.ApolloService;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.team.Team;
 import net.frozenorb.foxtrot.team.claims.LandBoard;
@@ -54,10 +55,10 @@ public class TeamSetHQCommand {
             if (team.getHomeWaypoint() == null) {
                team.setHomeWaypoint(new LCWaypoint(ChatColor.BLUE + "HQ" + ChatColor.WHITE, team.getHQ(), Color.BLUE.getRGB(), true));
             } else {
-               LunarClientAPI.getInstance().removeWaypoint(sender, team.getHomeWaypoint());
+               ApolloService.removeWaypoint(sender, team.getHomeWaypoint());
             }
 
-            LunarClientAPI.getInstance().sendWaypoint(sender, team.getHomeWaypoint());
+            ApolloService.sendWaypoint(sender, team.getHomeWaypoint());
          }
       }
    }
