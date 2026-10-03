@@ -42,7 +42,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class SpawnListener implements Listener {
    @EventHandler(priority = EventPriority.HIGH)
    public void onBlockIgnite(BlockIgniteEvent event) {
-      if (event.getPlayer() == null || !Foxtrot.getInstance().getServerHandler().isAdminOverride(event.getPlayer())) {
+      if (event.getPlayer() == null
+         || !Foxtrot.getInstance().getServerHandler().isAdminOverride(event.getPlayer())
+            && !Foxtrot.getInstance().getServerHandler().isNetherOpOverride(event.getPlayer(), event.getBlock().getLocation())) {
          if (DTRBitmask.SAFE_ZONE.appliesAt(event.getBlock().getLocation())) {
             event.setCancelled(true);
          }
@@ -52,7 +54,8 @@ public class SpawnListener implements Listener {
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onBlockPlace(final BlockPlaceEvent event) {
       if (!event.getPlayer().hasMetadata("ADMIN_BUILD")) {
-         if (!Foxtrot.getInstance().getServerHandler().isAdminOverride(event.getPlayer())) {
+         if (!Foxtrot.getInstance().getServerHandler().isAdminOverride(event.getPlayer())
+            && !Foxtrot.getInstance().getServerHandler().isNetherOpOverride(event.getPlayer(), event.getBlock().getLocation())) {
             if (DTRBitmask.SAFE_ZONE.appliesAt(event.getBlock().getLocation())) {
                event.setCancelled(true);
                event.getPlayer().sendMessage(ChatColor.YELLOW + "You cannot build in spawn!");
@@ -120,7 +123,8 @@ public class SpawnListener implements Listener {
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onBlockBreak(BlockBreakEvent event) {
       if (!event.getPlayer().hasMetadata("ADMIN_BUILD")) {
-         if (!Foxtrot.getInstance().getServerHandler().isAdminOverride(event.getPlayer())) {
+         if (!Foxtrot.getInstance().getServerHandler().isAdminOverride(event.getPlayer())
+            && !Foxtrot.getInstance().getServerHandler().isNetherOpOverride(event.getPlayer(), event.getBlock().getLocation())) {
             if (DTRBitmask.SAFE_ZONE.appliesAt(event.getBlock().getLocation())) {
                event.setCancelled(true);
                event.getPlayer().sendMessage(ChatColor.YELLOW + "You cannot break blocks in spawn!");
