@@ -22,7 +22,6 @@ public class DisabledCommands {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
 
-   @Command(names = "schedule", permission = "")
    public static void schedule(Player player) {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
@@ -84,7 +83,6 @@ public class DisabledCommands {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
 
-   @Command(names = "outpost", permission = "")
    public static void outpost(Player player) {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
@@ -106,7 +104,6 @@ public class DisabledCommands {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }
 
-   @Command(names = {"gems", "gem"}, permission = "")
    public static void gems(Player player) {
       player.sendMessage("Unknown command. Type \"/help\" for help.");
    }

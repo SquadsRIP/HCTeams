@@ -7,7 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class FlyCommand {
-   @Command(names = "fly", permission = "")
    public static void execute(Player player) {
       if (player.hasPermission("command.fly")) {
          player.setAllowFlight(!player.getAllowFlight());
@@ -24,7 +23,6 @@ public class FlyCommand {
       }
    }
 
-   @Command(names = "flyspeed", permission = "")
    public static void execute(Player player, @Parameter(name = "speed") int speed) {
       if (!player.getAllowFlight()) {
          player.sendMessage(ChatColor.YELLOW + "You must already have flight enabled to do this!");
