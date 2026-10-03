@@ -133,11 +133,10 @@ public class BasicPreventionListener implements Listener {
    public void onFoodLevelChange(FoodLevelChangeEvent event) {
       if (CustomTimerCreateCommand.isSOTWTimer()) {
          event.setCancelled(true);
-      } else if (DTRBitmask.SAFE_ZONE.appliesAt(event.getEntity().getLocation()) && event.getFoodLevel() < ((Player)event.getEntity()).getFoodLevel()) {
-         event.setCancelled(true);
-      } else {
-         if (event.getFoodLevel() < ((Player)event.getEntity()).getFoodLevel()
-            && ThreadLocalRandom.current().nextInt(100) > (Foxtrot.getInstance().getPvPTimerMap().hasTimer(event.getEntity().getUniqueId()) ? 10 : 30)) {
+      } else if (event.getFoodLevel() < ((Player)event.getEntity()).getFoodLevel()) {
+         if (DTRBitmask.SAFE_ZONE.appliesAt(event.getEntity().getLocation())
+            || Foxtrot.getInstance().getPvPTimerMap().hasTimer(event.getEntity().getUniqueId())
+            || ThreadLocalRandom.current().nextInt(100) > 30) {
             event.setCancelled(true);
          }
       }
@@ -202,6 +201,13 @@ public class BasicPreventionListener implements Listener {
 
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onCreatureSpawnAnywhere(CreatureSpawnEvent event) {
+      if (event.getSpawnReason() == SpawnReason.NATURAL
+         && event.getEntityType() == EntityType.BLAZE
+         && event.getLocation().getWorld().getEnvironment() == Environment.NETHER
+         && Foxtrot.getInstance().getConfig().getBoolean("spawners.naturalBlazes", true)) {
+         return;
+      }
+
       if (event.getSpawnReason() == SpawnReason.NATURAL
          || event.getSpawnReason() == SpawnReason.CHUNK_GEN
          || event.getSpawnReason() == SpawnReason.MOUNT
