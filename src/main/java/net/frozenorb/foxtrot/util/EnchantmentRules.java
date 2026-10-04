@@ -35,6 +35,10 @@ public final class EnchantmentRules {
          )
       )
    );
+   // Never given by the table and never added by an anvil.
+   private static final Set<Enchantment> BANNED = Collections.unmodifiableSet(
+      new HashSet<>(Arrays.asList(Enchantment.THORNS, Enchantment.KNOCKBACK, Enchantment.ARROW_KNOCKBACK, Enchantment.FIRE_ASPECT, Enchantment.ARROW_FIRE, Enchantment.OXYGEN, Enchantment.WATER_WORKER))
+   );
    private static final Set<Enchantment> ANVIL_LIMITED = new HashSet<>(Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.DAMAGE_ALL, Enchantment.ARROW_DAMAGE));
    private final Map<Enchantment, Integer> limits = new HashMap<>();
    private final double maxLevelChance;
@@ -67,6 +71,10 @@ public final class EnchantmentRules {
       this.limits.put(enchantment, config.getInt("enchantmentLimits." + key, fallback));
    }
 
+   public static boolean isBanned(Enchantment enchantment) {
+      return BANNED.contains(enchantment);
+   }
+
    public int getLimit(Enchantment enchantment) {
       Integer limit = this.limits.get(enchantment);
       return limit == null ? 0 : limit;
@@ -93,9 +101,8 @@ public final class EnchantmentRules {
 
    public void applyTableRules(ItemStack item, Map<Enchantment, Integer> enchants, int levelCost, Random random) {
       if (item != null && item.getType() != Material.AIR) {
+         enchants.keySet().removeIf(BANNED::contains);
          if (item.getType() == Material.BOW) {
-            enchants.remove(Enchantment.ARROW_FIRE);
-            enchants.remove(Enchantment.ARROW_KNOCKBACK);
             for (Entry<Enchantment, Integer> entry : enchants.entrySet()) {
                int maximum = this.getTableMaximum(entry.getKey());
                if (entry.getValue() > maximum || levelCost >= 30 && this.getLimit(entry.getKey()) > 0) {
@@ -205,7 +212,14 @@ public final class EnchantmentRules {
 
    public boolean exceedsLimits(ItemStack result, ItemStack... inputs) {
       if (result != null && result.getType() != Material.AIR && result.hasItemMeta()) {
+         Map<Enchantment, Integer> left = inputs.length > 0 ? getAllEnchants(inputs[0]) : Collections.emptyMap();
+
          for (Entry<Enchantment, Integer> entry : getAllEnchants(result).entrySet()) {
+            // A banned enchant may only stay on the item that already had it, never be added from the second slot.
+            if (BANNED.contains(entry.getKey()) && entry.getValue() > left.getOrDefault(entry.getKey(), 0)) {
+               return true;
+            }
+
             int limit = this.getAnvilLimit(entry.getKey());
             if (limit > 0 && entry.getValue() > limit) {
                int inputLevel = 0;

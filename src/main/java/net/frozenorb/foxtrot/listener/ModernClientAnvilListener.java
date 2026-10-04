@@ -170,7 +170,8 @@ public final class ModernClientAnvilListener implements Listener {
                for (Entry<Integer, Integer> entry : getEnchants(right).entrySet()) {
                   int id = entry.getKey();
                   Enchantment enchantment = id >= 0 && id < Enchantment.byId.length ? Enchantment.byId[id] : null;
-                  if (enchantment != null) {
+                  // Banned enchants (Thorns, Knockback, Punch, Fire Aspect, Flame, Respiration, Aqua Affinity) are never added by an anvil.
+                  if (enchantment != null && !EnchantmentRules.isBanned(org.bukkit.enchantments.Enchantment.getById(id))) {
                      int current = enchants.containsKey(id) ? enchants.get(id) : 0;
                      int level = entry.getValue();
                      level = current == level ? level + 1 : Math.max(level, current);

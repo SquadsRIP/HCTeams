@@ -117,6 +117,8 @@ enchantmentLimits:
 # Tables only roll Protection, Feather Falling, Unbreaking, Efficiency, Fortune, Silk Touch,
 # Smite, Bane of Arthropods, Looting, Sharpness, Power and Infinity. Books receive one enchant.
 # Bows keep their vanilla table rolls except Flame and Punch (Punch bows can't shoot).
+# Thorns, Knockback, Punch, Fire Aspect, Flame, Respiration and Aqua Affinity are
+# never given by the table and never added by an anvil (from books or other gear).
 enchantingTable:
   # A 30-level enchant always gives every enchant listed in enchantmentLimits at
   # that limit (Sharpness II, Protection II, Feather Falling IV, Unbreaking III,
