@@ -778,7 +778,7 @@ public class FoxListener implements Listener {
    @EventHandler(priority = EventPriority.LOWEST)
    private void onArrow(EntityDamageEvent event) {
       if (event.getCause().equals(DamageCause.PROJECTILE)) {
-         event.setDamage(event.getDamage() * Foxtrot.getInstance().getConfig().getDouble("arrowDamageMultiplier", 0.25));
+         event.setDamage(event.getDamage() * Foxtrot.getInstance().getConfig().getDouble("arrowDamageMultiplier", 0.3));
       }
    }
 
