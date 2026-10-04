@@ -80,7 +80,7 @@ public class MobStackListener implements Listener {
                LivingEntity newMob = (LivingEntity)loc.getWorld().spawnEntity(loc, type);
                newMob.setCustomName(ChatColor.RED + String.valueOf(finalNewCount) + "x");
                newMob.setCustomNameVisible(true);
-               newMob.setHealth(20.0);
+               newMob.setHealth(newMob.getMaxHealth());
             }
          }, 1L);
       }
