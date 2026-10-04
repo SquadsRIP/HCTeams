@@ -47,7 +47,7 @@ public class CouponDropsTask extends BukkitRunnable {
             player.sendMessage(ChatColor.translate("&cLocation: &f" + x + ", " + location.getBlockY() + ", " + z));
             player.sendMessage(" ");
             CouponDropsListener.couponDropWaypoint = new LCWaypoint(ChatColor.DARK_RED + "Coupon Drop" + ChatColor.WHITE, location, Color.RED.getRGB(), true);
-            ApolloService.sendWaypoint(player, CouponDropsListener.couponDropWaypoint);
+            ApolloService.sendWaypoint(player, CouponDropsListener.couponDropWaypoint, true);
          });
          Foxtrot.getInstance().getCouponDropsHandler().setDropsIn(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5L));
          Foxtrot.getInstance().getCouponDropsHandler().setLocation(location.clone());

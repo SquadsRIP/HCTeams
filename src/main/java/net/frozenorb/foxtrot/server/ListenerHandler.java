@@ -7,6 +7,7 @@ import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.apollo.ApolloListener;
 import net.frozenorb.foxtrot.apollo.ApolloNametagListener;
 import net.frozenorb.foxtrot.apollo.ApolloService;
+import net.frozenorb.foxtrot.apollo.ApolloSyncService;
 import net.frozenorb.foxtrot.apollo.ApolloWaypointListener;
 import net.frozenorb.foxtrot.chat.listeners.ChatListener;
 import net.frozenorb.foxtrot.commands.LegacySpectatorMode;
@@ -245,8 +246,14 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new ApolloListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new ApolloNametagListener(), foxtrot);
       ApolloNametagListener.startTask(foxtrot);
-      foxtrot.getServer().getPluginManager().registerEvents(new ApolloWaypointListener(), foxtrot);
-      ApolloWaypointListener.startTask(foxtrot);
+      if (ApolloService.isApolloEnabled()) {
+         ApolloSyncService.start(foxtrot);
+      }
+
+      if (!ApolloSyncService.isRunning()) {
+         foxtrot.getServer().getPluginManager().registerEvents(new ApolloWaypointListener(), foxtrot);
+         ApolloWaypointListener.startTask(foxtrot);
+      }
       ControlPanelService.init();
       foxtrot.getServer().getPluginManager().registerEvents(new ControlPanelListener(), foxtrot);
       ControlPanelListener.startStatusTask();

@@ -144,9 +144,15 @@ public class ApolloService {
    }
 
    public static void sendWaypoint(Player player, LCWaypoint waypoint) {
+      sendWaypoint(player, waypoint, false);
+   }
+
+   // Spawn, HQ, rally and focus waypoints are kept in sync by ApolloSyncService when it runs, so
+   // only waypoints it doesn't know about (coupon drops) pass apollo = true.
+   public static void sendWaypoint(Player player, LCWaypoint waypoint, boolean apollo) {
       if (waypoint != null) {
          LunarClientAPI.getInstance().sendWaypoint(player, waypoint);
-         if (apolloEnabled) {
+         if (apolloEnabled && (apollo || !ApolloSyncService.isRunning())) {
             try {
                ApolloWaypoints.display(player, waypoint);
             } catch (Throwable var3) {
@@ -156,9 +162,13 @@ public class ApolloService {
    }
 
    public static void removeWaypoint(Player player, LCWaypoint waypoint) {
+      removeWaypoint(player, waypoint, false);
+   }
+
+   public static void removeWaypoint(Player player, LCWaypoint waypoint, boolean apollo) {
       if (waypoint != null) {
          LunarClientAPI.getInstance().removeWaypoint(player, waypoint);
-         if (apolloEnabled) {
+         if (apolloEnabled && (apollo || !ApolloSyncService.isRunning())) {
             try {
                ApolloWaypoints.remove(player, waypoint);
             } catch (Throwable var3) {
