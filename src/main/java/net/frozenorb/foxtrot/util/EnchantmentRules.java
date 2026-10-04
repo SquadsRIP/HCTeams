@@ -35,6 +35,7 @@ public final class EnchantmentRules {
    );
    private static final Set<Enchantment> ANVIL_LIMITED = new HashSet<>(Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.DAMAGE_ALL));
    private final Map<Enchantment, Integer> limits = new HashMap<>();
+   private final Map<Enchantment, Integer> anvilOnlyLimits = new HashMap<>();
    private final double maxLevelChance;
    private final double secondEnchantChance;
    private final double thirdEnchantChance;
@@ -51,6 +52,7 @@ public final class EnchantmentRules {
       this.addLimit(config, Enchantment.DAMAGE_ARTHROPODS, "baneOfArthropods", 2);
       this.addLimit(config, Enchantment.ARROW_DAMAGE, "power", 2);
       this.addLimit(config, Enchantment.LOOT_BONUS_MOBS, "looting", 3);
+      this.anvilOnlyLimits.put(Enchantment.ARROW_DAMAGE, config.getInt("anvilLimits.power", 3));
       this.maxLevelChance = readChance(config, "max-level-chance-percent", 25.0);
       this.secondEnchantChance = readChance(config, "level-30-second-enchant-chance-percent", 70.0);
       this.thirdEnchantChance = readChance(config, "level-30-third-enchant-chance-percent", 20.0);
@@ -70,17 +72,26 @@ public final class EnchantmentRules {
       return limit == null ? 0 : limit;
    }
 
-   // Anvils only cap Protection and Sharpness; the other enchantmentLimits only apply to the enchanting table.
+   // Anvils cap Protection and Sharpness at their enchantmentLimits and Power at anvilLimits.power;
+   // the other enchantmentLimits only apply to the enchanting table.
    public int getAnvilLimit(Enchantment enchantment) {
-      return ANVIL_LIMITED.contains(enchantment) ? this.getLimit(enchantment) : 0;
+      Integer anvilOnly = this.anvilOnlyLimits.get(enchantment);
+      if (anvilOnly != null) {
+         return anvilOnly;
+      } else {
+         return ANVIL_LIMITED.contains(enchantment) ? this.getLimit(enchantment) : 0;
+      }
    }
 
    // Anvil caps keyed by enchantment id (the same ids NMS uses).
    public Map<Integer, Integer> getAnvilLimitsById() {
       Map<Integer, Integer> caps = new HashMap<>();
 
-      for (Enchantment enchantment : ANVIL_LIMITED) {
-         int limit = this.getLimit(enchantment);
+      Set<Enchantment> capped = new HashSet<>(ANVIL_LIMITED);
+      capped.addAll(this.anvilOnlyLimits.keySet());
+
+      for (Enchantment enchantment : capped) {
+         int limit = this.getAnvilLimit(enchantment);
          if (limit > 0) {
             caps.put(enchantment.getId(), limit);
          }

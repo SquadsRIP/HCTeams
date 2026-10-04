@@ -97,10 +97,10 @@ voteParty:
   currentVotes: 0
 
 # Enchantment limits — max levels allowed on items
-# The enchanting table never rolls above these. Anvils only cap protection
-# and sharpness: a combine that would go higher keeps the limit
-# (Sharp II + Sharp II -> Sharp II, other enchants still combine), and gear
-# already above it (KOTH loot) keeps its level.
+# The enchanting table never rolls above these. Anvils cap protection and
+# sharpness here, and power at anvilLimits.power below: a combine that would
+# go higher keeps the limit (Sharp II + Sharp II -> Sharp II, other enchants
+# still combine), and gear already above it (KOTH loot) keeps its level.
 enchantmentLimits:
   protection: 2
   sharpness: 2
@@ -114,6 +114,11 @@ enchantmentLimits:
   power: 2
   looting: 3
 
+# Anvil-only caps. The table still rolls power up to enchantmentLimits.power
+# (II); anvils can combine bows up to this level (Power II + Power II -> III).
+anvilLimits:
+  power: 3
+
 # Tables only roll Protection, Feather Falling, Unbreaking, Efficiency, Fortune, Silk Touch,
 # Smite, Bane of Arthropods, Looting, and Sharpness. Books receive one enchant.
 # Bows keep their vanilla table rolls except Flame and Punch (Punch bows can't shoot).
@@ -126,7 +131,7 @@ enchantingTable:
   # Scales down with cost (15 = 12.5%); never raises a lower vanilla roll.
   # Failed max rolls lose one level. Silk Touch keeps its vanilla level/rarity.
   # Set 0 to require anvils for multi-level caps, or 100 for vanilla cap clamping
-  # at cost 30. Anvils combine normally up to enchantmentLimits above.
+  # at cost 30. Anvils combine normally up to enchantmentLimits and anvilLimits above.
   max-level-chance-percent: 25.0
   # Level-30 gear with one enchant has this chance to receive a second.
   level-30-second-enchant-chance-percent: 70.0
