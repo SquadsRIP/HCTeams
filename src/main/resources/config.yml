@@ -50,6 +50,8 @@ allowBoosting: false
 waterPlacementInClaims: false
 blockRemoval: false
 rodPrevention: false
+# Multiplier on all player-vs-player damage (melee and projectiles). 0.85 = 15% less.
+pvpDamageMultiplier: 0.85
 # Fishing rod cooldown in seconds, per PvP class (name as shown in-game); "default" covers diamond and any class not listed. 0 disables it.
 rodCooldown:
   default: 3.0
