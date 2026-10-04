@@ -1,7 +1,6 @@
 package net.frozenorb.foxtrot.gameplay.events.mini.command;
 
 import cc.fyre.neutron.Neutron;
-import cc.fyre.proton.command.Command;
 import cc.fyre.proton.command.param.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +14,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class MiniEventCommand {
-   @Command(names = "minievent", permission = "")
    public static void execute(Player player) {
       MiniEvent miniEvent = Foxtrot.getInstance().getMiniEventsHandler().getActiveEvent();
       if (miniEvent == null) {
@@ -92,7 +90,6 @@ public class MiniEventCommand {
       }
    }
 
-   @Command(names = {"minievent start", "minievent activate"}, permission = "op")
    public static void start(Player player, @Parameter(name = "taskName", defaultValue = "R_A_N_D_O_M") String taskName) {
       MiniEventsHandler miniEventsHandler = Foxtrot.getInstance().getMiniEventsHandler();
       if (taskName.equalsIgnoreCase("R_A_N_D_O_M")) {
@@ -104,7 +101,6 @@ public class MiniEventCommand {
       }
    }
 
-   @Command(names = {"minievent stop", "minievent deactivate"}, permission = "op")
    public static void stop(Player player) {
       MiniEventsHandler miniEventsHandler = Foxtrot.getInstance().getMiniEventsHandler();
       miniEventsHandler.getActiveEvent().deactivate(false);
