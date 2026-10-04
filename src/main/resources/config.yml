@@ -105,6 +105,9 @@ enchantmentLimits:
   featherFalling: 2
   smite: 2
   baneOfArthropods: 2
+  # Table bows roll at most this Power; anvils can't combine above it.
+  # KOTH Power III bows can still be repaired.
+  power: 2
 
 # Tables only roll Protection, Unbreaking, Efficiency, Fortune, Silk Touch,
 # Smite, Bane of Arthropods, Looting, and Sharpness. Books receive one enchant.
@@ -130,9 +133,6 @@ enchantingTable:
   # Charge 1/2/3 levels for the top/middle/bottom option like 1.8, instead of the
   # whole requirement. The player still needs the shown level to enchant.
   modern-level-cost: true
-  # Highest Power a bow can get from the table (higher rolls are lowered to this).
-  # Bows from loot or anvils are not affected. Set 0 for vanilla (up to Power V).
-  max-power: 2
   anvil-limit-message: '&cYou cannot combine items above the maximum enchantment level.'
 
 # Spawn tag duration in seconds
