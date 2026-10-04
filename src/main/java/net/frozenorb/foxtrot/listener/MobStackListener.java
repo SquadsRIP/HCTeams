@@ -1,6 +1,5 @@
 package net.frozenorb.foxtrot.listener;
 
-import java.lang.reflect.Method;
 import net.frozenorb.foxtrot.Foxtrot;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,7 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
@@ -107,14 +105,8 @@ public class MobStackListener implements Listener {
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onEndermanDamage(EntityDamageByEntityEvent event) {
       if (event.getEntity() instanceof Player && event.getDamager() instanceof Enderman) {
-         try {
-            Method m = EntityDamageEvent.class.getMethod("getDamage");
-            Object result = m.invoke(event);
-            double damage = result instanceof Number ? ((Number)result).doubleValue() : 0.0;
-            Method setM = EntityDamageEvent.class.getMethod("setDamage", double.class);
-            setM.invoke(event, damage * 0.5);
-         } catch (Exception var7) {
-         }
+         double multiplier = Foxtrot.getInstance().getConfig().getDouble("mobDamage.endermanMultiplier", 0.3);
+         event.setDamage(event.getDamage() * multiplier);
       }
    }
 }
