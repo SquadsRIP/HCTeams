@@ -40,6 +40,9 @@ spawners:
 mobStacking:
   radius: 8
 
+mobDamage:
+  endermanMultiplier: 0.3
+
 startingTimer: true
 forceInvites: true
 idleCheck: true
