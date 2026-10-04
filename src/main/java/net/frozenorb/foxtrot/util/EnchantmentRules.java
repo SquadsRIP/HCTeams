@@ -33,7 +33,7 @@ public final class EnchantmentRules {
          )
       )
    );
-   private static final Set<Enchantment> ANVIL_LIMITED = new HashSet<>(Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.DAMAGE_ALL, Enchantment.ARROW_DAMAGE));
+   private static final Set<Enchantment> ANVIL_LIMITED = new HashSet<>(Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.DAMAGE_ALL));
    private final Map<Enchantment, Integer> limits = new HashMap<>();
    private final double maxLevelChance;
    private final double secondEnchantChance;
@@ -70,7 +70,7 @@ public final class EnchantmentRules {
       return limit == null ? 0 : limit;
    }
 
-   // Anvils only cap Protection, Sharpness and Power; the other enchantmentLimits only apply to the enchanting table.
+   // Anvils only cap Protection and Sharpness; the other enchantmentLimits only apply to the enchanting table.
    public int getAnvilLimit(Enchantment enchantment) {
       return ANVIL_LIMITED.contains(enchantment) ? this.getLimit(enchantment) : 0;
    }

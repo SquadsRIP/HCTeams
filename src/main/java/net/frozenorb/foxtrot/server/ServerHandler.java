@@ -440,7 +440,10 @@ public class ServerHandler {
       }
 
       if (inClaim != null) {
-         if (Foxtrot.getInstance().getServerHandler().isTeams() && inClaim.getOwner() != null && !inClaim.isMember(player.getUniqueId())) {
+         if (Foxtrot.getInstance().getServerHandler().isTeams()
+            && !this.teamHQInEnemyClaims
+            && inClaim.getOwner() != null
+            && !inClaim.isMember(player.getUniqueId())) {
             player.sendMessage(ChatColor.YELLOW + "You may not go to your team headquarters from an enemy's claim! Use '/f stuck' first.");
             return;
          }

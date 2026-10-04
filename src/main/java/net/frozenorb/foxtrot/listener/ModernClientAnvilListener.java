@@ -28,7 +28,7 @@ import org.bukkit.inventory.Inventory;
 // pickaxe, a Looting/Unbreaking sword) almost always hits "Too Expensive" (40+) and the server shows no result at all,
 // and 1.8 clients (protocol 47+) predict a different result and cost than the server charges. So the anvil result is
 // computed here with the 1.8 rules for every survival player and written into the real result slot every tick and
-// right before a click on it. Every level cost is scaled by anvil.cost-multiplier, and Protection, Sharpness and Power
+// right before a click on it. Every level cost is scaled by anvil.cost-multiplier, and Protection and Sharpness
 // are capped at their enchantmentLimits instead of the combine being refused (Sharp II + Sharp II stays Sharp II).
 public final class ModernClientAnvilListener implements Listener {
    private static final int MAX_NAME_LENGTH = 30;

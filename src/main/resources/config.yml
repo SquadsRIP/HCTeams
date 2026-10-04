@@ -65,6 +65,9 @@ allowBoosting: false
 waterPlacementInClaims: false
 blockRemoval: false
 rodPrevention: false
+# false = /airdrops give does nothing (battle pass, quests, bundles, trivia included)
+# and airdrops already in inventories can't be placed.
+airdropsEnabled: false
 # Multiplier on all player-vs-player damage (melee and projectiles). 0.85 = 15% less.
 pvpDamageMultiplier: 0.85
 # Multiplier on all projectile damage (arrows), applied before pvpDamageMultiplier. Was hardcoded 0.6.
@@ -94,8 +97,8 @@ voteParty:
   currentVotes: 0
 
 # Enchantment limits — max levels allowed on items
-# The enchanting table never rolls above these. Anvils only cap protection,
-# sharpness and power: a combine that would go higher keeps the limit
+# The enchanting table never rolls above these. Anvils only cap protection
+# and sharpness: a combine that would go higher keeps the limit
 # (Sharp II + Sharp II -> Sharp II, other enchants still combine), and gear
 # already above it (KOTH loot) keeps its level.
 enchantmentLimits:

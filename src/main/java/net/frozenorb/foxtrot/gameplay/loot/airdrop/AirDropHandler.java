@@ -40,6 +40,10 @@ public class AirDropHandler {
       this.loadLootTable();
    }
 
+   public boolean isEnabled() {
+      return this.instance.getConfig().getBoolean("airdropsEnabled", false);
+   }
+
    public void loadLootTable() {
       this.file = new File(Foxtrot.getInstance().getDataFolder(), "data/airdrops.yml");
       this.data = YamlConfiguration.loadConfiguration(this.file);

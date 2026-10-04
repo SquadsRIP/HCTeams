@@ -40,6 +40,11 @@ public class AirDropListener implements Listener {
       ItemStack itemStack = event.getItemInHand();
       if (!event.isCancelled() && AirDropCommand.isAirdrop(itemStack)) {
          event.setCancelled(true);
+         if (!this.instance.getAirDropHandler().isEnabled()) {
+            player.sendMessage(ChatColor.RED + "Airdrops are disabled.");
+            return;
+         }
+
          final Block block = event.getBlockPlaced();
          final AtomicInteger seconds = new AtomicInteger(4);
          VoucherCommand.spawnFireworks(block.getLocation(), 1, 2, Color.RED, Type.BALL_LARGE);
