@@ -111,7 +111,9 @@ public final class EnchantmentRules {
             Enchantment enchantment = entry.getKey();
             int maximum = this.getTableMaximum(enchantment);
             int level = Math.min(entry.getValue(), maximum);
-            if (maximum > 1 && level == maximum && random.nextDouble() >= chance) {
+            if (levelCost >= 30 && this.getLimit(enchantment) > 0) {
+               level = maximum;
+            } else if (maximum > 1 && level == maximum && random.nextDouble() >= chance) {
                level = maximum - 1;
             }
 
