@@ -36,6 +36,7 @@ public final class EnchantmentRules {
    private final double maxLevelChance;
    private final double secondEnchantChance;
    private final double thirdEnchantChance;
+   private final int maxBowPower;
 
    public EnchantmentRules(ConfigurationSection config) {
       this.addLimit(config, Enchantment.PROTECTION_ENVIRONMENTAL, "protection", 2);
@@ -50,6 +51,7 @@ public final class EnchantmentRules {
       this.maxLevelChance = readChance(config, "max-level-chance-percent", 25.0);
       this.secondEnchantChance = readChance(config, "level-30-second-enchant-chance-percent", 70.0);
       this.thirdEnchantChance = readChance(config, "level-30-third-enchant-chance-percent", 20.0);
+      this.maxBowPower = config.getInt("enchantingTable.max-power", 2);
    }
 
    private static double readChance(ConfigurationSection config, String key, double fallback) {
@@ -71,6 +73,11 @@ public final class EnchantmentRules {
          if (item.getType() == Material.BOW) {
             enchants.remove(Enchantment.ARROW_FIRE);
             enchants.remove(Enchantment.ARROW_KNOCKBACK);
+            Integer power = enchants.get(Enchantment.ARROW_DAMAGE);
+            if (power != null && this.maxBowPower > 0 && power > this.maxBowPower) {
+               enchants.put(Enchantment.ARROW_DAMAGE, this.maxBowPower);
+            }
+
             if (enchants.isEmpty() && Enchantment.DURABILITY.canEnchantItem(item)) {
                enchants.put(Enchantment.DURABILITY, 1);
             }
