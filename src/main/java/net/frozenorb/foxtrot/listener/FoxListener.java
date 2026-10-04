@@ -57,6 +57,7 @@ import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Giant;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -67,6 +68,7 @@ import org.bukkit.event.block.BlockDropItemsEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
@@ -776,7 +778,23 @@ public class FoxListener implements Listener {
    @EventHandler(priority = EventPriority.LOWEST)
    private void onArrow(EntityDamageEvent event) {
       if (event.getCause().equals(DamageCause.PROJECTILE)) {
-         event.setDamage(event.getDamage() * 0.6);
+         event.setDamage(event.getDamage() * Foxtrot.getInstance().getConfig().getDouble("arrowDamageMultiplier", 0.3));
+      }
+   }
+
+   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+   private void onPvPDamage(EntityDamageByEntityEvent event) {
+      if (event.getEntity() instanceof Player) {
+         Player attacker = null;
+         if (event.getDamager() instanceof Player) {
+            attacker = (Player)event.getDamager();
+         } else if (event.getDamager() instanceof Projectile && ((Projectile)event.getDamager()).getShooter() instanceof Player) {
+            attacker = (Player)((Projectile)event.getDamager()).getShooter();
+         }
+
+         if (attacker != null && attacker != event.getEntity()) {
+            event.setDamage(event.getDamage() * Foxtrot.getInstance().getConfig().getDouble("pvpDamageMultiplier", 0.85));
+         }
       }
    }
 

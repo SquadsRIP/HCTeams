@@ -26,7 +26,9 @@ import org.bukkit.inventory.ItemStack;
 public class AirDropCommand {
    @Command(names = {"airdrops give", "airdrop give"}, permission = "command.airdrops.give", hidden = true)
    public static void execute(CommandSender sender, @Parameter(name = "target") Player target, @Parameter(name = "amount") int amount) {
-      if (amount > 1 && !sender.isOp()) {
+      if (!Foxtrot.getInstance().getAirDropHandler().isEnabled()) {
+         sender.sendMessage(ChatColor.RED + "Airdrops are disabled.");
+      } else if (amount > 1 && !sender.isOp()) {
          sender.sendMessage(ChatColor.RED + "You can't give more than 1 Airdrop without OP!");
       } else if (amount < 0) {
          sender.sendMessage(ChatColor.RED + "Invalid number!");
@@ -104,7 +106,9 @@ public class AirDropCommand {
 
    @Command(names = {"airdrops giveall", "airdrop giveall"}, permission = "op", hidden = true)
    public static void giveAll(CommandSender sender, @Parameter(name = "amount") int amount) {
-      if (amount > 1 && !sender.getName().equalsIgnoreCase("SimplyTrash")) {
+      if (!Foxtrot.getInstance().getAirDropHandler().isEnabled()) {
+         sender.sendMessage(ChatColor.RED + "Airdrops are disabled.");
+      } else if (amount > 1 && !sender.getName().equalsIgnoreCase("SimplyTrash")) {
          sender.sendMessage(ChatColor.RED + "No permission.");
       } else {
          Foxtrot.getInstance()

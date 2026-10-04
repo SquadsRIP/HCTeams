@@ -69,7 +69,7 @@ public class ArrowTracker implements Listener {
 
       @Override
       public String getDeathMessage() {
-         return this.wrapName(this.getDamaged()) + " was shot by a " + ChatColor.DARK_RED + EntityUtils.getName(this.getMobType()) + ChatColor.DARK_RED + ".";
+         return this.wrapName(this.getDamaged()) + " was shot by a " + ChatColor.DARK_RED + EntityUtils.getName(this.getMobType()) + ChatColor.RED + ".";
       }
    }
 
@@ -92,7 +92,7 @@ public class ArrowTracker implements Listener {
             + ChatColor.BLUE
             + (int)this.distance
             + " blocks"
-            + ChatColor.DARK_RED
+            + ChatColor.RED
             + ".";
       }
 

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Map.Entry;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -21,6 +22,7 @@ public final class EnchantmentRules {
       new HashSet<>(
          Arrays.asList(
             Enchantment.PROTECTION_ENVIRONMENTAL,
+            Enchantment.PROTECTION_FALL,
             Enchantment.DURABILITY,
             Enchantment.DIG_SPEED,
             Enchantment.LOOT_BONUS_BLOCKS,
@@ -28,10 +30,19 @@ public final class EnchantmentRules {
             Enchantment.DAMAGE_UNDEAD,
             Enchantment.DAMAGE_ARTHROPODS,
             Enchantment.LOOT_BONUS_MOBS,
-            Enchantment.DAMAGE_ALL
+            Enchantment.DAMAGE_ALL,
+            Enchantment.ARROW_DAMAGE,
+            Enchantment.ARROW_INFINITE
          )
       )
    );
+   // Never given by the table and never added by an anvil.
+   private static final Set<Enchantment> BANNED = Collections.unmodifiableSet(
+      new HashSet<>(Arrays.asList(Enchantment.THORNS, Enchantment.KNOCKBACK, Enchantment.ARROW_KNOCKBACK, Enchantment.FIRE_ASPECT, Enchantment.ARROW_FIRE, Enchantment.OXYGEN, Enchantment.WATER_WORKER))
+   );
+   // SquadsCrates names KOTH crate gear "KOTH <piece>" in red italic; anvils can't type colours, so it can't be faked.
+   private static final String KOTH_GEAR_PREFIX = ChatColor.RED + "" + ChatColor.ITALIC + "KOTH ";
+   private static final Set<Enchantment> ANVIL_LIMITED = new HashSet<>(Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.DAMAGE_ALL, Enchantment.ARROW_DAMAGE));
    private final Map<Enchantment, Integer> limits = new HashMap<>();
    private final double maxLevelChance;
    private final double secondEnchantChance;
@@ -44,9 +55,11 @@ public final class EnchantmentRules {
       this.addLimit(config, Enchantment.PROTECTION_FIRE, "fireProtection", 2);
       this.addLimit(config, Enchantment.PROTECTION_PROJECTILE, "projectileProtection", 2);
       this.addLimit(config, Enchantment.PROTECTION_EXPLOSIONS, "blastProtection", 2);
-      this.addLimit(config, Enchantment.PROTECTION_FALL, "featherFalling", 2);
+      this.addLimit(config, Enchantment.PROTECTION_FALL, "featherFalling", 4);
       this.addLimit(config, Enchantment.DAMAGE_UNDEAD, "smite", 2);
       this.addLimit(config, Enchantment.DAMAGE_ARTHROPODS, "baneOfArthropods", 2);
+      this.addLimit(config, Enchantment.ARROW_DAMAGE, "power", 3);
+      this.addLimit(config, Enchantment.LOOT_BONUS_MOBS, "looting", 3);
       this.maxLevelChance = readChance(config, "max-level-chance-percent", 25.0);
       this.secondEnchantChance = readChance(config, "level-30-second-enchant-chance-percent", 70.0);
       this.thirdEnchantChance = readChance(config, "level-30-third-enchant-chance-percent", 20.0);
@@ -61,15 +74,82 @@ public final class EnchantmentRules {
       this.limits.put(enchantment, config.getInt("enchantmentLimits." + key, fallback));
    }
 
+   public static boolean isBanned(Enchantment enchantment) {
+      return BANNED.contains(enchantment);
+   }
+
+   public static boolean isKothGear(ItemStack item) {
+      if (item != null && item.hasItemMeta()) {
+         ItemMeta meta = item.getItemMeta();
+         return meta.hasDisplayName() && meta.getDisplayName().startsWith(KOTH_GEAR_PREFIX);
+      } else {
+         return false;
+      }
+   }
+
+   // Removes banned enchants (including ones stored on books) from anything but KOTH gear.
+   public static boolean stripBanned(ItemStack item) {
+      if (item != null && item.getType() != Material.AIR && item.hasItemMeta() && !isKothGear(item)) {
+         ItemMeta meta = item.getItemMeta();
+         boolean changed = false;
+
+         for (Enchantment enchantment : BANNED) {
+            if (meta.hasEnchant(enchantment)) {
+               meta.removeEnchant(enchantment);
+               changed = true;
+            }
+
+            if (meta instanceof EnchantmentStorageMeta && ((EnchantmentStorageMeta)meta).hasStoredEnchant(enchantment)) {
+               ((EnchantmentStorageMeta)meta).removeStoredEnchant(enchantment);
+               changed = true;
+            }
+         }
+
+         if (changed) {
+            item.setItemMeta(meta);
+         }
+
+         return changed;
+      } else {
+         return false;
+      }
+   }
+
    public int getLimit(Enchantment enchantment) {
       Integer limit = this.limits.get(enchantment);
       return limit == null ? 0 : limit;
    }
 
+   // Anvils only cap Protection, Sharpness and Power; the other enchantmentLimits only apply to the enchanting table.
+   public int getAnvilLimit(Enchantment enchantment) {
+      return ANVIL_LIMITED.contains(enchantment) ? this.getLimit(enchantment) : 0;
+   }
+
+   // Anvil caps keyed by enchantment id (the same ids NMS uses).
+   public Map<Integer, Integer> getAnvilLimitsById() {
+      Map<Integer, Integer> caps = new HashMap<>();
+
+      for (Enchantment enchantment : ANVIL_LIMITED) {
+         int limit = this.getLimit(enchantment);
+         if (limit > 0) {
+            caps.put(enchantment.getId(), limit);
+         }
+      }
+
+      return caps;
+   }
+
    public void applyTableRules(ItemStack item, Map<Enchantment, Integer> enchants, int levelCost, Random random) {
       if (item != null && item.getType() != Material.AIR) {
+         enchants.keySet().removeIf(BANNED::contains);
          if (item.getType() == Material.BOW) {
-            enchants.remove(Enchantment.ARROW_FIRE);
+            for (Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+               int maximum = this.getTableMaximum(entry.getKey());
+               if (entry.getValue() > maximum || levelCost >= 30 && this.getLimit(entry.getKey()) > 0) {
+                  entry.setValue(maximum);
+               }
+            }
+
             if (enchants.isEmpty() && Enchantment.DURABILITY.canEnchantItem(item)) {
                enchants.put(Enchantment.DURABILITY, 1);
             }
@@ -111,7 +191,9 @@ public final class EnchantmentRules {
             Enchantment enchantment = entry.getKey();
             int maximum = this.getTableMaximum(enchantment);
             int level = Math.min(entry.getValue(), maximum);
-            if (maximum > 1 && level == maximum && random.nextDouble() >= chance) {
+            if (levelCost >= 30 && this.getLimit(enchantment) > 0) {
+               level = maximum;
+            } else if (maximum > 1 && level == maximum && random.nextDouble() >= chance) {
                level = maximum - 1;
             }
 
@@ -166,6 +248,54 @@ public final class EnchantmentRules {
       } else {
          return false;
       }
+   }
+
+   public boolean exceedsLimits(ItemStack result, ItemStack... inputs) {
+      if (result != null && result.getType() != Material.AIR && result.hasItemMeta()) {
+         Map<Enchantment, Integer> left = inputs.length > 0 ? getAllEnchants(inputs[0]) : Collections.emptyMap();
+
+         for (Entry<Enchantment, Integer> entry : getAllEnchants(result).entrySet()) {
+            // A banned enchant may only stay on the item that already had it, never be added from the second slot.
+            if (BANNED.contains(entry.getKey()) && entry.getValue() > left.getOrDefault(entry.getKey(), 0)) {
+               return true;
+            }
+
+            int limit = this.getAnvilLimit(entry.getKey());
+            if (limit > 0 && entry.getValue() > limit) {
+               int inputLevel = 0;
+
+               for (ItemStack input : inputs) {
+                  Integer level = getAllEnchants(input).get(entry.getKey());
+                  if (level != null) {
+                     inputLevel = Math.max(inputLevel, level);
+                  }
+               }
+
+               if (entry.getValue() > inputLevel) {
+                  return true;
+               }
+            }
+         }
+
+         return false;
+      } else {
+         return false;
+      }
+   }
+
+   private static Map<Enchantment, Integer> getAllEnchants(ItemStack item) {
+      Map<Enchantment, Integer> enchants = new HashMap<>();
+      if (item != null && item.getType() != Material.AIR && item.hasItemMeta()) {
+         ItemMeta meta = item.getItemMeta();
+         enchants.putAll(meta.getEnchants());
+         if (meta instanceof EnchantmentStorageMeta) {
+            for (Entry<Enchantment, Integer> entry : ((EnchantmentStorageMeta)meta).getStoredEnchants().entrySet()) {
+               enchants.merge(entry.getKey(), entry.getValue(), Math::max);
+            }
+         }
+      }
+
+      return enchants;
    }
 
    private boolean exceedsLimits(Map<Enchantment, Integer> enchants) {

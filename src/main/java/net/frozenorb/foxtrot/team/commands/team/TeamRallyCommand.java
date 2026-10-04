@@ -3,6 +3,7 @@ package net.frozenorb.foxtrot.team.commands.team;
 import cc.fyre.proton.command.Command;
 import com.lunarclient.bukkitapi.LunarClientAPI;
 import com.lunarclient.bukkitapi.object.LCWaypoint;
+import net.frozenorb.foxtrot.apollo.ApolloService;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.team.Team;
 import org.bukkit.ChatColor;
@@ -22,14 +23,14 @@ public class TeamRallyCommand {
       } else {
          Location location = sender.getLocation();
          if (team.getRallyWaypoint() != null) {
-            team.getOnlineMembers().forEach(it -> LunarClientAPI.getInstance().removeWaypoint(it, team.getRallyWaypoint()));
+            team.getOnlineMembers().forEach(it -> ApolloService.removeWaypoint(it, team.getRallyWaypoint()));
          }
 
          team.setRallyPoint(location);
          team.setRallyWaypoint(new LCWaypoint("Rally", team.getRallyPoint(), Color.ORANGE.asRGB(), true, true));
 
          for (Player onlineMember : team.getOnlineMembers()) {
-            LunarClientAPI.getInstance().sendWaypoint(onlineMember, team.getRallyWaypoint());
+            ApolloService.sendWaypoint(onlineMember, team.getRallyWaypoint());
          }
 
          team.sendMessage(
@@ -38,21 +39,21 @@ public class TeamRallyCommand {
       }
    }
 
-   @Command(names = "team unrally", permission = "")
+   @Command(names = {"team unrally", "t unrally", "f unrally", "faction unrally"}, permission = "")
    public static void teamUnRally(Player sender) {
       Team team = Foxtrot.getInstance().getTeamHandler().getTeam(sender);
       if (team == null) {
          sender.sendMessage(ChatColor.GRAY + "You are not on a team!");
+      } else if (team.getRallyPoint() == null) {
+         sender.sendMessage(ChatColor.GRAY + "Your team doesn't have a rally point.");
       } else {
-         Location location = sender.getLocation();
          if (team.getRallyWaypoint() != null) {
-            team.getOnlineMembers().forEach(it -> LunarClientAPI.getInstance().removeWaypoint(it, team.getRallyWaypoint()));
+            team.getOnlineMembers().forEach(it -> ApolloService.removeWaypoint(it, team.getRallyWaypoint()));
          }
 
-         team.setRallyPoint(location);
-         team.sendMessage(
-            ChatColor.translateAlternateColorCodes('&', "&f" + sender.getName() + " &6has updated the team's rally point! This will last for 10 minutes")
-         );
+         team.setRallyPoint(null);
+         team.setRallyWaypoint(null);
+         team.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f" + sender.getName() + " &6has removed the team's rally point."));
       }
    }
 }

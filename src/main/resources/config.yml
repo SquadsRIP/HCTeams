@@ -35,10 +35,25 @@ spawners:
   ignoreLight: true
   # Allow natural blaze spawns in the Nether (fortresses). Every other natural spawn stays blocked.
   naturalBlazes: true
+  # Per-mob overrides, keyed by the spawner's mob id (LavaSlime = magma cube). Missing keys use the values above.
+  types:
+    LavaSlime:
+      minDelay: 300
+      maxDelay: 800
+      spawnCount: 2
+      maxNearby: 4
+    Creeper:
+      minDelay: 160
+      maxDelay: 480
+      spawnCount: 4
+      maxNearby: 10
 
 # Newly spawned mobs merge into a mob of the same type within this many blocks.
 mobStacking:
   radius: 8
+
+mobDamage:
+  endermanMultiplier: 0.3
 
 startingTimer: true
 forceInvites: true
@@ -50,6 +65,13 @@ allowBoosting: false
 waterPlacementInClaims: false
 blockRemoval: false
 rodPrevention: false
+# false = /airdrops give does nothing (battle pass, quests, bundles, trivia included)
+# and airdrops already in inventories can't be placed.
+airdropsEnabled: false
+# Multiplier on all player-vs-player damage (melee and projectiles). 0.85 = 15% less.
+pvpDamageMultiplier: 0.85
+# Multiplier on all projectile damage (arrows), applied before pvpDamageMultiplier. Was hardcoded 0.6.
+arrowDamageMultiplier: 0.3
 # Fishing rod cooldown in seconds, per PvP class (name as shown in-game); "default" covers diamond and any class not listed. 0 disables it.
 rodCooldown:
   default: 3.0
@@ -75,7 +97,10 @@ voteParty:
   currentVotes: 0
 
 # Enchantment limits — max levels allowed on items
-# Any enchantment above these levels is automatically reduced
+# The enchanting table never rolls above these, on gear or books. Anvils only
+# cap protection, sharpness and power: a combine that would go higher keeps
+# the limit (Sharp II + Sharp II -> Sharp II, other enchants still combine),
+# and gear already above it (KOTH loot) keeps its level.
 enchantmentLimits:
   protection: 2
   sharpness: 2
@@ -83,13 +108,22 @@ enchantmentLimits:
   fireProtection: 2
   projectileProtection: 2
   blastProtection: 2
-  featherFalling: 2
+  featherFalling: 4
   smite: 2
   baneOfArthropods: 2
+  power: 3
+  looting: 3
 
-# Tables only roll Protection, Unbreaking, Efficiency, Fortune, Silk Touch,
-# Smite, Bane of Arthropods, Looting, and Sharpness. Books receive one enchant.
+# Tables only roll Protection, Feather Falling, Unbreaking, Efficiency, Fortune, Silk Touch,
+# Smite, Bane of Arthropods, Looting, Sharpness, Power and Infinity. Books receive one enchant.
+# Bows keep their vanilla table rolls except Flame and Punch (Punch bows can't shoot).
+# Thorns, Knockback, Punch, Fire Aspect, Flame, Respiration and Aqua Affinity are
+# never given by the table and never added by an anvil (from books or other gear).
 enchantingTable:
+  # A 30-level enchant always gives every enchant listed in enchantmentLimits at
+  # that limit (Sharpness II, Protection II, Feather Falling IV, Unbreaking III,
+  # Looting III, Power III). The chance below only applies to cheaper rolls and
+  # to uncapped enchants (Efficiency, Fortune).
   # Chance to KEEP a qualifying max-level roll, per enchant, at level cost 30.
   # Scales down with cost (15 = 12.5%); never raises a lower vanilla roll.
   # Failed max rolls lose one level. Silk Touch keeps its vanilla level/rarity.
@@ -103,7 +137,20 @@ enchantingTable:
   # Bonus enchants use the same max-level rarity above; Silk Touch is vanilla-only.
   # Cheaper table rolls do not receive bonus enchants. Set both to 0 to disable.
   level-30-third-enchant-chance-percent: 20.0
+  # Charge 1/2/3 levels for the top/middle/bottom option like 1.8, instead of the
+  # whole requirement. The player still needs the shown level to enchant.
+  modern-level-cost: true
   anvil-limit-message: '&cYou cannot combine items above the maximum enchantment level.'
+
+# XP balance. Mob kill XP is multiplied by xp.mob-multiplier (on top of the
+# map.yml looting multipliers); player deaths are unaffected.
+xp:
+  mob-multiplier: 2.0
+
+# Every anvil level cost (rename, repair, combine) is multiplied by this and
+# rounded up, minimum 1. "Too Expensive!" applies to the reduced cost (40+).
+anvil:
+  cost-multiplier: 0.5
 
 # Spawn tag duration in seconds
 spawnTagSeconds: 30
@@ -182,3 +229,14 @@ cheatbreaker:
     koth: true
   # Voice chat is currently unavailable in the CheatBreaker client.
 
+lunar:
+  # Lunar Client (Apollo) sync: team view markers and waypoints, kept up to date every few ticks.
+  # Missing keys default to true.
+  enabled: true
+  team-view: true
+  waypoints:
+    # Uses /f setlocation Spawn, or the gameplay world's spawn location.
+    spawn: true
+    # HQ, rally and focused team's HQ.
+    faction: true
+    koth: true

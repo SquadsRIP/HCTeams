@@ -1,6 +1,5 @@
 package net.frozenorb.foxtrot.listener;
 
-import java.lang.reflect.Method;
 import net.frozenorb.foxtrot.Foxtrot;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,7 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
@@ -24,7 +22,14 @@ public class MobStackListener implements Listener {
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onCreatureSpawn(CreatureSpawnEvent event) {
       SpawnReason reason = event.getSpawnReason();
-      if (reason != SpawnReason.CUSTOM) {
+      if (reason == SpawnReason.SLIME_SPLIT) {
+         // A dying stack is respawned as (N-1)x by onEntityDeath, so its split children must not
+         // spawn too: stacked onto it they grew the stack by 1-3 per kill and flooded the area.
+         // Children of an unstacked cube split as in vanilla but never merge into a stack.
+         if (this.isSplitFromStack(event.getEntity())) {
+            event.setCancelled(true);
+         }
+      } else if (reason != SpawnReason.CUSTOM) {
          if (event.getEntityType() != EntityType.ENDERMAN) {
             LivingEntity entity = event.getEntity();
             String stripped;
@@ -80,10 +85,23 @@ public class MobStackListener implements Listener {
                LivingEntity newMob = (LivingEntity)loc.getWorld().spawnEntity(loc, type);
                newMob.setCustomName(ChatColor.RED + String.valueOf(finalNewCount) + "x");
                newMob.setCustomNameVisible(true);
-               newMob.setHealth(20.0);
+               newMob.setHealth(newMob.getMaxHealth());
             }
          }, 1L);
       }
+   }
+
+   private boolean isSplitFromStack(LivingEntity child) {
+      for (Entity nearby : child.getNearbyEntities(3.0, 3.0, 3.0)) {
+         if (nearby.getType() == child.getType()
+            && nearby instanceof LivingEntity
+            && ((LivingEntity)nearby).getHealth() <= 0.0
+            && this.getStackCount((LivingEntity)nearby) > 1) {
+            return true;
+         }
+      }
+
+      return false;
    }
 
    private int getStackCount(LivingEntity entity) {
@@ -107,14 +125,8 @@ public class MobStackListener implements Listener {
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onEndermanDamage(EntityDamageByEntityEvent event) {
       if (event.getEntity() instanceof Player && event.getDamager() instanceof Enderman) {
-         try {
-            Method m = EntityDamageEvent.class.getMethod("getDamage");
-            Object result = m.invoke(event);
-            double damage = result instanceof Number ? ((Number)result).doubleValue() : 0.0;
-            Method setM = EntityDamageEvent.class.getMethod("setDamage", double.class);
-            setM.invoke(event, damage * 0.5);
-         } catch (Exception var7) {
-         }
+         double multiplier = Foxtrot.getInstance().getConfig().getDouble("mobDamage.endermanMultiplier", 0.3);
+         event.setDamage(event.getDamage() * multiplier);
       }
    }
 }

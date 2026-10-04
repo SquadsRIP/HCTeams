@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.team.claims.LandBoard;
@@ -21,6 +22,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -30,6 +32,7 @@ public class EnchantmentLimiterListener implements Listener {
    public static final Set<Character> ITEM_NAME_CHARACTER_BLACKLIST = new HashSet<>(Arrays.asList('卍'));
    private Map<String, Long> lastArmorCheck = new HashMap<>();
    private Map<String, Long> lastSwordCheck = new HashMap<>();
+   private final Map<UUID, Long> lastAnvilMessage = new HashMap<>();
 
    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
@@ -86,7 +89,19 @@ public class EnchantmentLimiterListener implements Listener {
                && previous.hasItemMeta()
                && previous.getItemMeta().hasDisplayName()
                && this.containsColor(previous.getItemMeta().getDisplayName())) {
-               event.setCancelled(true);
+               String original = previous.getItemMeta().getDisplayName();
+               if (!this.isUnchangedName(original, meta.getDisplayName())) {
+                  event.setCancelled(true);
+                  if (event.getWhoClicked() instanceof Player) {
+                     ((Player)event.getWhoClicked()).sendMessage(ChatColor.RED + "You cannot rename this item.");
+                  }
+
+                  return;
+               }
+
+               meta.setDisplayName(original);
+               item.setItemMeta(meta);
+               event.setCurrentItem(item);
                return;
             }
 
@@ -99,6 +114,10 @@ public class EnchantmentLimiterListener implements Listener {
 
    private boolean containsColor(String displayName) {
       return !ChatColor.stripColor(displayName).equals(displayName);
+   }
+
+   private boolean isUnchangedName(String original, String result) {
+      return result.equals(original) || result.equals(original.replace("§", "")) || result.equals(ChatColor.stripColor(original));
    }
 
    private String fixName(String name) {
@@ -157,6 +176,12 @@ public class EnchantmentLimiterListener implements Listener {
       rules.applyTableRules(event.getItem(), event.getEnchantsToAdd(), event.getExpLevelCost(), ThreadLocalRandom.current());
       if (event.getEnchantsToAdd().isEmpty()) {
          event.setCancelled(true);
+         return;
+      }
+
+      // 1.7 takes the whole level requirement (up to 30); 1.8 clients expect 1-3 levels, one per button.
+      if (Foxtrot.getInstance().getConfig().getBoolean("enchantingTable.modern-level-cost", true)) {
+         event.setExpLevelCost(Math.min(event.getExpLevelCost(), event.whichButton() + 1));
       }
    }
 
@@ -164,20 +189,42 @@ public class EnchantmentLimiterListener implements Listener {
    public void onAnvilResult(InventoryClickEvent event) {
       if (event.getInventory() instanceof AnvilInventory && event.getRawSlot() == 2) {
          EnchantmentRules rules = new EnchantmentRules(Foxtrot.getInstance().getConfig());
-         if (rules.exceedsLimits(event.getCurrentItem())) {
+         if (rules.exceedsLimits(event.getCurrentItem(), event.getInventory().getItem(0), event.getInventory().getItem(1))) {
             event.setCancelled(true);
+            event.getInventory().setItem(2, null);
             if (event.getWhoClicked() instanceof Player) {
-               ((Player)event.getWhoClicked())
-                  .sendMessage(
-                     ChatColor.translateAlternateColorCodes(
-                        '&',
-                        Foxtrot.getInstance()
-                           .getConfig()
-                           .getString("enchantingTable.anvil-limit-message", "&cYou cannot combine items above the maximum enchantment level.")
-                     )
-                  );
+               Player player = (Player)event.getWhoClicked();
+               this.sendAnvilLimitMessage(player);
+               // The client already took the result and spent the levels on its own screen; the server took nothing.
+               // Resend the inventory and the XP bar so the player sees their items and levels back.
+               Foxtrot.getInstance().getServer().getScheduler().runTask(Foxtrot.getInstance(), () -> {
+                  if (player.isOnline()) {
+                     player.updateInventory();
+                     player.setLevel(player.getLevel());
+                  }
+               });
             }
          }
       }
+   }
+
+   private void sendAnvilLimitMessage(Player player) {
+      Long last = this.lastAnvilMessage.get(player.getUniqueId());
+      if (last == null || System.currentTimeMillis() - last > 3000L) {
+         this.lastAnvilMessage.put(player.getUniqueId(), System.currentTimeMillis());
+         player.sendMessage(
+            ChatColor.translateAlternateColorCodes(
+               '&',
+               Foxtrot.getInstance()
+                  .getConfig()
+                  .getString("enchantingTable.anvil-limit-message", "&cYou cannot combine items above the maximum enchantment level.")
+            )
+         );
+      }
+   }
+
+   @EventHandler
+   public void onQuit(PlayerQuitEvent event) {
+      this.lastAnvilMessage.remove(event.getPlayer().getUniqueId());
    }
 }

@@ -13,10 +13,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class KOTHScheduleCommand {
-   public static final DateFormat KOTH_DATE_FORMAT = new SimpleDateFormat("EEE h:mm a");
+   public static final DateFormat KOTH_DATE_FORMAT = new SimpleDateFormat("EEE h:mm a z");
 
    @Command(names = "KOTH Schedule", permission = "")
    public static void kothSchedule(Player sender) {
+      if (!Foxtrot.getInstance().getEventHandler().isScheduleEnabled()) {
+         sender.sendMessage(ChatColor.GOLD + "[KingOfTheHill] " + ChatColor.YELLOW + "The KOTH schedule is currently disabled.");
+         return;
+      }
+
       int sent = 0;
       Date now = new Date();
 
@@ -44,25 +49,7 @@ public class KOTHScheduleCommand {
       }
 
       if (sent == 0) {
-         sender.sendMessage(ChatColor.DARK_RED + "[KingOfTheHill] " + ChatColor.YELLOW + "KOTH Schedule: " + ChatColor.GRAY + "Every 2 hours");
-         sender.sendMessage(
-            ChatColor.GRAY
-               + "Rotation: "
-               + ChatColor.DARK_RED
-               + "Spider"
-               + ChatColor.GRAY
-               + ", "
-               + ChatColor.DARK_RED
-               + "Mushroom"
-               + ChatColor.GRAY
-               + ", "
-               + ChatColor.DARK_RED
-               + "Hell"
-               + ChatColor.GRAY
-               + ", "
-               + ChatColor.DARK_RED
-               + "End"
-         );
+         sender.sendMessage(ChatColor.GOLD + "[KingOfTheHill] " + ChatColor.YELLOW + "No KOTHs are scheduled right now.");
       } else {
          sender.sendMessage(
             ChatColor.GOLD

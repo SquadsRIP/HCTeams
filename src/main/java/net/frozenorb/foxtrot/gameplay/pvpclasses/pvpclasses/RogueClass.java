@@ -8,7 +8,6 @@ import java.util.Map;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.deathmessage.DeathMessageHandler;
 import net.frozenorb.foxtrot.deathmessage.objects.PlayerDamage;
-import net.frozenorb.foxtrot.gameplay.events.mini.type.kitmap.Stabber;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.PvPClass;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.PvPClassHandler;
 import net.frozenorb.foxtrot.listener.event.BackstabKillEvent;
@@ -151,7 +150,6 @@ public class RogueClass extends PvPClass {
                      Bukkit.getPluginManager().callEvent(new BackstabKillEvent(damager, victim));
                   }
 
-                  Stabber.stab(damager);
                   if (Foxtrot.getInstance().getMapHandler().isKitMap()) {
                      Foxtrot.getInstance().getMasteryUpgradeHandler().addUpgrade(damager, "Rogue", 1);
                   }

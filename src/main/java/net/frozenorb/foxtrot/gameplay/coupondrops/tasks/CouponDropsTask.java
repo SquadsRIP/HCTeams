@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import net.buycraft.plugin.data.Coupon;
+import net.frozenorb.foxtrot.apollo.ApolloService;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.gameplay.coupondrops.listener.CouponDropsListener;
 import org.bukkit.ChatColor;
@@ -46,7 +47,7 @@ public class CouponDropsTask extends BukkitRunnable {
             player.sendMessage(ChatColor.translate("&cLocation: &f" + x + ", " + location.getBlockY() + ", " + z));
             player.sendMessage(" ");
             CouponDropsListener.couponDropWaypoint = new LCWaypoint(ChatColor.DARK_RED + "Coupon Drop" + ChatColor.WHITE, location, Color.RED.getRGB(), true);
-            LunarClientAPI.getInstance().sendWaypoint(player, CouponDropsListener.couponDropWaypoint);
+            ApolloService.sendWaypoint(player, CouponDropsListener.couponDropWaypoint, true);
          });
          Foxtrot.getInstance().getCouponDropsHandler().setDropsIn(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5L));
          Foxtrot.getInstance().getCouponDropsHandler().setLocation(location.clone());

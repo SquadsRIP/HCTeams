@@ -38,7 +38,7 @@ public class PVPTracker implements Listener {
       public String getDeathMessage() {
          String extension = Foxtrot.getInstance().getInDuelPredicate().test(Bukkit.getPlayer(this.getDamaged()))
             ? " during a duel."
-            : " using " + ChatColor.DARK_RED + this.itemString + ChatColor.DARK_RED + ".";
+            : " using " + ChatColor.DARK_RED + this.itemString + ChatColor.RED + ".";
          Player player = Foxtrot.getInstance().getServer().getPlayer(this.getDamager());
          if (player == null) {
             return this.wrapName(this.getDamaged()) + " was slain by " + this.wrapName(this.getDamager()) + extension;

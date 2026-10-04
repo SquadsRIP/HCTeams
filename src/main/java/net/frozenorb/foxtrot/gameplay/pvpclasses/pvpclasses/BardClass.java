@@ -116,7 +116,7 @@ public class BardClass extends PvPClass implements Listener {
             return;
          }
 
-         this.giveBardEffect(player, this.BARD_PASSIVE_EFFECTS.get(player.getItemInHand().getType()), true, false);
+         this.giveBardEffect(player, this.BARD_PASSIVE_EFFECTS.get(player.getItemInHand().getType()), true, false, false);
       }
 
       super.tick(player);
@@ -191,7 +191,7 @@ public class BardClass extends PvPClass implements Listener {
                      );
                      Foxtrot.getInstance().getServer().getPluginManager().callEvent(bardEffectUseEvent);
                      if (!bardEffectUseEvent.isCancelled()) {
-                        this.giveBardEffect(event.getPlayer(), bardEffect, !negative, true);
+                        this.giveBardEffect(event.getPlayer(), bardEffect, !negative, true, true);
                         PvPClassHandler.getUltimate()
                            .put(event.getPlayer().getUniqueId(), Math.min(PvPClassHandler.getUltimate().get(event.getPlayer().getUniqueId()) + 10.0F, 100.0F));
                         if (event.getPlayer().isSneaking() && PvPClassHandler.getUltimate().get(event.getPlayer().getUniqueId()) >= 100.0F) {
@@ -232,7 +232,7 @@ public class BardClass extends PvPClass implements Listener {
       }
    }
 
-   public void giveBardEffect(Player source, EnergyEffect bardEffect, boolean friendly, boolean persistOldValues) {
+   public void giveBardEffect(Player source, EnergyEffect bardEffect, boolean friendly, boolean persistOldValues, boolean announce) {
       for (Player player : this.getNearbyPlayers(source, friendly)) {
          if (!DTRBitmask.SAFE_ZONE.appliesAt(player.getLocation())
             && (
@@ -242,20 +242,13 @@ public class BardClass extends PvPClass implements Listener {
             )
             && bardEffect.getPotionEffect() != null) {
             smartAddPotion(player, bardEffect.getPotionEffect(), persistOldValues, this);
-            if (!player.getUniqueId().equals(source.getUniqueId()) && bardEffect.getPotionEffect() != null) {
+            if (announce && friendly && !player.getUniqueId().equals(source.getUniqueId())) {
                String effectName = bardEffect.getFancyName();
                String msg = Foxtrot.getInstance().getConfig().getString("bardEffectReceivedMessage", "&fYou have received &6<effect> &ffrom your &6Bard");
                msg = msg.replace("<effect>", effectName);
                player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
             }
          }
-      }
-
-      if (bardEffect.getPotionEffect() != null) {
-         String effectName = bardEffect.getFancyName();
-         String msg = Foxtrot.getInstance().getConfig().getString("bardEffectGivenMessage", "&fYou have given &6<effect> &fto your team");
-         msg = msg.replace("<effect>", effectName);
-         source.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
       }
    }
 

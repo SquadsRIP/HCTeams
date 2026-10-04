@@ -5,6 +5,7 @@ import cc.fyre.proton.command.param.Parameter;
 import com.lunarclient.bukkitapi.LunarClientAPI;
 import com.lunarclient.bukkitapi.object.LCWaypoint;
 import java.awt.Color;
+import net.frozenorb.foxtrot.apollo.ApolloService;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.listener.LunarClientListener;
 import net.frozenorb.foxtrot.team.Team;
@@ -32,7 +33,7 @@ public class ForceJoinCommand {
                team.setHomeWaypoint(new LCWaypoint(ChatColor.BLUE + "HQ" + ChatColor.WHITE, team.getHQ(), Color.BLUE.getRGB(), true));
             }
 
-            LunarClientAPI.getInstance().sendWaypoint(player, team.getHomeWaypoint());
+            ApolloService.sendWaypoint(player, team.getHomeWaypoint());
          }
 
          if (team.getRallyPoint() != null) {
@@ -40,7 +41,7 @@ public class ForceJoinCommand {
                team.setRallyWaypoint(new LCWaypoint(ChatColor.GOLD + "Rally" + ChatColor.WHITE, team.getRallyPoint(), Color.ORANGE.getRGB(), true));
             }
 
-            LunarClientAPI.getInstance().sendWaypoint(player, team.getRallyWaypoint());
+            ApolloService.sendWaypoint(player, team.getRallyWaypoint());
          }
 
          if (team.getFocusedTeam() != null && team.getFocusedTeam().getHQ() != null) {
@@ -51,7 +52,7 @@ public class ForceJoinCommand {
                );
             }
 
-            LunarClientAPI.getInstance().sendWaypoint(player, team.getFocusWaypoint());
+            ApolloService.sendWaypoint(player, team.getFocusWaypoint());
          }
 
          LunarClientListener.updateNametag(player);

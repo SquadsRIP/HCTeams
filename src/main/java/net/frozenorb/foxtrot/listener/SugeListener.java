@@ -3,7 +3,6 @@ package net.frozenorb.foxtrot.listener;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.commands.CustomTimerCreateCommand;
 import net.frozenorb.foxtrot.server.SpawnTagHandler;
-import net.frozenorb.foxtrot.team.Team;
 import net.frozenorb.foxtrot.team.claims.LandBoard;
 import net.frozenorb.foxtrot.team.dtr.DTRBitmask;
 import org.bukkit.ChatColor;
@@ -34,11 +33,7 @@ public class SugeListener implements Listener {
          player.sendMessage(ChatColor.YELLOW + "You can't use a kit at all in Nether!");
          return false;
       } else {
-         Team team = Foxtrot.getInstance().getTeamHandler().getTeam(player);
-         if (team != null && AntiCleanListener.CACHE.containsKey(team) && DTRBitmask.SAFE_ZONE.appliesAt(location)) {
-            player.sendMessage(ChatColor.YELLOW + "You may not use a kit in Spawn while your faction is anti-clean combat tagged!");
-            return false;
-         } else if (Foxtrot.getInstance().getPvPTimerMap().hasTimer(player.getUniqueId()) || DTRBitmask.SAFE_ZONE.appliesAt(player.getLocation())) {
+         if (Foxtrot.getInstance().getPvPTimerMap().hasTimer(player.getUniqueId()) || DTRBitmask.SAFE_ZONE.appliesAt(player.getLocation())) {
             return true;
          } else if (Foxtrot.getInstance().getInDuelPredicate().test(player) || Foxtrot.getInstance().getInEventPredicate().test(player)) {
             player.sendMessage(ChatColor.YELLOW + "You may not use a kit whilst in a Duel or in an Event!");

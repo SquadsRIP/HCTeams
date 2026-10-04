@@ -37,8 +37,6 @@ import net.frozenorb.foxtrot.gameplay.events.conquest.enums.ConquestCapzone;
 import net.frozenorb.foxtrot.gameplay.events.conquest.game.ConquestGame;
 import net.frozenorb.foxtrot.gameplay.events.dtc.DTC;
 import net.frozenorb.foxtrot.gameplay.events.koth.KOTH;
-import net.frozenorb.foxtrot.gameplay.events.mini.MiniEvent;
-import net.frozenorb.foxtrot.gameplay.events.mini.MiniEventsHandler;
 import net.frozenorb.foxtrot.gameplay.events.outposts.OutpostHandler;
 import net.frozenorb.foxtrot.gameplay.events.outposts.type.EndOutpost;
 import net.frozenorb.foxtrot.gameplay.events.outposts.type.NetherOutpost;
@@ -50,11 +48,9 @@ import net.frozenorb.foxtrot.gameplay.loot.voteparty.VotePartyHandler;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.PvPClass;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.PvPClassHandler;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.pvpclasses.ArcherClass;
-import net.frozenorb.foxtrot.listener.AntiCleanListener;
 import net.frozenorb.foxtrot.listener.CrappleLimitListener;
 import net.frozenorb.foxtrot.listener.EndListener;
 import net.frozenorb.foxtrot.listener.GoldenAppleListener;
-import net.frozenorb.foxtrot.listener.RodCooldownListener;
 import net.frozenorb.foxtrot.listener.event.TimerEndEvent;
 import net.frozenorb.foxtrot.server.ServerHandler;
 import net.frozenorb.foxtrot.server.SpawnTagHandler;
@@ -158,34 +154,11 @@ public class FoxtrotScoreGetter implements ScoreGetter {
          }
 
          Team team = Foxtrot.getInstance().getTeamHandler().getTeam(player);
-         Long antiCleanTime = AntiCleanListener.TIME_CACHE.get(team);
-         if (antiCleanTime != null) {
-            Team fightOpponent = AntiCleanListener.CACHE.get(team);
-            String fightFaction = fightOpponent != null ? fightOpponent.getName() : "Unknown";
-            long timeLeft = antiCleanTime - System.currentTimeMillis();
-            String fightTime;
-            if (timeLeft <= 0L) {
-               fightTime = "0s";
-            } else {
-               int seconds = (int)(timeLeft / 1000L);
-               fightTime = seconds + "s";
-            }
-
-            scores.add(sc("fight-format", "&4Fight: &7<faction> &4(<time>)").replace("<faction>", fightFaction).replace("<time>", fightTime));
-            if (System.currentTimeMillis() > antiCleanTime) {
-               String opponentName = fightOpponent != null ? fightOpponent.getName() : "Unknown";
-               AntiCleanListener.CACHE.remove(team);
-               AntiCleanListener.TIME_CACHE.remove(team);
-               team.sendMessage(ChatColor.translateAlternateColorCodes('&', "&fYour &4Fight&f against &4" + opponentName + "&f is now over."));
-            }
-         }
-
          String spawnTagScore = this.getSpawnTagScore(player);
          String enderpearlScore = this.getEnderpearlScore(player);
          String abilityScore = this.getAbilityScore(player);
          String pvpTimerScore = this.getPvPTimerScore(player);
          String archerMarkScore = this.getArcherMarkScore(player);
-         String rodScore = this.getRodScore(player);
          String effectScore = getEffectScore(player);
          String energyScore = this.getEnergyScore(player);
          String fstuckScore = this.getFStuckScore(player);
@@ -258,10 +231,6 @@ public class FoxtrotScoreGetter implements ScoreGetter {
 
          if (goppleScore != null) {
             scores.add(sc("gopple-format", "&6&lGopple&7: &6<time>").replace("<time>", goppleScore));
-         }
-
-         if (rodScore != null) {
-            scores.add(sc("fishing-rod-format", "&5&lFishing Rod&7: &5<time>").replace("<time>", rodScore));
          }
 
          if (appleScore != null) {
@@ -479,21 +448,6 @@ public class FoxtrotScoreGetter implements ScoreGetter {
             }
          }
 
-         MiniEventsHandler miniEventsHandler = Foxtrot.getInstance().getMiniEventsHandler();
-         if (!Foxtrot.getInstance().getTeamfightModeMap().isTeamfight(player.getUniqueId())
-            && player.getWorld().getEnvironment() == Environment.NORMAL
-            && miniEventsHandler != null
-            && miniEventsHandler.getActiveEvent() != null) {
-            MiniEvent miniEvent = miniEventsHandler.getActiveEvent();
-            if (!scores.isEmpty()) {
-               scores.add("&0&7&m--------------------");
-            }
-
-            scores.add("&6&l" + miniEvent.getObjective() + " Event");
-            scores.add("&7ends in &f" + ScoreFunction.TIME_FANCY.apply((float)((miniEvent.getEndsAt() - System.currentTimeMillis()) / 1000L)));
-            scores.add("&a/minievent");
-         }
-
          CaveNiteHandler caveNiteHandler;
          if ((caveNiteHandler = Foxtrot.getInstance().getCaveNiteHandler()) != null && caveNiteHandler.getGameState() != CaveNiteState.INACTIVE) {
             if (!scores.isEmpty()) {
@@ -688,15 +642,6 @@ public class FoxtrotScoreGetter implements ScoreGetter {
       } else {
          return false;
       }
-   }
-
-   public String getRodScore(Player player) {
-      float diff;
-      return RodCooldownListener.cache.containsKey(player.getUniqueId())
-            && RodCooldownListener.cache.get(player.getUniqueId()) >= System.currentTimeMillis()
-            && (diff = (float)(RodCooldownListener.cache.get(player.getUniqueId()) - System.currentTimeMillis())) >= 0.0F
-         ? ScoreFunction.TIME_FANCY.apply(diff / 1000.0F)
-         : null;
    }
 
    public List<String> getAbilityCooldownsScore(Player player) {

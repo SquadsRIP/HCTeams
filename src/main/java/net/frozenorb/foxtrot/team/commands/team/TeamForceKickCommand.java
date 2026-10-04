@@ -36,6 +36,8 @@ public class TeamForceKickCommand {
          sender.sendMessage(ChatColor.RED + "Only the owner can kick other co-leaders!");
       } else if (team.isCaptain(player) && !team.isOwner(sender.getUniqueId()) && !team.isCoLeader(sender.getUniqueId())) {
          sender.sendMessage(ChatColor.RED + "Only an owner or co-leader can kick other captains!");
+      } else if (DTRHandler.isOnCooldown(team)) {
+         sender.sendMessage(ChatColor.RED + "You cannot kick members while your faction's DTR is frozen!");
       } else {
          TeamActionTracker.logActionAsync(
             team,

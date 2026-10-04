@@ -93,6 +93,16 @@ public class EnderpearlCooldownHandler implements Listener {
          if (!enderpearlCooldown.containsKey(event.getPlayer().getName())) {
             event.setCancelled(true);
          } else {
+            Location landing = PearlLandingFixer.findLanding(event.getPlayer(), event.getFrom(), event.getTo());
+            if (landing == null) {
+               event.setCancelled(true);
+               removeCooldown(event.getPlayer());
+               event.getPlayer()
+                  .sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "Invalid Pearl! " + ChatColor.YELLOW + "There is no room to land there!");
+               return;
+            }
+
+            event.setTo(landing);
             Location target = event.getTo();
             Location from = event.getFrom();
             if (DTRBitmask.SAFE_ZONE.appliesAt(target) && !DTRBitmask.SAFE_ZONE.appliesAt(from)) {

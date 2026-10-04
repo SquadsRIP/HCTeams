@@ -10,6 +10,7 @@ import com.lunarclient.bukkitapi.object.LCWaypoint;
 import java.awt.Color;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import net.frozenorb.foxtrot.apollo.ApolloService;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.listener.LunarClientListener;
 import net.frozenorb.foxtrot.server.SpawnTagHandler;
@@ -108,7 +109,7 @@ public class TeamAcceptCommand {
                team.setHomeWaypoint(new LCWaypoint(ChatColor.BLUE + "HQ" + ChatColor.WHITE, team.getHQ(), Color.BLUE.getRGB(), true));
             }
 
-            LunarClientAPI.getInstance().sendWaypoint(sender, team.getHomeWaypoint());
+            ApolloService.sendWaypoint(sender, team.getHomeWaypoint());
          }
 
          if (team.getRallyPoint() != null) {
@@ -116,7 +117,7 @@ public class TeamAcceptCommand {
                team.setRallyWaypoint(new LCWaypoint(ChatColor.GOLD + "Rally" + ChatColor.WHITE, team.getRallyPoint(), Color.ORANGE.getRGB(), true));
             }
 
-            LunarClientAPI.getInstance().sendWaypoint(sender, team.getRallyWaypoint());
+            ApolloService.sendWaypoint(sender, team.getRallyWaypoint());
          }
 
          if (team.getFocusedTeam() != null && team.getFocusedTeam().getHQ() != null) {
@@ -127,7 +128,7 @@ public class TeamAcceptCommand {
                );
             }
 
-            LunarClientAPI.getInstance().sendWaypoint(sender, team.getFocusWaypoint());
+            ApolloService.sendWaypoint(sender, team.getFocusWaypoint());
          }
 
          LunarClientListener.updateNametag(sender);

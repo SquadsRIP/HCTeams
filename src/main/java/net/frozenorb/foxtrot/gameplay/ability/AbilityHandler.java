@@ -22,7 +22,6 @@ import net.frozenorb.foxtrot.gameplay.ability.menu.TradeMenu;
 import net.frozenorb.foxtrot.gameplay.ability.packet.InvisibilityPacketAdapter;
 import net.frozenorb.foxtrot.gameplay.ability.parameter.AbilityParameter;
 import net.frozenorb.foxtrot.gameplay.armorclass.ArmorClass;
-import net.frozenorb.foxtrot.gameplay.events.mini.MiniEvent;
 import net.frozenorb.foxtrot.team.Team;
 import net.minecraft.util.com.google.common.collect.HashBasedTable;
 import net.minecraft.util.com.google.common.collect.Table;
@@ -148,10 +147,7 @@ public class AbilityHandler {
       if (ability.getCooldown() > 0L) {
          Team team = Foxtrot.getInstance().getTeamHandler().getTeam(player);
          ArmorClass armorClass = Foxtrot.getInstance().getArmorClassHandler().findWearing(player);
-         if (Foxtrot.getInstance().getMiniEventsHandler() != null && Foxtrot.getInstance().getMiniEventsHandler().getActiveEvent() != null) {
-            MiniEvent miniEvent = Foxtrot.getInstance().getMiniEventsHandler().getActiveEvent();
-            cooldownTime = miniEvent.getEventID().equalsIgnoreCase("Rage") ? cooldownTime / 2L : cooldownTime;
-         } else if (armorClass != null && armorClass.getId().equalsIgnoreCase("Raider")) {
+         if (armorClass != null && armorClass.getId().equalsIgnoreCase("Raider")) {
             cooldownTime = (long)(cooldownTime * 0.85);
          } else if (Foxtrot.getInstance().getNetworkBoosterHandler() != null && Foxtrot.getInstance().getNetworkBoosterHandler().isFrenzy()) {
             cooldownTime = (long)(cooldownTime * 0.75);

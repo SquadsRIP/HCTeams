@@ -1,13 +1,13 @@
 package net.frozenorb.foxtrot.apollo;
 
-import java.awt.Color;
+import com.lunarclient.bukkitapi.LunarClientAPI;
+import com.lunarclient.bukkitapi.object.LCWaypoint;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
 import net.frozenorb.foxtrot.Foxtrot;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -143,15 +143,37 @@ public class ApolloService {
       }
    }
 
-   public static void sendWaypoint(Player player, String name, Location location, Color color) {
-      if (apolloEnabled) {
-         ;
+   public static void sendWaypoint(Player player, LCWaypoint waypoint) {
+      sendWaypoint(player, waypoint, false);
+   }
+
+   // Spawn, HQ, rally and focus waypoints are kept in sync by ApolloSyncService when it runs, so
+   // only waypoints it doesn't know about (coupon drops) pass apollo = true.
+   public static void sendWaypoint(Player player, LCWaypoint waypoint, boolean apollo) {
+      if (waypoint != null) {
+         LunarClientAPI.getInstance().sendWaypoint(player, waypoint);
+         if (apolloEnabled && (apollo || !ApolloSyncService.isRunning())) {
+            try {
+               ApolloWaypoints.display(player, waypoint);
+            } catch (Throwable var3) {
+            }
+         }
       }
    }
 
-   public static void removeWaypoint(Player player, String waypointName) {
-      if (apolloEnabled) {
-         ;
+   public static void removeWaypoint(Player player, LCWaypoint waypoint) {
+      removeWaypoint(player, waypoint, false);
+   }
+
+   public static void removeWaypoint(Player player, LCWaypoint waypoint, boolean apollo) {
+      if (waypoint != null) {
+         LunarClientAPI.getInstance().removeWaypoint(player, waypoint);
+         if (apolloEnabled && (apollo || !ApolloSyncService.isRunning())) {
+            try {
+               ApolloWaypoints.remove(player, waypoint);
+            } catch (Throwable var3) {
+            }
+         }
       }
    }
 }

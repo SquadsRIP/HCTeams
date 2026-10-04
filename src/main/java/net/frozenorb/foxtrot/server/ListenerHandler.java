@@ -7,6 +7,7 @@ import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.apollo.ApolloListener;
 import net.frozenorb.foxtrot.apollo.ApolloNametagListener;
 import net.frozenorb.foxtrot.apollo.ApolloService;
+import net.frozenorb.foxtrot.apollo.ApolloSyncService;
 import net.frozenorb.foxtrot.apollo.ApolloWaypointListener;
 import net.frozenorb.foxtrot.chat.listeners.ChatListener;
 import net.frozenorb.foxtrot.commands.LegacySpectatorMode;
@@ -28,13 +29,13 @@ import net.frozenorb.foxtrot.gameplay.kitmap.game.impl.tnttag.TNTTagListeners;
 import net.frozenorb.foxtrot.gameplay.kitmap.game.listener.GameListeners;
 import net.frozenorb.foxtrot.gameplay.kitmap.kits.listener.KitEditorListener;
 import net.frozenorb.foxtrot.gameplay.loot.partnercrate.listener.PartnerCrateListener;
-import net.frozenorb.foxtrot.listener.AntiCleanListener;
 import net.frozenorb.foxtrot.listener.AntiGlitchListener;
 import net.frozenorb.foxtrot.listener.AntiGriefListener;
 import net.frozenorb.foxtrot.listener.AntiPrimeListener;
 import net.frozenorb.foxtrot.listener.AnvilInventorySyncListener;
 import net.frozenorb.foxtrot.listener.ArmorDamageListener;
 import net.frozenorb.foxtrot.listener.AutoRebuildListener;
+import net.frozenorb.foxtrot.listener.BannedEnchantListener;
 import net.frozenorb.foxtrot.listener.BasicPreventionListener;
 import net.frozenorb.foxtrot.listener.BlockConvenienceListener;
 import net.frozenorb.foxtrot.listener.BlockRegenListener;
@@ -49,6 +50,7 @@ import net.frozenorb.foxtrot.listener.DomainListener;
 import net.frozenorb.foxtrot.listener.DoorListener;
 import net.frozenorb.foxtrot.listener.DupeGlitchListener;
 import net.frozenorb.foxtrot.listener.ElevatorsListener;
+import net.frozenorb.foxtrot.listener.CreativeItemGuardListener;
 import net.frozenorb.foxtrot.listener.EnchantmentLimiterListener;
 import net.frozenorb.foxtrot.listener.EndListener;
 import net.frozenorb.foxtrot.listener.EntityPortalListener;
@@ -65,7 +67,9 @@ import net.frozenorb.foxtrot.listener.KitMapListener;
 import net.frozenorb.foxtrot.listener.LunarClientListener;
 import net.frozenorb.foxtrot.listener.MapListener;
 import net.frozenorb.foxtrot.listener.MegaFixListener;
+import net.frozenorb.foxtrot.listener.OldWorldGuardListener;
 import net.frozenorb.foxtrot.listener.MobStackListener;
+import net.frozenorb.foxtrot.listener.ModernClientAnvilListener;
 import net.frozenorb.foxtrot.listener.NetherPortalListener;
 import net.frozenorb.foxtrot.listener.OwnerClickableKitListener;
 import net.frozenorb.foxtrot.listener.PearlListener;
@@ -138,8 +142,14 @@ public class ListenerHandler {
       foxtrot.setCombatLoggerListener(new CombatLoggerListener());
       foxtrot.getServer().getPluginManager().registerEvents(foxtrot.getCombatLoggerListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new CrowbarListener(), foxtrot);
-      foxtrot.getServer().getPluginManager().registerEvents(new EnchantmentLimiterListener(), foxtrot);
+      foxtrot.getServer().getPluginManager().registerEvents(new CreativeItemGuardListener(), foxtrot);
+      EnchantmentLimiterListener enchantmentLimiter = new EnchantmentLimiterListener();
+      foxtrot.getServer().getPluginManager().registerEvents(enchantmentLimiter, foxtrot);
+      foxtrot.getServer().getPluginManager().registerEvents(new BannedEnchantListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new AnvilInventorySyncListener(foxtrot), foxtrot);
+      ModernClientAnvilListener anvilListener = new ModernClientAnvilListener();
+      foxtrot.getServer().getPluginManager().registerEvents(anvilListener, foxtrot);
+      foxtrot.getServer().getScheduler().runTaskTimer(foxtrot, anvilListener::syncAnvils, 1L, 1L);
       foxtrot.getServer().getPluginManager().registerEvents(new EnderpearlCooldownHandler(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new ChatListener(), Foxtrot.getInstance());
       foxtrot.getServer().getPluginManager().registerEvents(new RedstoneCrashListener(foxtrot), foxtrot);
@@ -149,6 +159,7 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new FirstJoinFixListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new MobStackListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new MegaFixListener(), foxtrot);
+      foxtrot.getServer().getPluginManager().registerEvents(new OldWorldGuardListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new SignShopListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new RatioCommand(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new TitleListener(), foxtrot);
@@ -179,7 +190,6 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new TeamClaimCommand(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new SellAllListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new FlyListener(), foxtrot);
-      foxtrot.getServer().getPluginManager().registerEvents(new AntiCleanListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new SpawnerTrackerListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new SpawnerLimiterListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new BossCleanupListener(), foxtrot);
@@ -239,8 +249,14 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new ApolloListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new ApolloNametagListener(), foxtrot);
       ApolloNametagListener.startTask(foxtrot);
-      foxtrot.getServer().getPluginManager().registerEvents(new ApolloWaypointListener(), foxtrot);
-      ApolloWaypointListener.startTask(foxtrot);
+      if (ApolloService.isApolloEnabled()) {
+         ApolloSyncService.start(foxtrot);
+      }
+
+      if (!ApolloSyncService.isRunning()) {
+         foxtrot.getServer().getPluginManager().registerEvents(new ApolloWaypointListener(), foxtrot);
+         ApolloWaypointListener.startTask(foxtrot);
+      }
       ControlPanelService.init();
       foxtrot.getServer().getPluginManager().registerEvents(new ControlPanelListener(), foxtrot);
       ControlPanelListener.startStatusTask();
