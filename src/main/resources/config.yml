@@ -35,6 +35,18 @@ spawners:
   ignoreLight: true
   # Allow natural blaze spawns in the Nether (fortresses). Every other natural spawn stays blocked.
   naturalBlazes: true
+  # Per-mob overrides, keyed by the spawner's mob id (LavaSlime = magma cube). Missing keys use the values above.
+  types:
+    LavaSlime:
+      minDelay: 300
+      maxDelay: 800
+      spawnCount: 2
+      maxNearby: 4
+    Creeper:
+      minDelay: 160
+      maxDelay: 480
+      spawnCount: 4
+      maxNearby: 10
 
 # Newly spawned mobs merge into a mob of the same type within this many blocks.
 mobStacking:

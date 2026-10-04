@@ -24,7 +24,14 @@ public class MobStackListener implements Listener {
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onCreatureSpawn(CreatureSpawnEvent event) {
       SpawnReason reason = event.getSpawnReason();
-      if (reason != SpawnReason.CUSTOM) {
+      if (reason == SpawnReason.SLIME_SPLIT) {
+         // A dying stack is respawned as (N-1)x by onEntityDeath, so its split children must not
+         // spawn too: stacked onto it they grew the stack by 1-3 per kill and flooded the area.
+         // Children of an unstacked cube split as in vanilla but never merge into a stack.
+         if (this.isSplitFromStack(event.getEntity())) {
+            event.setCancelled(true);
+         }
+      } else if (reason != SpawnReason.CUSTOM) {
          if (event.getEntityType() != EntityType.ENDERMAN) {
             LivingEntity entity = event.getEntity();
             String stripped;
@@ -84,6 +91,19 @@ public class MobStackListener implements Listener {
             }
          }, 1L);
       }
+   }
+
+   private boolean isSplitFromStack(LivingEntity child) {
+      for (Entity nearby : child.getNearbyEntities(3.0, 3.0, 3.0)) {
+         if (nearby.getType() == child.getType()
+            && nearby instanceof LivingEntity
+            && ((LivingEntity)nearby).getHealth() <= 0.0
+            && this.getStackCount((LivingEntity)nearby) > 1) {
+            return true;
+         }
+      }
+
+      return false;
    }
 
    private int getStackCount(LivingEntity entity) {
