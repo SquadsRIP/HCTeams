@@ -193,6 +193,10 @@ public class MegaFixListener implements Listener {
          Player player = event.getPlayer();
          ItemStack item = player.getItemInHand();
          if (item != null && item.getType() == Material.EYE_OF_ENDER) {
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.ENDER_PORTAL_FRAME) {
+               return;
+            }
+
             if (!item.hasItemMeta() || !item.getItemMeta().hasDisplayName()) {
                event.setCancelled(true);
             }
