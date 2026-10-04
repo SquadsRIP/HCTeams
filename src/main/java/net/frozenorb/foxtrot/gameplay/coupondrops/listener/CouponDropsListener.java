@@ -52,7 +52,7 @@ public class CouponDropsListener implements Listener {
                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7The book containing a coupon has been picked up!"));
                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&ePicked up By: &f" + event.getPlayer().getDisplayName()));
                player.sendMessage(" ");
-               ApolloService.removeWaypoint(player, couponDropWaypoint);
+               ApolloService.removeWaypoint(player, couponDropWaypoint, true);
             }
          }
       }

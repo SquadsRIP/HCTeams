@@ -187,3 +187,14 @@ cheatbreaker:
     koth: true
   # Voice chat is currently unavailable in the CheatBreaker client.
 
+lunar:
+  # Lunar Client (Apollo) sync: team view markers and waypoints, kept up to date every few ticks.
+  # Missing keys default to true.
+  enabled: true
+  team-view: true
+  waypoints:
+    # Uses /f setlocation Spawn, or the gameplay world's spawn location.
+    spawn: true
+    # HQ, rally and focused team's HQ.
+    faction: true
+    koth: true
