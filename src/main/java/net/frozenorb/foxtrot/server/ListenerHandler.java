@@ -139,7 +139,9 @@ public class ListenerHandler {
       foxtrot.setCombatLoggerListener(new CombatLoggerListener());
       foxtrot.getServer().getPluginManager().registerEvents(foxtrot.getCombatLoggerListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new CrowbarListener(), foxtrot);
-      foxtrot.getServer().getPluginManager().registerEvents(new EnchantmentLimiterListener(), foxtrot);
+      EnchantmentLimiterListener enchantmentLimiter = new EnchantmentLimiterListener();
+      foxtrot.getServer().getPluginManager().registerEvents(enchantmentLimiter, foxtrot);
+      foxtrot.getServer().getScheduler().runTaskTimer(foxtrot, enchantmentLimiter::checkOpenAnvils, 1L, 1L);
       foxtrot.getServer().getPluginManager().registerEvents(new AnvilInventorySyncListener(foxtrot), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new ModernClientAnvilListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new EnderpearlCooldownHandler(), foxtrot);
