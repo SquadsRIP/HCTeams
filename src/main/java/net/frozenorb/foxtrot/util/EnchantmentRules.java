@@ -115,6 +115,39 @@ public final class EnchantmentRules {
       }
    }
 
+   // Strips banned enchants, then lowers every limited enchant above its enchantmentLimits level to that level
+   // (Sharp IV -> Sharp II, Power V -> Power III), stored book enchants included. KOTH gear is left alone.
+   public boolean enforce(ItemStack item) {
+      boolean changed = stripBanned(item);
+      if (item != null && item.getType() != Material.AIR && item.hasItemMeta() && !isKothGear(item)) {
+         ItemMeta meta = item.getItemMeta();
+         boolean lowered = false;
+
+         for (Entry<Enchantment, Integer> limit : this.limits.entrySet()) {
+            Enchantment enchantment = limit.getKey();
+            int maximum = limit.getValue();
+            if (maximum > 0) {
+               if (meta.getEnchantLevel(enchantment) > maximum) {
+                  meta.addEnchant(enchantment, maximum, true);
+                  lowered = true;
+               }
+
+               if (meta instanceof EnchantmentStorageMeta && ((EnchantmentStorageMeta)meta).getStoredEnchantLevel(enchantment) > maximum) {
+                  ((EnchantmentStorageMeta)meta).addStoredEnchant(enchantment, maximum, true);
+                  lowered = true;
+               }
+            }
+         }
+
+         if (lowered) {
+            item.setItemMeta(meta);
+            changed = true;
+         }
+      }
+
+      return changed;
+   }
+
    public int getLimit(Enchantment enchantment) {
       Integer limit = this.limits.get(enchantment);
       return limit == null ? 0 : limit;

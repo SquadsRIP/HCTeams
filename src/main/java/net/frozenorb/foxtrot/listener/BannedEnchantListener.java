@@ -1,5 +1,6 @@
 package net.frozenorb.foxtrot.listener;
 
+import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.util.EnchantmentRules;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,16 +17,21 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 // Items made before the ban can still carry Thorns, Knockback, Punch, Fire Aspect, Flame, Respiration
-// or Aqua Affinity. Strip them (KOTH crate gear excepted) from a player's own items: on join (inventory,
-// armor, ender chest), when held or used, on pickup, after closing any inventory, and when fighting.
+// or Aqua Affinity, or limited enchants above enchantmentLimits (Sharp IV, Prot IV, Power V). Strip the
+// banned ones and lower the rest to their limit (KOTH crate gear excepted) on a player's own items: on join
+// (inventory, armor, ender chest), when held or used, on pickup, after closing any inventory, and when fighting.
 // Containers themselves are left alone, so KOTH loot chests and crate previews are never edited.
 public class BannedEnchantListener implements Listener {
-   private static boolean strip(Inventory inventory) {
+   private static EnchantmentRules rules() {
+      return new EnchantmentRules(Foxtrot.getInstance().getConfig());
+   }
+
+   private static boolean strip(EnchantmentRules rules, Inventory inventory) {
       boolean changed = false;
       ItemStack[] contents = inventory.getContents();
 
       for (int i = 0; i < contents.length; i++) {
-         if (EnchantmentRules.stripBanned(contents[i])) {
+         if (rules.enforce(contents[i])) {
             inventory.setItem(i, contents[i]);
             changed = true;
          }
@@ -34,12 +40,12 @@ public class BannedEnchantListener implements Listener {
       return changed;
    }
 
-   private static boolean stripArmor(PlayerInventory inventory) {
+   private static boolean stripArmor(EnchantmentRules rules, PlayerInventory inventory) {
       ItemStack[] armor = inventory.getArmorContents();
       boolean changed = false;
 
       for (ItemStack piece : armor) {
-         changed |= EnchantmentRules.stripBanned(piece);
+         changed |= rules.enforce(piece);
       }
 
       if (changed) {
@@ -49,9 +55,9 @@ public class BannedEnchantListener implements Listener {
       return changed;
    }
 
-   private static void stripPlayer(Player player) {
-      boolean changed = strip(player.getInventory());
-      changed |= stripArmor(player.getInventory());
+   private static void stripPlayer(EnchantmentRules rules, Player player) {
+      boolean changed = strip(rules, player.getInventory());
+      changed |= stripArmor(rules, player.getInventory());
       if (changed) {
          player.updateInventory();
       }
@@ -59,7 +65,7 @@ public class BannedEnchantListener implements Listener {
 
    private static void stripHand(Player player) {
       ItemStack hand = player.getItemInHand();
-      if (EnchantmentRules.stripBanned(hand)) {
+      if (rules().enforce(hand)) {
          player.setItemInHand(hand);
          player.updateInventory();
       }
@@ -67,15 +73,16 @@ public class BannedEnchantListener implements Listener {
 
    @EventHandler(priority = EventPriority.MONITOR)
    public void onJoin(PlayerJoinEvent event) {
-      stripPlayer(event.getPlayer());
-      strip(event.getPlayer().getEnderChest());
+      EnchantmentRules rules = rules();
+      stripPlayer(rules, event.getPlayer());
+      strip(rules, event.getPlayer().getEnderChest());
    }
 
    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
    public void onItemHeld(PlayerItemHeldEvent event) {
       Player player = event.getPlayer();
       ItemStack item = player.getInventory().getItem(event.getNewSlot());
-      if (EnchantmentRules.stripBanned(item)) {
+      if (rules().enforce(item)) {
          player.getInventory().setItem(event.getNewSlot(), item);
          player.updateInventory();
       }
@@ -90,7 +97,7 @@ public class BannedEnchantListener implements Listener {
    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
    public void onPickup(PlayerPickupItemEvent event) {
       ItemStack stack = event.getItem().getItemStack();
-      if (EnchantmentRules.stripBanned(stack)) {
+      if (rules().enforce(stack)) {
          event.getItem().setItemStack(stack);
       }
    }
@@ -100,9 +107,10 @@ public class BannedEnchantListener implements Listener {
    public void onInventoryClose(InventoryCloseEvent event) {
       if (event.getPlayer() instanceof Player) {
          Player player = (Player)event.getPlayer();
-         stripPlayer(player);
+         EnchantmentRules rules = rules();
+         stripPlayer(rules, player);
          if (event.getInventory().equals(player.getEnderChest())) {
-            strip(player.getEnderChest());
+            strip(rules, player.getEnderChest());
          }
       }
    }
@@ -115,7 +123,7 @@ public class BannedEnchantListener implements Listener {
 
       if (event.getEntity() instanceof Player) {
          Player victim = (Player)event.getEntity();
-         if (stripArmor(victim.getInventory())) {
+         if (stripArmor(rules(), victim.getInventory())) {
             victim.updateInventory();
          }
       }
