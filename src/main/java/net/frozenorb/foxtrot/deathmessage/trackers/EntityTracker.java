@@ -35,7 +35,7 @@ public class EntityTracker implements Listener {
             entityName = "Puppy";
          }
 
-         return this.wrapName(this.getDamaged()) + " was slain by a " + ChatColor.DARK_RED + entityName + ChatColor.DARK_RED + ".";
+         return this.wrapName(this.getDamaged()) + " was slain by a " + ChatColor.DARK_RED + entityName + ChatColor.RED + ".";
       }
    }
 }
