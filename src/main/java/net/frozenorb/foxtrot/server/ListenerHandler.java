@@ -166,7 +166,9 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new KOTHRewardKeyListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new PvPTimerListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new PearlListener(), foxtrot);
-      foxtrot.getServer().getPluginManager().registerEvents(new PotionLimiterListener(), foxtrot);
+      PotionLimiterListener potionLimiterListener = new PotionLimiterListener();
+      foxtrot.getServer().getPluginManager().registerEvents(potionLimiterListener, foxtrot);
+      potionLimiterListener.registerBrewGuard(foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new PracticeListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new NetherPortalListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new RodCooldownListener(), foxtrot);
