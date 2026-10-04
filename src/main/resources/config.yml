@@ -105,19 +105,20 @@ enchantmentLimits:
   fireProtection: 2
   projectileProtection: 2
   blastProtection: 2
-  featherFalling: 2
+  featherFalling: 4
   smite: 2
   baneOfArthropods: 2
   power: 2
+  looting: 3
 
-# Tables only roll Protection, Unbreaking, Efficiency, Fortune, Silk Touch,
+# Tables only roll Protection, Feather Falling, Unbreaking, Efficiency, Fortune, Silk Touch,
 # Smite, Bane of Arthropods, Looting, and Sharpness. Books receive one enchant.
 # Bows keep their vanilla table rolls except Flame and Punch (Punch bows can't shoot).
 enchantingTable:
   # A 30-level enchant always gives every enchant listed in enchantmentLimits at
-  # that limit (e.g. Sharpness II, Protection II, Unbreaking III). The chance
-  # below only applies to cheaper rolls and to uncapped enchants (Efficiency,
-  # Fortune, Looting).
+  # that limit (Sharpness II, Protection II, Feather Falling IV, Unbreaking III,
+  # Looting III, Power II). The chance below only applies to cheaper rolls and
+  # to uncapped enchants (Efficiency, Fortune).
   # Chance to KEEP a qualifying max-level roll, per enchant, at level cost 30.
   # Scales down with cost (15 = 12.5%); never raises a lower vanilla roll.
   # Failed max rolls lose one level. Silk Touch keeps its vanilla level/rarity.
