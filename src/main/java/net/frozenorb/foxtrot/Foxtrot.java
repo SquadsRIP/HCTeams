@@ -43,7 +43,6 @@ import net.frozenorb.foxtrot.gameplay.events.cavenite.CaveNiteHandler;
 import net.frozenorb.foxtrot.gameplay.events.citadel.CitadelHandler;
 import net.frozenorb.foxtrot.gameplay.events.conquest.ConquestHandler;
 import net.frozenorb.foxtrot.gameplay.events.fury.FuryHandler;
-import net.frozenorb.foxtrot.gameplay.events.mini.MiniEventsHandler;
 import net.frozenorb.foxtrot.gameplay.events.outposts.OutpostHandler;
 import net.frozenorb.foxtrot.gameplay.events.region.cavern.CavernHandler;
 import net.frozenorb.foxtrot.gameplay.events.region.glowmtn.GlowHandler;
@@ -216,7 +215,6 @@ public class Foxtrot extends JavaPlugin {
    private PollHandler pollHandler;
    private VoucherHandler voucherHandler;
    private TreasureChestHandler treasureChestHandler;
-   private MiniEventsHandler miniEventsHandler;
    private SpawnerGroundsHandler spawnerGroundsHandler;
    private MasteryUpgradeHandler masteryUpgradeHandler;
    private CavernHandler cavernHandler;
@@ -580,7 +578,6 @@ public class Foxtrot extends JavaPlugin {
          this.spawnerGroundsHandler = new SpawnerGroundsHandler(this);
       }
 
-      this.miniEventsHandler = new MiniEventsHandler(this);
       this.caveSaysHandler = new CaveSaysHandler(this);
       this.networkBoosterHandler = new NetworkBoosterHandler(this);
       this.couponDropsHandler = new CouponDropsHandler(this);
@@ -906,10 +903,6 @@ public class Foxtrot extends JavaPlugin {
 
    public TreasureChestHandler getTreasureChestHandler() {
       return this.treasureChestHandler;
-   }
-
-   public MiniEventsHandler getMiniEventsHandler() {
-      return this.miniEventsHandler;
    }
 
    public SpawnerGroundsHandler getSpawnerGroundsHandler() {

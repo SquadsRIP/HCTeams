@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.deathmessage.DeathMessageHandler;
 import net.frozenorb.foxtrot.deathmessage.trackers.ArrowTracker;
-import net.frozenorb.foxtrot.gameplay.events.mini.type.kitmap.Shooter;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.PvPClass;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.PvPClassHandler;
 import net.frozenorb.foxtrot.gameplay.pvpclasses.archer.ArcherColor;
@@ -232,7 +231,6 @@ public class ArcherClass extends PvPClass {
                Foxtrot.getInstance().getMasteryUpgradeHandler().addUpgrade(shooter, "Archer", 1);
             }
 
-            Shooter.archerTag(shooter);
             PotionEffect invis = null;
 
             for (PotionEffect potionEffect : victim.getActivePotionEffects()) {

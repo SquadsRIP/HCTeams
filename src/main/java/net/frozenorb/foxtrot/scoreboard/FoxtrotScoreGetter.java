@@ -37,8 +37,6 @@ import net.frozenorb.foxtrot.gameplay.events.conquest.enums.ConquestCapzone;
 import net.frozenorb.foxtrot.gameplay.events.conquest.game.ConquestGame;
 import net.frozenorb.foxtrot.gameplay.events.dtc.DTC;
 import net.frozenorb.foxtrot.gameplay.events.koth.KOTH;
-import net.frozenorb.foxtrot.gameplay.events.mini.MiniEvent;
-import net.frozenorb.foxtrot.gameplay.events.mini.MiniEventsHandler;
 import net.frozenorb.foxtrot.gameplay.events.outposts.OutpostHandler;
 import net.frozenorb.foxtrot.gameplay.events.outposts.type.EndOutpost;
 import net.frozenorb.foxtrot.gameplay.events.outposts.type.NetherOutpost;
@@ -477,21 +475,6 @@ public class FoxtrotScoreGetter implements ScoreGetter {
             if (king.getWorld().getName().equalsIgnoreCase(player.getLocation().getWorld().getName())) {
                scores.add("&6┃ &fDistance: &e" + (int)Math.round(king.getLocation().distance(player.getLocation())) + "m");
             }
-         }
-
-         MiniEventsHandler miniEventsHandler = Foxtrot.getInstance().getMiniEventsHandler();
-         if (!Foxtrot.getInstance().getTeamfightModeMap().isTeamfight(player.getUniqueId())
-            && player.getWorld().getEnvironment() == Environment.NORMAL
-            && miniEventsHandler != null
-            && miniEventsHandler.getActiveEvent() != null) {
-            MiniEvent miniEvent = miniEventsHandler.getActiveEvent();
-            if (!scores.isEmpty()) {
-               scores.add("&0&7&m--------------------");
-            }
-
-            scores.add("&6&l" + miniEvent.getObjective() + " Event");
-            scores.add("&7ends in &f" + ScoreFunction.TIME_FANCY.apply((float)((miniEvent.getEndsAt() - System.currentTimeMillis()) / 1000L)));
-            scores.add("&a/minievent");
          }
 
          CaveNiteHandler caveNiteHandler;
