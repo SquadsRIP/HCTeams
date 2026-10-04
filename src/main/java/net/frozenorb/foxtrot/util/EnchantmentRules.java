@@ -33,6 +33,7 @@ public final class EnchantmentRules {
       )
    );
    private final Map<Enchantment, Integer> limits = new HashMap<>();
+   private final Map<Enchantment, Integer> anvilLimits = new HashMap<>();
    private final double maxLevelChance;
    private final double secondEnchantChance;
    private final double thirdEnchantChance;
@@ -47,6 +48,7 @@ public final class EnchantmentRules {
       this.addLimit(config, Enchantment.PROTECTION_FALL, "featherFalling", 2);
       this.addLimit(config, Enchantment.DAMAGE_UNDEAD, "smite", 2);
       this.addLimit(config, Enchantment.DAMAGE_ARTHROPODS, "baneOfArthropods", 2);
+      this.anvilLimits.put(Enchantment.ARROW_DAMAGE, config.getInt("anvilLimits.power", 2));
       this.maxLevelChance = readChance(config, "max-level-chance-percent", 25.0);
       this.secondEnchantChance = readChance(config, "level-30-second-enchant-chance-percent", 70.0);
       this.thirdEnchantChance = readChance(config, "level-30-third-enchant-chance-percent", 20.0);
@@ -172,7 +174,8 @@ public final class EnchantmentRules {
    public boolean exceedsLimits(ItemStack result, ItemStack... inputs) {
       if (result != null && result.getType() != Material.AIR && result.hasItemMeta()) {
          for (Entry<Enchantment, Integer> entry : getAllEnchants(result).entrySet()) {
-            int limit = this.getLimit(entry.getKey());
+            Integer anvilLimit = this.anvilLimits.get(entry.getKey());
+            int limit = anvilLimit != null ? anvilLimit : this.getLimit(entry.getKey());
             if (limit > 0 && entry.getValue() > limit) {
                int inputLevel = 0;
 

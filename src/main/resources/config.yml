@@ -91,6 +91,11 @@ enchantmentLimits:
   smite: 2
   baneOfArthropods: 2
 
+# Anvil-only caps: an anvil can't raise these above the level, but items that
+# already have more (e.g. enchanting-table bows) are left alone and can be repaired.
+anvilLimits:
+  power: 2
+
 # Tables only roll Protection, Unbreaking, Efficiency, Fortune, Silk Touch,
 # Smite, Bane of Arthropods, Looting, and Sharpness. Books receive one enchant.
 # Bows keep their vanilla table rolls except Flame and Punch (Punch bows can't shoot).
