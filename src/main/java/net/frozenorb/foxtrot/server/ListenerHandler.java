@@ -50,6 +50,7 @@ import net.frozenorb.foxtrot.listener.DoorListener;
 import net.frozenorb.foxtrot.listener.DupeGlitchListener;
 import net.frozenorb.foxtrot.listener.ElevatorsListener;
 import net.frozenorb.foxtrot.listener.CreativeItemGuardListener;
+import net.frozenorb.foxtrot.listener.BowPowerListener;
 import net.frozenorb.foxtrot.listener.EnchantmentLimiterListener;
 import net.frozenorb.foxtrot.listener.EndListener;
 import net.frozenorb.foxtrot.listener.EntityPortalListener;
@@ -144,6 +145,7 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new CreativeItemGuardListener(), foxtrot);
       EnchantmentLimiterListener enchantmentLimiter = new EnchantmentLimiterListener();
       foxtrot.getServer().getPluginManager().registerEvents(enchantmentLimiter, foxtrot);
+      foxtrot.getServer().getPluginManager().registerEvents(new BowPowerListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new AnvilInventorySyncListener(foxtrot), foxtrot);
       ModernClientAnvilListener anvilListener = new ModernClientAnvilListener();
       foxtrot.getServer().getPluginManager().registerEvents(anvilListener, foxtrot);

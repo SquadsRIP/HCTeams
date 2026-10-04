@@ -108,7 +108,10 @@ enchantmentLimits:
   featherFalling: 4
   smite: 2
   baneOfArthropods: 2
-  power: 2
+  power: 3
+  # KOTH crate bows (named "KOTH Bow"). Existing bows above their cap are
+  # lowered to it when used, picked up, or seen in an opened container or on join.
+  kothPower: 4
   looting: 3
 
 # Tables only roll Protection, Feather Falling, Unbreaking, Efficiency, Fortune, Silk Touch,

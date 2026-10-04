@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Map.Entry;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -34,7 +35,10 @@ public final class EnchantmentRules {
       )
    );
    private static final Set<Enchantment> ANVIL_LIMITED = new HashSet<>(Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.DAMAGE_ALL, Enchantment.ARROW_DAMAGE));
+   // The name SquadsCrates gives the KOTH crate bow; anvils can't rename a coloured name, so it can't be faked.
+   private static final String KOTH_BOW_NAME = ChatColor.RED + "" + ChatColor.ITALIC + "KOTH Bow";
    private final Map<Enchantment, Integer> limits = new HashMap<>();
+   private final int kothBowPower;
    private final double maxLevelChance;
    private final double secondEnchantChance;
    private final double thirdEnchantChance;
@@ -49,7 +53,8 @@ public final class EnchantmentRules {
       this.addLimit(config, Enchantment.PROTECTION_FALL, "featherFalling", 4);
       this.addLimit(config, Enchantment.DAMAGE_UNDEAD, "smite", 2);
       this.addLimit(config, Enchantment.DAMAGE_ARTHROPODS, "baneOfArthropods", 2);
-      this.addLimit(config, Enchantment.ARROW_DAMAGE, "power", 2);
+      this.addLimit(config, Enchantment.ARROW_DAMAGE, "power", 3);
+      this.kothBowPower = config.getInt("enchantmentLimits.kothPower", 4);
       this.addLimit(config, Enchantment.LOOT_BONUS_MOBS, "looting", 3);
       this.maxLevelChance = readChance(config, "max-level-chance-percent", 25.0);
       this.secondEnchantChance = readChance(config, "level-30-second-enchant-chance-percent", 70.0);
@@ -246,6 +251,30 @@ public final class EnchantmentRules {
       for (Entry<Enchantment, Integer> entry : enchants.entrySet()) {
          int limit = this.getLimit(entry.getKey());
          if (limit > 0 && entry.getValue() > limit) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   public static boolean isKothBow(ItemStack item) {
+      if (item != null && item.getType() == Material.BOW && item.hasItemMeta()) {
+         ItemMeta meta = item.getItemMeta();
+         return meta.hasDisplayName() && KOTH_BOW_NAME.equals(meta.getDisplayName());
+      } else {
+         return false;
+      }
+   }
+
+   // Lowers Power on a bow above its cap (KOTH bows: kothPower, others: power). Other enchants are untouched.
+   public boolean limitBowPower(ItemStack item) {
+      if (item != null && item.getType() == Material.BOW && item.hasItemMeta()) {
+         int limit = isKothBow(item) ? this.kothBowPower : this.getLimit(Enchantment.ARROW_DAMAGE);
+         if (limit > 0 && item.getEnchantmentLevel(Enchantment.ARROW_DAMAGE) > limit) {
+            ItemMeta meta = item.getItemMeta();
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, limit, true);
+            item.setItemMeta(meta);
             return true;
          }
       }
