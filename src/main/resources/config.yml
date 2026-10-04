@@ -93,6 +93,7 @@ enchantmentLimits:
 
 # Tables only roll Protection, Unbreaking, Efficiency, Fortune, Silk Touch,
 # Smite, Bane of Arthropods, Looting, and Sharpness. Books receive one enchant.
+# Bows keep their vanilla table rolls except Flame and Punch (Punch bows can't shoot).
 enchantingTable:
   # Chance to KEEP a qualifying max-level roll, per enchant, at level cost 30.
   # Scales down with cost (15 = 12.5%); never raises a lower vanilla roll.

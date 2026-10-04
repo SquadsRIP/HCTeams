@@ -70,6 +70,7 @@ public final class EnchantmentRules {
       if (item != null && item.getType() != Material.AIR) {
          if (item.getType() == Material.BOW) {
             enchants.remove(Enchantment.ARROW_FIRE);
+            enchants.remove(Enchantment.ARROW_KNOCKBACK);
             if (enchants.isEmpty() && Enchantment.DURABILITY.canEnchantItem(item)) {
                enchants.put(Enchantment.DURABILITY, 1);
             }
