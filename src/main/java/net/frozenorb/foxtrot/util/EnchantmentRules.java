@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Map.Entry;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -39,6 +40,8 @@ public final class EnchantmentRules {
    private static final Set<Enchantment> BANNED = Collections.unmodifiableSet(
       new HashSet<>(Arrays.asList(Enchantment.THORNS, Enchantment.KNOCKBACK, Enchantment.ARROW_KNOCKBACK, Enchantment.FIRE_ASPECT, Enchantment.ARROW_FIRE, Enchantment.OXYGEN, Enchantment.WATER_WORKER))
    );
+   // SquadsCrates names KOTH crate gear "KOTH <piece>" in red italic; anvils can't type colours, so it can't be faked.
+   private static final String KOTH_GEAR_PREFIX = ChatColor.RED + "" + ChatColor.ITALIC + "KOTH ";
    private static final Set<Enchantment> ANVIL_LIMITED = new HashSet<>(Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.DAMAGE_ALL, Enchantment.ARROW_DAMAGE));
    private final Map<Enchantment, Integer> limits = new HashMap<>();
    private final double maxLevelChance;
@@ -73,6 +76,43 @@ public final class EnchantmentRules {
 
    public static boolean isBanned(Enchantment enchantment) {
       return BANNED.contains(enchantment);
+   }
+
+   public static boolean isKothGear(ItemStack item) {
+      if (item != null && item.hasItemMeta()) {
+         ItemMeta meta = item.getItemMeta();
+         return meta.hasDisplayName() && meta.getDisplayName().startsWith(KOTH_GEAR_PREFIX);
+      } else {
+         return false;
+      }
+   }
+
+   // Removes banned enchants (including ones stored on books) from anything but KOTH gear.
+   public static boolean stripBanned(ItemStack item) {
+      if (item != null && item.getType() != Material.AIR && item.hasItemMeta() && !isKothGear(item)) {
+         ItemMeta meta = item.getItemMeta();
+         boolean changed = false;
+
+         for (Enchantment enchantment : BANNED) {
+            if (meta.hasEnchant(enchantment)) {
+               meta.removeEnchant(enchantment);
+               changed = true;
+            }
+
+            if (meta instanceof EnchantmentStorageMeta && ((EnchantmentStorageMeta)meta).hasStoredEnchant(enchantment)) {
+               ((EnchantmentStorageMeta)meta).removeStoredEnchant(enchantment);
+               changed = true;
+            }
+         }
+
+         if (changed) {
+            item.setItemMeta(meta);
+         }
+
+         return changed;
+      } else {
+         return false;
+      }
    }
 
    public int getLimit(Enchantment enchantment) {

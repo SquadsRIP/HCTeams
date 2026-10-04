@@ -35,6 +35,7 @@ import net.frozenorb.foxtrot.listener.AntiPrimeListener;
 import net.frozenorb.foxtrot.listener.AnvilInventorySyncListener;
 import net.frozenorb.foxtrot.listener.ArmorDamageListener;
 import net.frozenorb.foxtrot.listener.AutoRebuildListener;
+import net.frozenorb.foxtrot.listener.BannedEnchantListener;
 import net.frozenorb.foxtrot.listener.BasicPreventionListener;
 import net.frozenorb.foxtrot.listener.BlockConvenienceListener;
 import net.frozenorb.foxtrot.listener.BlockRegenListener;
@@ -167,6 +168,7 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new PvPTimerListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new PearlListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new PotionLimiterListener(), foxtrot);
+      foxtrot.getServer().getPluginManager().registerEvents(new BannedEnchantListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new PracticeListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new NetherPortalListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new RodCooldownListener(), foxtrot);
