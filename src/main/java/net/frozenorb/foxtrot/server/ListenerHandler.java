@@ -66,6 +66,7 @@ import net.frozenorb.foxtrot.listener.MapListener;
 import net.frozenorb.foxtrot.listener.MegaFixListener;
 import net.frozenorb.foxtrot.listener.OldWorldGuardListener;
 import net.frozenorb.foxtrot.listener.MobStackListener;
+import net.frozenorb.foxtrot.listener.ModernClientAnvilListener;
 import net.frozenorb.foxtrot.listener.NetherPortalListener;
 import net.frozenorb.foxtrot.listener.OwnerClickableKitListener;
 import net.frozenorb.foxtrot.listener.PearlListener;
@@ -140,6 +141,7 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new CrowbarListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new EnchantmentLimiterListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new AnvilInventorySyncListener(foxtrot), foxtrot);
+      foxtrot.getServer().getPluginManager().registerEvents(new ModernClientAnvilListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new EnderpearlCooldownHandler(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new ChatListener(), Foxtrot.getInstance());
       foxtrot.getServer().getPluginManager().registerEvents(new RedstoneCrashListener(foxtrot), foxtrot);
