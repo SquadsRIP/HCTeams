@@ -173,6 +173,12 @@ public class EnchantmentLimiterListener implements Listener {
       rules.applyTableRules(event.getItem(), event.getEnchantsToAdd(), event.getExpLevelCost(), ThreadLocalRandom.current());
       if (event.getEnchantsToAdd().isEmpty()) {
          event.setCancelled(true);
+         return;
+      }
+
+      // 1.7 takes the whole level requirement (up to 30); 1.8 clients expect 1-3 levels, one per button.
+      if (Foxtrot.getInstance().getConfig().getBoolean("enchantingTable.modern-level-cost", true)) {
+         event.setExpLevelCost(Math.min(event.getExpLevelCost(), event.whichButton() + 1));
       }
    }
 

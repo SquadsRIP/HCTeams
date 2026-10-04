@@ -108,6 +108,9 @@ enchantingTable:
   # Bonus enchants use the same max-level rarity above; Silk Touch is vanilla-only.
   # Cheaper table rolls do not receive bonus enchants. Set both to 0 to disable.
   level-30-third-enchant-chance-percent: 20.0
+  # Charge 1/2/3 levels for the top/middle/bottom option like 1.8, instead of the
+  # whole requirement. The player still needs the shown level to enchant.
+  modern-level-cost: true
   anvil-limit-message: '&cYou cannot combine items above the maximum enchantment level.'
 
 # Spawn tag duration in seconds

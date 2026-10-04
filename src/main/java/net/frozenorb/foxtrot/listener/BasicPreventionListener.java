@@ -138,7 +138,7 @@ public class BasicPreventionListener implements Listener {
       } else if (event.getFoodLevel() < ((Player)event.getEntity()).getFoodLevel()) {
          if (DTRBitmask.SAFE_ZONE.appliesAt(event.getEntity().getLocation())
             || Foxtrot.getInstance().getPvPTimerMap().hasTimer(event.getEntity().getUniqueId())
-            || ThreadLocalRandom.current().nextInt(100) > 30) {
+            || ThreadLocalRandom.current().nextInt(100) >= Foxtrot.getInstance().getConfig().getInt("hungerLossChance", 15)) {
             event.setCancelled(true);
          }
       }
