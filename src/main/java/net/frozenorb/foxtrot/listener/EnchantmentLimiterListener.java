@@ -24,7 +24,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -204,27 +203,6 @@ public class EnchantmentLimiterListener implements Listener {
                      player.setLevel(player.getLevel());
                   }
                });
-            }
-         }
-      }
-   }
-
-   // There's no anvil prepare event on 1.7, and the result is recomputed whenever an input or the name changes, so
-   // check open anvils every tick and empty an over-limit result (e.g. Sharp II + Sharp II -> Sharp III) before it can be taken.
-   public void checkOpenAnvils() {
-      EnchantmentRules rules = null;
-
-      for (Player player : Foxtrot.getInstance().getServer().getOnlinePlayers()) {
-         Inventory top = player.getOpenInventory().getTopInventory();
-         if (top instanceof AnvilInventory && top.getItem(2) != null) {
-            if (rules == null) {
-               rules = new EnchantmentRules(Foxtrot.getInstance().getConfig());
-            }
-
-            if (rules.exceedsLimits(top.getItem(2), top.getItem(0), top.getItem(1))) {
-               top.setItem(2, null);
-               player.updateInventory();
-               this.sendAnvilLimitMessage(player);
             }
          }
       }

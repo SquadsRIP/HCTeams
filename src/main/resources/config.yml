@@ -94,7 +94,10 @@ voteParty:
   currentVotes: 0
 
 # Enchantment limits — max levels allowed on items
-# Any enchantment above these levels is automatically reduced
+# The enchanting table never rolls above these. Anvils only cap protection,
+# sharpness and power: a combine that would go higher keeps the limit
+# (Sharp II + Sharp II -> Sharp II, other enchants still combine), and gear
+# already above it (KOTH loot) keeps its level.
 enchantmentLimits:
   protection: 2
   sharpness: 2
@@ -105,8 +108,6 @@ enchantmentLimits:
   featherFalling: 2
   smite: 2
   baneOfArthropods: 2
-  # Table bows roll at most this Power; anvils can't combine above it.
-  # KOTH Power III bows can still be repaired.
   power: 2
 
 # Tables only roll Protection, Unbreaking, Efficiency, Fortune, Silk Touch,

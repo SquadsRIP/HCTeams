@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.WeakHashMap;
+import java.util.Objects;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.util.EnchantmentRules;
 import net.minecraft.server.v1_7_R4.Container;
@@ -24,50 +24,41 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 
-// The server runs 1.7 anvil rules, but 1.8 clients (protocol 47+) predict the result and level cost with 1.8 rules:
-// renaming costs 1 level instead of 7+, and enchant/repair costs differ. The server then refused clicks the client
-// showed as affordable, so the inputs bounced back into the anvil. For those clients, recompute the result and cost
-// with the 1.8 rules right before vanilla handles the click on the result slot.
-// Every level cost (1.7 and 1.8 clients) is also scaled by anvil.cost-multiplier. Clients compute the cost on their own
-// screen and the 1.7 server only sends it when the anvil opens, so the scaled cost is resent every tick.
+// The server runs 1.7 anvil rules. Those charge for every enchant already on the item, so enchanted gear (an Eff V
+// pickaxe, a Looting/Unbreaking sword) almost always hits "Too Expensive" (40+) and the server shows no result at all,
+// and 1.8 clients (protocol 47+) predict a different result and cost than the server charges. So the anvil result is
+// computed here with the 1.8 rules for every survival player and written into the real result slot every tick and
+// right before a click on it. Every level cost is scaled by anvil.cost-multiplier, and Protection, Sharpness and Power
+// are capped at their enchantmentLimits instead of the combine being refused (Sharp II + Sharp II stays Sharp II).
 public final class ModernClientAnvilListener implements Listener {
-   private static final int MODERN_PROTOCOL = 47;
    private static final int MAX_NAME_LENGTH = 30;
    private static final int TOO_EXPENSIVE = 40;
    private Field costField;
    private Field materialCostField;
    private Field renameTextField;
    private boolean reflectionFailed;
-   // 1.7 clients keep vanilla rules: the result item vanilla computed, mapped to the scaled cost written for it.
-   private final Map<ItemStack, Integer> scaledVanillaResults = new WeakHashMap<>();
 
    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
    public void onInventoryClick(InventoryClickEvent event) {
       if (event.getInventory() instanceof AnvilInventory && event.getRawSlot() == 2 && event.getWhoClicked() instanceof Player) {
          EntityPlayer handle = ((CraftPlayer)event.getWhoClicked()).getHandle();
-         if (handle.playerConnection != null && !handle.abilities.canInstantlyBuild) {
-            Container container = handle.activeContainer;
-            if (this.resolveFields(container)) {
-               try {
-                  if (isModern(handle)) {
-                     AnvilResult result = this.computeModern(container, event.getInventory());
-                     this.costField.setInt(container, result.cost);
-                     this.materialCostField.setInt(container, result.materialCost);
-                     event.getInventory().setItem(2, result.item == null ? null : CraftItemStack.asCraftMirror(result.item));
-                  } else {
-                     this.scaleVanillaCost(container);
-                  }
-               } catch (IllegalAccessException ex) {
-                  this.reflectionFailed = true;
-               }
+         Container container = handle.activeContainer;
+         if (handle.playerConnection != null && !handle.abilities.canInstantlyBuild && this.resolveFields(container)) {
+            try {
+               AnvilResult result = this.computeResult(container, event.getInventory());
+               this.costField.setInt(container, result.cost);
+               this.materialCostField.setInt(container, result.materialCost);
+               event.getInventory().setItem(2, result.item == null ? null : CraftItemStack.asCraftMirror(result.item));
+            } catch (IllegalAccessException ex) {
+               this.reflectionFailed = true;
             }
          }
       }
    }
 
-   // Runs every tick. Any inventory resend makes the client recompute the cost with its own rules, so keep
-   // overwriting it with the cost the server will actually charge.
-   public void syncCosts() {
+   // Runs every tick. Vanilla recomputes its own (1.7) result whenever an input or the name changes, and any inventory
+   // resend makes the client recompute the cost with its own rules, so keep overwriting both with ours.
+   public void syncAnvils() {
       for (Player player : Foxtrot.getInstance().getServer().getOnlinePlayers()) {
          Inventory top = player.getOpenInventory().getTopInventory();
          if (top instanceof AnvilInventory && top.getItem(0) != null) {
@@ -75,21 +66,15 @@ public final class ModernClientAnvilListener implements Listener {
             Container container = handle.activeContainer;
             if (handle.playerConnection != null && !handle.abilities.canInstantlyBuild && this.resolveFields(container)) {
                try {
-                  if (isModern(handle)) {
-                     AnvilResult result = this.computeModern(container, top);
-                     if (result.item != null) {
-                        handle.setContainerData(container, 0, result.cost);
-                        // The client hides the result when its own (unscaled) cost reaches 40; show it again.
-                        if (result.unscaledCost >= TOO_EXPENSIVE
-                           && top.getItem(2) == null
-                           && !new EnchantmentRules(Foxtrot.getInstance().getConfig())
-                              .exceedsLimits(CraftItemStack.asCraftMirror(result.item), top.getItem(0), top.getItem(1))) {
-                           handle.a(container, 2, result.item);
-                        }
-                     }
-                  } else if (container.getSlot(2).getItem() != null) {
-                     handle.setContainerData(container, 0, this.scaleVanillaCost(container));
+                  AnvilResult result = this.computeResult(container, top);
+                  org.bukkit.inventory.ItemStack item = result.item == null ? null : CraftItemStack.asCraftMirror(result.item);
+                  if (!Objects.equals(item, top.getItem(2))) {
+                     top.setItem(2, item);
                   }
+
+                  this.costField.setInt(container, result.cost);
+                  this.materialCostField.setInt(container, result.materialCost);
+                  handle.setContainerData(container, 0, result.cost);
                } catch (IllegalAccessException ex) {
                   this.reflectionFailed = true;
                }
@@ -98,32 +83,11 @@ public final class ModernClientAnvilListener implements Listener {
       }
    }
 
-   private static boolean isModern(EntityPlayer handle) {
-      return handle.playerConnection.networkManager.getVersion() >= MODERN_PROTOCOL;
-   }
-
-   private AnvilResult computeModern(Container container, Inventory anvil) throws IllegalAccessException {
+   private AnvilResult computeResult(Container container, Inventory anvil) throws IllegalAccessException {
       ItemStack left = CraftItemStack.asNMSCopy(anvil.getItem(0));
       ItemStack right = CraftItemStack.asNMSCopy(anvil.getItem(1));
-      return compute(left, right, (String)this.renameTextField.get(container), costMultiplier());
-   }
-
-   // Vanilla 1.7 recomputes the result (a new ItemStack) and the cost whenever an input or the name changes; scale
-   // each new cost once.
-   private int scaleVanillaCost(Container container) throws IllegalAccessException {
-      ItemStack result = container.getSlot(2).getItem();
-      if (result == null) {
-         return this.costField.getInt(container);
-      } else {
-         Integer scaled = this.scaledVanillaResults.get(result);
-         if (scaled == null) {
-            scaled = scaleCost(this.costField.getInt(container), costMultiplier());
-            this.scaledVanillaResults.put(result, scaled);
-         }
-
-         this.costField.setInt(container, scaled);
-         return scaled;
-      }
+      Map<Integer, Integer> caps = new EnchantmentRules(Foxtrot.getInstance().getConfig()).getAnvilLimitsById();
+      return compute(left, right, (String)this.renameTextField.get(container), costMultiplier(), caps);
    }
 
    private static double costMultiplier() {
@@ -158,7 +122,7 @@ public final class ModernClientAnvilListener implements Listener {
    }
 
    // Port of 1.8's ContainerRepair.updateRepairOutput.
-   static AnvilResult compute(ItemStack left, ItemStack right, String renameText, double costMultiplier) {
+   static AnvilResult compute(ItemStack left, ItemStack right, String renameText, double costMultiplier, Map<Integer, Integer> caps) {
       if (left == null) {
          return new AnvilResult(null, 0, 0, 0);
       } else {
@@ -217,6 +181,15 @@ public final class ModernClientAnvilListener implements Listener {
                         if (other != id && otherEnchantment != null && !enchantment.a(otherEnchantment)) {
                            applies = false;
                            cost++;
+                        }
+                     }
+
+                     // Capped enchants never go past the cap, but keep a higher level an input already has (KOTH gear).
+                     Integer cap = caps.get(id);
+                     if (cap != null && level > cap) {
+                        level = Math.max(cap, Math.max(current, entry.getValue()));
+                        if (level <= current) {
+                           applies = false;
                         }
                      }
 
@@ -296,10 +269,11 @@ public final class ModernClientAnvilListener implements Listener {
    }
 
    // The 1.8 client sends the item's own name (colour codes included) when the player didn't edit it, or "" for an
-   // unnamed item. The server strips the colour codes, and the client's text box cuts the name at 30 characters.
+   // unnamed item; 1.7 clients may send the default name. The server strips the colour codes, and the client's text
+   // box cuts the name at 30 characters.
    private static boolean isUnchangedName(ItemStack left, String renameText) {
       if (!left.hasName()) {
-         return false;
+         return renameText.equals(left.getName());
       } else {
          String name = left.getName();
          String shown = name.length() > MAX_NAME_LENGTH ? name.substring(0, MAX_NAME_LENGTH) : name;

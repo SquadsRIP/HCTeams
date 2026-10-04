@@ -32,6 +32,7 @@ public final class EnchantmentRules {
          )
       )
    );
+   private static final Set<Enchantment> ANVIL_LIMITED = new HashSet<>(Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.DAMAGE_ALL, Enchantment.ARROW_DAMAGE));
    private final Map<Enchantment, Integer> limits = new HashMap<>();
    private final double maxLevelChance;
    private final double secondEnchantChance;
@@ -65,6 +66,25 @@ public final class EnchantmentRules {
    public int getLimit(Enchantment enchantment) {
       Integer limit = this.limits.get(enchantment);
       return limit == null ? 0 : limit;
+   }
+
+   // Anvils only cap Protection, Sharpness and Power; the other enchantmentLimits only apply to the enchanting table.
+   public int getAnvilLimit(Enchantment enchantment) {
+      return ANVIL_LIMITED.contains(enchantment) ? this.getLimit(enchantment) : 0;
+   }
+
+   // Anvil caps keyed by enchantment id (the same ids NMS uses).
+   public Map<Integer, Integer> getAnvilLimitsById() {
+      Map<Integer, Integer> caps = new HashMap<>();
+
+      for (Enchantment enchantment : ANVIL_LIMITED) {
+         int limit = this.getLimit(enchantment);
+         if (limit > 0) {
+            caps.put(enchantment.getId(), limit);
+         }
+      }
+
+      return caps;
    }
 
    public void applyTableRules(ItemStack item, Map<Enchantment, Integer> enchants, int levelCost, Random random) {
@@ -180,7 +200,7 @@ public final class EnchantmentRules {
    public boolean exceedsLimits(ItemStack result, ItemStack... inputs) {
       if (result != null && result.getType() != Material.AIR && result.hasItemMeta()) {
          for (Entry<Enchantment, Integer> entry : getAllEnchants(result).entrySet()) {
-            int limit = this.getLimit(entry.getKey());
+            int limit = this.getAnvilLimit(entry.getKey());
             if (limit > 0 && entry.getValue() > limit) {
                int inputLevel = 0;
 
