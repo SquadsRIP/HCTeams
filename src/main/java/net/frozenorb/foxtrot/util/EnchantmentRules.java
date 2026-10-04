@@ -21,6 +21,7 @@ public final class EnchantmentRules {
       new HashSet<>(
          Arrays.asList(
             Enchantment.PROTECTION_ENVIRONMENTAL,
+            Enchantment.PROTECTION_FALL,
             Enchantment.DURABILITY,
             Enchantment.DIG_SPEED,
             Enchantment.LOOT_BONUS_BLOCKS,
@@ -44,10 +45,11 @@ public final class EnchantmentRules {
       this.addLimit(config, Enchantment.PROTECTION_FIRE, "fireProtection", 2);
       this.addLimit(config, Enchantment.PROTECTION_PROJECTILE, "projectileProtection", 2);
       this.addLimit(config, Enchantment.PROTECTION_EXPLOSIONS, "blastProtection", 2);
-      this.addLimit(config, Enchantment.PROTECTION_FALL, "featherFalling", 2);
+      this.addLimit(config, Enchantment.PROTECTION_FALL, "featherFalling", 4);
       this.addLimit(config, Enchantment.DAMAGE_UNDEAD, "smite", 2);
       this.addLimit(config, Enchantment.DAMAGE_ARTHROPODS, "baneOfArthropods", 2);
       this.addLimit(config, Enchantment.ARROW_DAMAGE, "power", 2);
+      this.addLimit(config, Enchantment.LOOT_BONUS_MOBS, "looting", 3);
       this.maxLevelChance = readChance(config, "max-level-chance-percent", 25.0);
       this.secondEnchantChance = readChance(config, "level-30-second-enchant-chance-percent", 70.0);
       this.thirdEnchantChance = readChance(config, "level-30-third-enchant-chance-percent", 20.0);
@@ -72,9 +74,11 @@ public final class EnchantmentRules {
          if (item.getType() == Material.BOW) {
             enchants.remove(Enchantment.ARROW_FIRE);
             enchants.remove(Enchantment.ARROW_KNOCKBACK);
-            Integer power = enchants.get(Enchantment.ARROW_DAMAGE);
-            if (power != null && power > this.getTableMaximum(Enchantment.ARROW_DAMAGE)) {
-               enchants.put(Enchantment.ARROW_DAMAGE, this.getTableMaximum(Enchantment.ARROW_DAMAGE));
+            for (Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+               int maximum = this.getTableMaximum(entry.getKey());
+               if (entry.getValue() > maximum || levelCost >= 30 && this.getLimit(entry.getKey()) > 0) {
+                  entry.setValue(maximum);
+               }
             }
 
             if (enchants.isEmpty() && Enchantment.DURABILITY.canEnchantItem(item)) {
