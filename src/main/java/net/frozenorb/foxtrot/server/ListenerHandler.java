@@ -145,6 +145,7 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new CreativeItemGuardListener(), foxtrot);
       EnchantmentLimiterListener enchantmentLimiter = new EnchantmentLimiterListener();
       foxtrot.getServer().getPluginManager().registerEvents(enchantmentLimiter, foxtrot);
+      foxtrot.getServer().getPluginManager().registerEvents(new BannedEnchantListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new AnvilInventorySyncListener(foxtrot), foxtrot);
       ModernClientAnvilListener anvilListener = new ModernClientAnvilListener();
       foxtrot.getServer().getPluginManager().registerEvents(anvilListener, foxtrot);
@@ -168,7 +169,6 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(new PvPTimerListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new PearlListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new PotionLimiterListener(), foxtrot);
-      foxtrot.getServer().getPluginManager().registerEvents(new BannedEnchantListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new PracticeListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new NetherPortalListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new RodCooldownListener(), foxtrot);
