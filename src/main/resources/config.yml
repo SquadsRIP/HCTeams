@@ -135,6 +135,16 @@ enchantingTable:
   modern-level-cost: true
   anvil-limit-message: '&cYou cannot combine items above the maximum enchantment level.'
 
+# XP balance. Mob kill XP is multiplied by xp.mob-multiplier (on top of the
+# map.yml looting multipliers); player deaths are unaffected.
+xp:
+  mob-multiplier: 2.0
+
+# Every anvil level cost (rename, repair, combine) is multiplied by this and
+# rounded up, minimum 1. "Too Expensive!" applies to the reduced cost (40+).
+anvil:
+  cost-multiplier: 0.5
+
 # Spawn tag duration in seconds
 spawnTagSeconds: 30
 

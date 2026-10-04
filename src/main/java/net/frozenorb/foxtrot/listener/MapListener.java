@@ -50,6 +50,10 @@ public class MapListener implements Listener {
          }
       }
 
+      if (!(event.getEntity() instanceof Player)) {
+         multiplier *= Foxtrot.getInstance().getConfig().getDouble("xp.mob-multiplier", 2.0);
+      }
+
       event.setDroppedExp((int)Math.ceil(event.getDroppedExp() * multiplier));
    }
 
