@@ -41,8 +41,8 @@ public class DeathbanListener implements Listener {
             seconds += 180;
          }
 
+         // No Nether/End/event life cooldown: players with lives can use one as soon as they rejoin.
          this.instance.getDeathbanMap().deathban(player.getUniqueId(), seconds);
-         this.instance.getDeathbanArenaHandler().startLifeCooldown(player);
          player.removeMetadata("PVP_TIMER_BYPASS", this.instance);
          this.instance.getPvPTimerMap().removeTimer(player.getUniqueId());
          player.sendMessage(ChatColor.RED + "You have been deathbanned for " + TimeUtils.formatIntoDetailedString(seconds) + "!");
@@ -91,6 +91,8 @@ public class DeathbanListener implements Listener {
          player.sendMessage(
             ChatColor.GREEN + "You have " + ChatColor.WHITE + lives + ChatColor.GREEN + (lives == 1 ? " life" : " lives") + ". Rejoin Teams" + when + " to use one and respawn."
          );
+      } else if (lives <= 0) {
+         player.sendMessage(ChatColor.RED + "You have no lives. A teammate can revive you with " + ChatColor.WHITE + "/lives revive " + player.getName() + ChatColor.RED + ".");
       }
 
       (new BukkitRunnable() {
