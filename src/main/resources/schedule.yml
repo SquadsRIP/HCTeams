@@ -4,7 +4,12 @@
 # Timezone: server timezone (default UTC)
 
 # KOTH Schedule
-# KOTHs run every 2 hours, cycling through: Spider, Mushroom, Hell, End
+# A KOTH starts every interval-hours on the hour (server time, counted from
+# midnight; use a number that divides 24), cycling through the rotation.
+# A slot is skipped if another event is still running at that time.
+# enabled: false turns automatic KOTHs off (/kothschedule enable|disable toggles
+# it until the next restart or /kothschedule reload).
+# interval-hours: 0 falls back to the old fixed eventSchedule.json.
 koth:
   enabled: true
   interval-hours: 2

@@ -6,6 +6,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
 import java.io.File;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -18,6 +19,7 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.frozenorb.foxtrot.commands.CustomTimerCreateCommand;
+import net.frozenorb.foxtrot.controlpanel.EventRewardsHandler;
 import net.frozenorb.foxtrot.gameplay.events.dtc.DTC;
 import net.frozenorb.foxtrot.gameplay.events.dtc.DTCListener;
 import net.frozenorb.foxtrot.gameplay.events.koth.KOTH;
@@ -25,12 +27,18 @@ import net.frozenorb.foxtrot.gameplay.events.koth.listeners.KOTHListener;
 import net.frozenorb.foxtrot.gameplay.events.koth.minikoth.MiniKOTHHandler;
 import net.minecraft.util.org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class EventHandler {
+   private static final int INTERVAL_SCHEDULE_DAYS = 7;
    private final Set<Event> events = new HashSet<>();
    private final Map<EventScheduledTime, String> EventSchedule = new TreeMap<>();
-   private boolean scheduleEnabled;
+   private boolean scheduleEnabled = true;
+   private int intervalHours;
+   private List<String> intervalRotation = Collections.emptyList();
+   private int intervalScheduleBuiltDay = -1;
+   private EventScheduledTime lastScheduledSlot;
    private MiniKOTHHandler miniKOTHHandler;
 
    public EventHandler() {
@@ -116,6 +124,24 @@ public class EventHandler {
 
    public void loadSchedules() {
       this.EventSchedule.clear();
+      this.intervalHours = 0;
+      this.intervalRotation = Collections.emptyList();
+      this.intervalScheduleBuiltDay = -1;
+      ConfigurationSection kothConfig = EventRewardsHandler.getConfig().getConfigurationSection("koth");
+      this.scheduleEnabled = kothConfig == null || kothConfig.getBoolean("enabled", true);
+      if (kothConfig != null && kothConfig.getInt("interval-hours", 0) > 0 && !kothConfig.getStringList("rotation").isEmpty()) {
+         this.intervalHours = Math.min(kothConfig.getInt("interval-hours"), 24);
+         this.intervalRotation = new ArrayList<>(kothConfig.getStringList("rotation"));
+
+         for (String name : this.intervalRotation) {
+            if (this.getEvent(name) == null) {
+               Foxtrot.getInstance().getLogger().warning("schedule.yml koth.rotation lists " + name + ", but no event has that name.");
+            }
+         }
+
+         this.buildIntervalSchedule();
+         return;
+      }
 
       try {
          File eventSchedule = new File(Foxtrot.getInstance().getDataFolder(), "eventSchedule.json");
@@ -207,6 +233,27 @@ public class EventHandler {
       }
    }
 
+   public boolean isIntervalSchedule() {
+      return this.intervalHours > 0;
+   }
+
+   private void buildIntervalSchedule() {
+      this.EventSchedule.clear();
+      int slotsPerDay = 23 / this.intervalHours + 1;
+      LocalDate today = LocalDate.now();
+
+      for (int dayOffset = 0; dayOffset < INTERVAL_SCHEDULE_DAYS; dayOffset++) {
+         LocalDate date = today.plusDays(dayOffset);
+
+         for (int slot = 0; slot < slotsPerDay; slot++) {
+            long rotationIndex = Math.floorMod(date.toEpochDay() * slotsPerDay + slot, (long)this.intervalRotation.size());
+            this.EventSchedule.put(new EventScheduledTime(date.getDayOfYear(), slot * this.intervalHours, 0), this.intervalRotation.get((int)rotationIndex));
+         }
+      }
+
+      this.intervalScheduleBuiltDay = today.getDayOfYear();
+   }
+
    public void saveEvents() {
       try {
          File eventsBase = new File(Foxtrot.getInstance().getDataFolder(), "events");
@@ -246,7 +293,11 @@ public class EventHandler {
    }
 
    private void activateKOTHs() {
-      if (!Foxtrot.getInstance().getServerHandler().isPreEOTW() && !CustomTimerCreateCommand.isSOTWTimer()) {
+      if (this.isIntervalSchedule() && LocalDate.now().getDayOfYear() != this.intervalScheduleBuiltDay) {
+         this.buildIntervalSchedule();
+      }
+
+      if (this.scheduleEnabled && !Foxtrot.getInstance().getServerHandler().isPreEOTW() && !CustomTimerCreateCommand.isSOTWTimer()) {
          for (Event koth : Foxtrot.getInstance().getEventHandler().getEvents()) {
             if (koth.isActive()) {
                return;
@@ -254,7 +305,8 @@ public class EventHandler {
          }
 
          EventScheduledTime scheduledTime = EventScheduledTime.parse(new Date());
-         if (Foxtrot.getInstance().getEventHandler().getEventSchedule().containsKey(scheduledTime)) {
+         if (!scheduledTime.equals(this.lastScheduledSlot) && Foxtrot.getInstance().getEventHandler().getEventSchedule().containsKey(scheduledTime)) {
+            this.lastScheduledSlot = scheduledTime;
             String resolvedName = Foxtrot.getInstance().getEventHandler().getEventSchedule().get(scheduledTime);
             Event resolved = Foxtrot.getInstance().getEventHandler().getEvent(resolvedName);
             if (resolved == null) {
@@ -264,6 +316,7 @@ public class EventHandler {
                return;
             }
 
+            Foxtrot.getInstance().getLogger().info("Starting scheduled event " + resolved.getName() + ".");
             resolved.activate();
          }
       }
