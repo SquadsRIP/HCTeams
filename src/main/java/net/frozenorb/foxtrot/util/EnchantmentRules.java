@@ -29,13 +29,14 @@ public final class EnchantmentRules {
             Enchantment.DAMAGE_UNDEAD,
             Enchantment.DAMAGE_ARTHROPODS,
             Enchantment.LOOT_BONUS_MOBS,
-            Enchantment.DAMAGE_ALL
+            Enchantment.DAMAGE_ALL,
+            Enchantment.ARROW_DAMAGE,
+            Enchantment.ARROW_INFINITE
          )
       )
    );
-   private static final Set<Enchantment> ANVIL_LIMITED = new HashSet<>(Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.DAMAGE_ALL));
+   private static final Set<Enchantment> ANVIL_LIMITED = new HashSet<>(Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.DAMAGE_ALL, Enchantment.ARROW_DAMAGE));
    private final Map<Enchantment, Integer> limits = new HashMap<>();
-   private final Map<Enchantment, Integer> anvilOnlyLimits = new HashMap<>();
    private final double maxLevelChance;
    private final double secondEnchantChance;
    private final double thirdEnchantChance;
@@ -50,9 +51,8 @@ public final class EnchantmentRules {
       this.addLimit(config, Enchantment.PROTECTION_FALL, "featherFalling", 4);
       this.addLimit(config, Enchantment.DAMAGE_UNDEAD, "smite", 2);
       this.addLimit(config, Enchantment.DAMAGE_ARTHROPODS, "baneOfArthropods", 2);
-      this.addLimit(config, Enchantment.ARROW_DAMAGE, "power", 2);
+      this.addLimit(config, Enchantment.ARROW_DAMAGE, "power", 3);
       this.addLimit(config, Enchantment.LOOT_BONUS_MOBS, "looting", 3);
-      this.anvilOnlyLimits.put(Enchantment.ARROW_DAMAGE, config.getInt("anvilLimits.power", 3));
       this.maxLevelChance = readChance(config, "max-level-chance-percent", 25.0);
       this.secondEnchantChance = readChance(config, "level-30-second-enchant-chance-percent", 70.0);
       this.thirdEnchantChance = readChance(config, "level-30-third-enchant-chance-percent", 20.0);
@@ -72,26 +72,17 @@ public final class EnchantmentRules {
       return limit == null ? 0 : limit;
    }
 
-   // Anvils cap Protection and Sharpness at their enchantmentLimits and Power at anvilLimits.power;
-   // the other enchantmentLimits only apply to the enchanting table.
+   // Anvils only cap Protection, Sharpness and Power; the other enchantmentLimits only apply to the enchanting table.
    public int getAnvilLimit(Enchantment enchantment) {
-      Integer anvilOnly = this.anvilOnlyLimits.get(enchantment);
-      if (anvilOnly != null) {
-         return anvilOnly;
-      } else {
-         return ANVIL_LIMITED.contains(enchantment) ? this.getLimit(enchantment) : 0;
-      }
+      return ANVIL_LIMITED.contains(enchantment) ? this.getLimit(enchantment) : 0;
    }
 
    // Anvil caps keyed by enchantment id (the same ids NMS uses).
    public Map<Integer, Integer> getAnvilLimitsById() {
       Map<Integer, Integer> caps = new HashMap<>();
 
-      Set<Enchantment> capped = new HashSet<>(ANVIL_LIMITED);
-      capped.addAll(this.anvilOnlyLimits.keySet());
-
-      for (Enchantment enchantment : capped) {
-         int limit = this.getAnvilLimit(enchantment);
+      for (Enchantment enchantment : ANVIL_LIMITED) {
+         int limit = this.getLimit(enchantment);
          if (limit > 0) {
             caps.put(enchantment.getId(), limit);
          }
