@@ -86,10 +86,6 @@ public class MapHandler {
             recipeIterator.remove();
          }
 
-         if (this.craftingReducedMelon && recipe.getResult().getType() == Material.SPECKLED_MELON) {
-            recipeIterator.remove();
-         }
-
          if (Foxtrot.getInstance().getConfig().getBoolean("rodPrevention") && recipe.getResult().getType() == Material.FISHING_ROD) {
             recipeIterator.remove();
          }
