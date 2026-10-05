@@ -13,14 +13,13 @@ public final class SpongeTrades {
 
    public static List<SpongeTrades.Trade> create() {
       List<SpongeTrades.Trade> trades = new ArrayList<>();
-      trades.add(new SpongeTrades.Trade(2, InventoryUtils.CROWBAR));
       trades.add(new SpongeTrades.Trade(1, new ItemStack(Material.ENDER_PORTAL_FRAME, 3)));
       trades.add(new SpongeTrades.Trade(1, new ItemStack(Material.EYE_OF_ENDER, 12)));
       trades.add(new SpongeTrades.Trade(1, new ItemStack(Material.MONSTER_EGG, 1, EntityType.COW.getTypeId())));
-      trades.add(new SpongeTrades.Trade(4, InventoryUtils.SKELETON_SPAWNER));
-      trades.add(new SpongeTrades.Trade(4, InventoryUtils.SPIDER_SPAWNER));
-      trades.add(new SpongeTrades.Trade(4, InventoryUtils.CAVE_SPIDER_SPAWNER));
-      trades.add(new SpongeTrades.Trade(4, InventoryUtils.ZOMBIE_SPAWNER));
+      trades.add(new SpongeTrades.Trade(2, InventoryUtils.SKELETON_SPAWNER));
+      trades.add(new SpongeTrades.Trade(2, InventoryUtils.SPIDER_SPAWNER));
+      trades.add(new SpongeTrades.Trade(2, InventoryUtils.CAVE_SPIDER_SPAWNER));
+      trades.add(new SpongeTrades.Trade(2, InventoryUtils.ZOMBIE_SPAWNER));
       return trades;
    }
 
