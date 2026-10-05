@@ -43,14 +43,12 @@ public class TeamHQCommand {
             sender.sendMessage(ChatColor.YELLOW + "You may not warp home in Nether whilst you have " + amount + " members spawn tagged in Nether.");
          } else {
             Team locationTeam = LandBoard.getInstance().getTeam(sender.getLocation());
-            boolean enemyClaim = team != locationTeam;
-            if (locationTeam == null
-               || Foxtrot.getInstance().getServerHandler().isWarzone(sender.getLocation())
-               || DTRBitmask.ROAD.appliesAt(sender.getLocation())) {
+            boolean enemyClaim = locationTeam != null && locationTeam.getOwner() != null && !locationTeam.isMember(sender.getUniqueId());
+            if (Foxtrot.getInstance().getServerHandler().isWarzone(sender.getLocation()) || DTRBitmask.ROAD.appliesAt(sender.getLocation())) {
                enemyClaim = false;
             }
 
-            Foxtrot.getInstance().getServerHandler().beginHQWarp(sender, team, 10, false);
+            Foxtrot.getInstance().getServerHandler().beginHQWarp(sender, team, enemyClaim ? 20 : 10, false);
          }
       }
    }
