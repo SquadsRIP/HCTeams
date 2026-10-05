@@ -107,16 +107,18 @@ public class MinerClass extends PvPClass implements Listener {
          player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), true);
       }
 
-      int resistanceLevel = diamonds >= 1000 ? 1 : (diamonds >= 750 ? 0 : -1);
-      if (resistanceLevel != -1 && this.shouldApplyPotion(player, PotionEffectType.DAMAGE_RESISTANCE, resistanceLevel)) {
-         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, resistanceLevel), true);
-      }
-
-      if (diamonds >= 1500 && this.shouldApplyPotion(player, PotionEffectType.REGENERATION, 0)) {
-         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 0), true);
-      }
-
+      stripInfiniteEffect(player, PotionEffectType.DAMAGE_RESISTANCE);
+      stripInfiniteEffect(player, PotionEffectType.REGENERATION);
       super.tick(player);
+   }
+
+   private static void stripInfiniteEffect(Player player, PotionEffectType type) {
+      for (PotionEffect effect : player.getActivePotionEffects()) {
+         if (effect.getType().equals(type) && effect.getDuration() > 1000000) {
+            player.removePotionEffect(type);
+            break;
+         }
+      }
    }
 
    public boolean shouldApplyPotion(Player player, PotionEffectType eff, int level) {
