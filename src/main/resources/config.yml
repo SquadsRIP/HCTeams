@@ -160,7 +160,7 @@ netherBorderSize: 3000
 kitMapBorderSize: 2000
 
 # Nether spawn protection radius (no breaking/placing within this many blocks of nether spawn)
-netherSpawnProtectionRadius: 500
+netherSpawnProtectionRadius: 200
 
 # Starting balance for first-time joiners
 startingBalance: 500.0

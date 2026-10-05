@@ -23,6 +23,7 @@ import net.frozenorb.foxtrot.config.ConfigMessages;
 import net.frozenorb.foxtrot.gameplay.events.Event;
 import net.frozenorb.foxtrot.gameplay.events.EventType;
 import net.frozenorb.foxtrot.listener.LunarClientListener;
+import net.frozenorb.foxtrot.listener.MegaFixListener;
 import net.frozenorb.foxtrot.listener.SignShopListener;
 import net.frozenorb.foxtrot.server.deathban.Deathban;
 import net.frozenorb.foxtrot.server.idle.IdleCheckRunnable;
@@ -251,6 +252,10 @@ public class ServerHandler {
    }
 
    public boolean isWarzone(Location loc) {
+      if (loc.getWorld().getEnvironment() == Environment.NETHER) {
+         return MegaFixListener.isNetherWarzone(loc);
+      }
+
       return loc.getWorld().getEnvironment() != Environment.NORMAL
          ? false
          : Math.abs(loc.getBlockX()) <= WARZONE_RADIUS && Math.abs(loc.getBlockZ()) <= WARZONE_RADIUS
