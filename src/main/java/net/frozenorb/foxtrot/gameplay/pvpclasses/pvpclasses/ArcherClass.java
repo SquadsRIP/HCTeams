@@ -106,7 +106,7 @@ public class ArcherClass extends PvPClass {
 
          int limit = Foxtrot.getInstance().getMapHandler().isKitMap() ? 2 : 1;
          if (PvPClassHandler.countMembersWithKitOn(shooter, this) > limit) {
-            shooter.sendMessage(ChatColor.RED + "Your team has too many archers!");
+            this.sendLimitMessage(shooter, ChatColor.RED + "Your team has too many archers!");
             return;
          }
 
@@ -378,7 +378,7 @@ public class ArcherClass extends PvPClass {
          }
 
          if (amount > limit) {
-            player.sendMessage(ChatColor.RED + "Your team has too many archers. Archer mark was not applied.");
+            this.sendLimitMessage(player, ChatColor.RED + "Your team has too many archers. Archer mark was not applied.");
             return false;
          }
       }

@@ -263,7 +263,7 @@ public class BardClass extends PvPClass implements Listener {
    public boolean canUseEffect(Player player) {
       int limit = Foxtrot.getInstance().getMapHandler().isKitMap() ? 3 : 1;
       if (PvPClassHandler.countMembersWithKitOn(player, this) > limit) {
-         player.sendMessage(ChatColor.YELLOW + "Your team has too many bards!");
+         this.sendLimitMessage(player, ChatColor.YELLOW + "Your team has too many bards!");
          return false;
       } else {
          return true;
