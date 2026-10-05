@@ -76,6 +76,7 @@ import net.frozenorb.foxtrot.listener.PearlListener;
 import net.frozenorb.foxtrot.listener.PhaseGlitchListener;
 import net.frozenorb.foxtrot.listener.PortalTrapListener;
 import net.frozenorb.foxtrot.listener.PotionLimiterListener;
+import net.frozenorb.foxtrot.listener.SpiderTargetListener;
 import net.frozenorb.foxtrot.listener.PracticeListener;
 import net.frozenorb.foxtrot.listener.PvPTimerListener;
 import net.frozenorb.foxtrot.listener.RedstoneCrashListener;
@@ -143,6 +144,7 @@ public class ListenerHandler {
       foxtrot.getServer().getPluginManager().registerEvents(foxtrot.getCombatLoggerListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new CrowbarListener(), foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new CreativeItemGuardListener(), foxtrot);
+      foxtrot.getServer().getPluginManager().registerEvents(new SpiderTargetListener(), foxtrot);
       EnchantmentLimiterListener enchantmentLimiter = new EnchantmentLimiterListener();
       foxtrot.getServer().getPluginManager().registerEvents(enchantmentLimiter, foxtrot);
       foxtrot.getServer().getPluginManager().registerEvents(new BannedEnchantListener(), foxtrot);
