@@ -2,7 +2,9 @@ package net.frozenorb.foxtrot.gameplay.pvpclasses;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import net.frozenorb.foxtrot.Foxtrot;
 import net.minecraft.util.com.google.common.collect.HashBasedTable;
@@ -27,6 +29,8 @@ public abstract class PvPClass implements Listener {
    private boolean warmup;
    private final List<PotionEffectType> permanentEffects = new ArrayList<>();
    private static final Table<UUID, PotionEffectType, PotionEffect> restores = HashBasedTable.create();
+   private static final long LIMIT_MESSAGE_COOLDOWN = 5000L;
+   private static final Map<String, Long> limitMessageTimes = new HashMap<>();
 
    public PvPClass(String name, List<Material> consumables) {
       this.name = name;
@@ -57,6 +61,16 @@ public abstract class PvPClass implements Listener {
 
    public boolean canApply(Player player) {
       return true;
+   }
+
+   protected void sendLimitMessage(Player player, String message) {
+      String key = player.getUniqueId() + ":" + this.name;
+      long now = System.currentTimeMillis();
+      Long last = limitMessageTimes.get(key);
+      if (last == null || now - last >= LIMIT_MESSAGE_COOLDOWN) {
+         limitMessageTimes.put(key, now);
+         player.sendMessage(message);
+      }
    }
 
    public static void removeInfiniteEffects(Player player) {
